@@ -25,7 +25,7 @@ class History_house extends CI_Controller {
 
     public function farm($idfarm,$sensor=null){
         if ($sensor == null) {redirect('history_house/farm/'.$idfarm.'/temperature');}
-        if ($sensor != 'temperature' AND $sensor != 'humidity' AND $sensor != 'wind' AND $sensor != 'feed' AND $sensor != 'water' AND $sensor != 'pressure') {redirect('history_house/farm/'.$idfarm.'/temperature');}
+        if ($sensor != 'temperature' AND $sensor != 'humidity' AND $sensor != 'wind' AND $sensor != 'feed' AND $sensor != 'water' AND $sensor != 'pressure' AND $sensor != 'fan') {redirect('history_house/farm/'.$idfarm.'/temperature');}
         $this->konfigurasi->cek_url();
         $this->session->set_userdata(['idfarm'=>$idfarm]);
         $id_user   = $this->session->userdata('id_user');
@@ -36,6 +36,7 @@ class History_house extends CI_Controller {
         if($sensor == 'feed'){$urljs = 'history_house-farm-feedjs.js';}
         if($sensor == 'water'){$urljs = 'history_house-farm-waterjs.js';}
         if($sensor == 'pressure'){$urljs = 'history_house-farm-pressurejs.js';}
+        if($sensor == 'fan'){$urljs = 'history_house-farm-fanjs.js';}
 
         $inidatafarm = $this->umum_model->get('data_kandang',"id = '".$idfarm."' AND kode_perusahaan = '".$id_user."'")->row_array();
         $iniperiode = $this->umum_model->get("(SELECT periode,grow_value FROM image2 WHERE kode_kandang = '".$idfarm."' AND kode_perusahaan = '".$id_user."' ORDER BY periode DESC,grow_value DESC LIMIT 1) as data")->row_array();

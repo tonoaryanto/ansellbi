@@ -5,9 +5,10 @@
       <li class="<?php if($this->uri->segment(4) == 'temperature'){ echo 'active';} ?>"><a href="<?php echo base_url('history_house/farm/').$idfarm.'/temperature' ?>">Temperature</a></li>
       <li class="<?php if($this->uri->segment(4) == 'humidity'){ echo 'active';} ?>"><a href="<?php echo base_url('history_house/farm/').$idfarm.'/humidity' ?>">Humidity</a></li>
       <li class="<?php if($this->uri->segment(4) == 'wind'){ echo 'active';} ?>"><a href="<?php echo base_url('history_house/farm/').$idfarm.'/wind' ?>">Wind Speed</a></li>
-      <li class="<?php if($this->uri->segment(4) == 'feed'){ echo 'active';} ?>"><a href="<?php echo base_url('history_house/farm/').$idfarm.'/feed' ?>">Feed Sensor</a></li>
-      <li class="<?php if($this->uri->segment(4) == 'water'){ echo 'active';} ?>"><a href="<?php echo base_url('history_house/farm/').$idfarm.'/water' ?>">Water Sensor</a></li>
+      <li class="<?php if($this->uri->segment(4) == 'feed'){ echo 'active';} ?>"><a href="<?php echo base_url('history_house/farm/').$idfarm.'/feed' ?>">Feed</a></li>
+      <li class="<?php if($this->uri->segment(4) == 'water'){ echo 'active';} ?>"><a href="<?php echo base_url('history_house/farm/').$idfarm.'/water' ?>">Water</a></li>
       <li class="<?php if($this->uri->segment(4) == 'pressure'){ echo 'active';} ?>"><a href="<?php echo base_url('history_house/farm/').$idfarm.'/pressure' ?>">Static Pressure</a></li>
+      <li class="<?php if($this->uri->segment(4) == 'fan'){ echo 'active';} ?>"><a href="<?php echo base_url('history_house/farm/').$idfarm.'/fan' ?>">Fan Speed</a></li>
       </ul>
       <div class="tab-content">
         <div class="tab-pane active">
@@ -16,44 +17,34 @@
                 <div class="col-sm-12">
                   <p>
                     <div class="radio">
-                      <label>
+                      <label style="visibility: hidden;">
                         <input type="radio" name="optiongrow" id="optiongrow" value="option1" checked="">
                         Filter by Grow Day :
                       </label>
                     </div>
                   </p>
-                  <div class="form-group col-sm-4">
+                  <div class="form-group col-sm-3">
                     <div class="input-group">
                       <span class="input-group-addon" style="border-top-left-radius:4px;border-bottom-left-radius:4px;">Periode</span>
                       <input name="val_periode" class="form-control" id="inputperiode" style="width: 100%;border-top-right-radius:4px;border-bottom-right-radius:4px;" type="number" min="1" placeholder="-Masukan periode-" onchange="reload_grafik()" value="<?php echo $iniperiode; ?>">
                     </div>
                   </div>
-                  <div class="form-group col-sm-4">
+                  <div class="form-group col-sm-3">
                     <div class="input-group">
-                      <span class="input-group-addon" style="border-top-left-radius:4px;border-bottom-left-radius:4px;">Grow Day</span>
+                      <span class="input-group-addon" style="border-top-left-radius:4px;border-bottom-left-radius:4px;">Start Grow Day</span>
                       <input class="form-control" type="number" min="-1" name="growval" value="<?php echo $inigrow; ?>" style="border-top-right-radius:4px;border-bottom-right-radius:4px;" onchange="reload_grafik()">
                     </div>
                   </div>
-                  <div class="form-group col-sm-4">
+                  <div class="form-group col-sm-3">
+                    <div class="input-group">
+                      <span class="input-group-addon" style="border-top-left-radius:4px;border-bottom-left-radius:4px;">End Grow Day</span>
+                      <input class="form-control" type="number" min="-1" name="growval2" value="<?php echo $inigrow; ?>" style="border-top-right-radius:4px;border-bottom-right-radius:4px;" onchange="reload_grafik()">
+                    </div>
+                  </div>
+                  <div class="form-group col-sm-3">
                     <button class="btn btn-default" onclick="reload_grafik();">Reload</button>
                   </div>
                 </div>
-                <!--div class="col-sm-6">
-                  <p>
-                    <div class="radio">
-                      <label>
-                        <input type="radio" name="optiongrow" id="optiongrow" value="option1">
-                        Filter by Date:
-                      </label>
-                    </div>
-                  </p>
-                  <div class="form-group col-sm-6">
-                    <div class="input-group">
-                      <span class="input-group-addon" style="border-top-left-radius:4px;border-bottom-left-radius:4px;">Start Date</span>
-                      <input name="val_periode" class="form-control" id="inputperiode" style="width: 100%;border-top-right-radius:4px;border-bottom-right-radius:4px;padding: 0px 5px;" type="date" min="1" placeholder="-Masukan periode-" onchange="" value="<?php echo $iniperiode; ?>">
-                    </div>
-                  </div>
-                </div-->
             </div>
           </div>
         </div>

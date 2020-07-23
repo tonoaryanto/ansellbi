@@ -23,8 +23,9 @@
           $data_farm5 = $this->umum_model->get($beginesql.'1301'.$endesql)->row_array();
           $data_farm6 = $this->umum_model->get($beginesql.'1302'.$endesql)->row_array();
           $data_farm7 = $this->umum_model->get($beginesql.'3259'.$endesql)->row_array();
+          $data_farm8 = $this->umum_model->get($beginesql.'3190'.$endesql)->row_array();
         ?>
-        <div class="col-md-4">
+        <div class="col-md-3">
           <!-- Widget: user widget style 1 -->
           <div class="box box-widget widget-user-2">
             <!-- Add the bg color to the header using any of the bg-* classes -->
@@ -34,7 +35,13 @@
               </div>
               <!-- /.widget-user-image -->
               <h3 class="widget-user-username"><?php echo $value->nama_kandang; ?></h3>
-              <h5 class="widget-user-desc">Periode : <b><?php if($data_farm['periode'] == ''){echo '0';}else{echo $data_farm['periode'];} ?></b>&nbsp;&nbsp;&nbsp; Grow day : <b><?php if($data_farm['grow_value'] == ''){echo '0';}else{echo $data_farm['grow_value'];} ?></b><br>Date : <b><?php if($data_farm['tanggal_value'] == ''){echo '0';}else{echo $data_farm['tanggal_value'];} ?></b>&nbsp;&nbsp;&nbsp; Time : <b><?php if($data_farm['jam_value'] == ''){echo '0';}else{echo $data_farm['jam_value'];} ?></b></h5>
+              <h5 class="widget-user-desc">
+              <table border="0">
+                <tr><td>Periode</td><td>&nbsp;&nbsp;:&nbsp;&nbsp;</td><td><b><?php if($data_farm['periode'] == ''){echo '0';}else{echo $data_farm['periode'];} ?></b></td></tr>
+                <tr><td>Growday</td><td>&nbsp;&nbsp;:&nbsp;&nbsp;</td><td><b><?php if($data_farm['grow_value'] == ''){echo '0';}else{echo $data_farm['grow_value'];} ?></b></td></tr>
+                <tr><td>Date</td><td>&nbsp;&nbsp;:&nbsp;&nbsp;</td><td><b><?php if($data_farm['tanggal_value'] == ''){echo '0';}else{echo $data_farm['tanggal_value'];} ?></b></td></tr>
+                <tr><td>Time</td><td>&nbsp;&nbsp;:&nbsp;&nbsp;</td><td><b><?php if($data_farm['jam_value'] == ''){echo '0';}else{echo $data_farm['jam_value'];} ?></b></td></tr>
+              </table>  
             </div>
             <div class="box-footer no-padding">
               <ul class="nav nav-stacked">
@@ -45,13 +52,14 @@
                 <li><a href="javascript:void(0);">Feed Consumtion<span class="pull-right"><?php if($data_farm5['isi_value'] != ''){echo $data_farm5['isi_value'];}else{echo '0';} ?> Kg</span></a></li>
                 <li><a href="javascript:void(0);">Water Consumption <span class="pull-right"><?php if($data_farm6['isi_value'] != ''){echo $data_farm6['isi_value'];}else{echo '0';} ?> Liter</span></a></li>
                 <li><a href="javascript:void(0);">Static Pressure <span class="pull-right"><?php if($data_farm7['isi_value'] != ''){echo $data_farm7['isi_value'];}else{echo '0';} ?></span></a></li>
+                <li><a href="javascript:void(0);">Fan Speed <span class="pull-right"><?php if($data_farm8['isi_value'] != ''){echo $data_farm8['isi_value'];}else{echo '0';} ?> %</span></a></li>
               </ul>
             </div>
           </div>
           <!-- /.widget-user -->
         </div>
         <?php 
-        if($nomor == 6){$nomor = 0;}else{$nomor = $nomor + 1;}
+        if($nomor == 5){$nomor = 0;}else{$nomor = $nomor + 1;}
         }
         ?>
 </div>

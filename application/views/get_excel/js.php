@@ -159,39 +159,43 @@ function save_new_kandang() {
       html : '<p style="font-size: 14px">Mohon Isi Input Nama Kandang!</p>',
       type: "warning",
     });
-  }else{
-    $.ajax({
-        url : "<?php echo base_url('get_excel/add_new_kandang');?>",
-        type: "POST",
-        data: {'value1' : $('[name="tambah_kandang"]').val()},
-        cache: false,
-        dataType:"JSON",
-        success: function(data){
-          get_sess(data.sess);
-          if(data.status == true){
-              swal.fire({
-                title: "Berhasil!",
-                html : '<p style="font-size: 14px">Nama Kandang Telah Ditambahkan!</p>',
-                type: "success",
-              });
-              batal_new_kandang();
-              select_kandang();
-          }else{
-            swal.fire({
-              title: "Gagal!",
-              html : data.message,
-              type: "error",
-            });
-          }
-        },
-        error: function (jqXHR, textStatus, errorThrown)
-        {
-          swal.fire({
-            title: "Gagal!",
-            html : '<p style="font-size: 14px">Terjadi Kesalahan!</p>',
-            type: "error",
-          });
-        }
-    });
   }
+  if($('[name="tambah_kandang"]').val().split("").length > 15){
+    alert($('[name="tambah_kandang"]').val().split("").length);
+    return;
+  }
+
+  $.ajax({
+    url : "<?php echo base_url('get_excel/add_new_kandang');?>",
+    type: "POST",
+    data: {'value1' : $('[name="tambah_kandang"]').val()},
+    cache: false,
+    dataType:"JSON",
+    success: function(data){
+      get_sess(data.sess);
+      if(data.status == true){
+          swal.fire({
+            title: "Berhasil!",
+            html : '<p style="font-size: 14px">Nama Kandang Telah Ditambahkan!</p>',
+            type: "success",
+          });
+          batal_new_kandang();
+          select_kandang();
+      }else{
+        swal.fire({
+          title: "Gagal!",
+          html : data.message,
+          type: "error",
+        });
+      }
+    },
+    error: function (jqXHR, textStatus, errorThrown)
+    {
+      swal.fire({
+        title: "Gagal!",
+        html : '<p style="font-size: 14px">Terjadi Kesalahan!</p>',
+        type: "error",
+      });
+    }
+  });
 }

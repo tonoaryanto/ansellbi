@@ -23,7 +23,7 @@
                             </span>
                       </div>
                       <div class="input-group input-group-sm" id="new_select_kandang" style="display: none;">
-                      <input placeholder="Masukan Nama Kandang Baru" type="text" min="1" name="tambah_kandang" class="form-control" width="100px" style="border-radius:5px;height: 34px;">
+                      <input placeholder="Masukan Nama Kandang Baru" type="text" name="tambah_kandang" class="form-control" width="100px" style="border-radius:5px;height: 34px;">
                             <span class="input-group-btn">
                               <button type="button" class="btn btn-default" style="height: 34px;border-radius: 5px;border-style:solid;border-width: thin;border-color: #a0a0a0;" onclick="batal_new_kandang()">Batal</button>
                             </span>
