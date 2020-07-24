@@ -3,8 +3,8 @@
 var dataini = {
   0 : ['7218','7197','7198','7199','7200','7203'],
   1 : ['4','1','2','3','5','6'],
-  2 : ['12','4','4','4','6','6'],
-  3 : ['1','2','2','2','3','3']
+  2 : ['12','6','6','6','6','6'],
+  3 : ['1','2','2','2','2','2']
 };
 
 $(document).ready(function(){
@@ -39,7 +39,7 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
         });
         return;
       }
-      if ($('[name="growval"]').val() == '' || $('[name="growval"]').val() < 0) {
+      if (parseInt($('[name="growval"]').val()) > parseInt($('[name="growval2"]').val())) {
         swal.fire({
           title: "Peringatan!",
           html : '<p style="font-size: 14px">Data Grow Day Salah! Mohon set ulang</p>',
@@ -50,6 +50,7 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
       data_json = {
         'radio' : 'grow',
         'growval' : $('[name="growval"]').val(),
+        'growval2' : $('[name="growval2"]').val(),
         'periode' : $('#inputperiode').val(),
       };
     }
@@ -96,21 +97,6 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
                   spanGaps: true,
                   }];
 
-          var datascales = {};
-          datascales['yAxes'] = {
-              yAxes: [{
-                  ticks: {
-                      beginAtZero:true
-                  },
-                  scaleLabel: {
-                       display: true,
-                       labelString: 'Moola',
-                       fontSize: 20 
-                    }
-              }] 
-          };
-
-
           var data_color = [window.chartColors.orange, window.chartColors.green, window.chartColors.red, window.chartColors.purple];
 
           var adddt = {
@@ -132,13 +118,35 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
             data: lineChartData,
             options: {
               responsive: true,
-              hoverMode: 'index',
-              stacked: true,
               title: {
                 display: true,
                 text: data.glabel
               },
-            scales: datascales
+              tooltips: {
+                mode: 'index',
+                intersect: false,
+              },
+              hover: {
+                mode: 'nearest',
+                intersect: true
+              },
+              scales: {
+                xAxes: [{
+                  display: true,
+                  ticks: {
+                    callback: function(dataLabel, index) {
+                      return index % 2 === 0 ? dataLabel : '';
+                    }
+                  }
+                }],
+                yAxes: [{
+                  display: true,
+                  scaleLabel: {
+                    display: true,
+                    labelString: 'Value'
+                  }
+                }]
+              }
             }
           });
 

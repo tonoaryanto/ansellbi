@@ -84,14 +84,21 @@ class History_house extends CI_Controller {
 
         if ($radio = 'grow') {
             $growval = $this->input->post('growval');
+            $growval2 = $this->input->post('growval2');
             $periode = $this->input->post('periode');
+
+            if($growval == $growval2){
+                $esqlgrow = "AND grow_value = '".$growval."' ";
+            }else{
+                $esqlgrow = "AND grow_value BETWEEN '".$growval."' AND '".$growval2."' ";
+            }
+
             $esqlperiode = "AND periode = '".$periode."' ";
-            $esqlgrow = "AND grow_value = '".$growval."' ";
         }
 
         $where_kodep = "kode_perusahaan = '".$id_user."'";
 
-        $esql  = "SELECT LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') AS grow_value,isi_value FROM `image2` ";
+        $esql  = "SELECT LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') AS grow_value,isi_value, DATE_FORMAT(image2.tanggal_value,'%d-%m-%Y') AS tanggal_value FROM `image2` ";
         $esql .= "WHERE ".$where_kodep." ";
         $esql .= "AND kode_kandang = '".$id_farm."' ";
         $esql .= "AND nama_data = '".$inidata."' ";
@@ -101,7 +108,11 @@ class History_house extends CI_Controller {
         $esql .= "ORDER BY tanggal_value ASC, LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') ASC";
 
         $label = $this->umum_model->get("(SELECT nama_data FROM kode_data WHERE kode_data = '".$inidata."' LIMIT 1) as data")->row_array()['nama_data'];
-        $addlabel = ' : Grow Day '.$growval.' ';
+        if($growval == $growval2){
+            $addlabel = ' : Grow Day '.$growval.' ';
+        }else{
+            $addlabel = ' : Grow Day '.$growval.' - '.$growval2;
+        }
         $glabel = $label.$addlabel;
         $linelabel[0] = $label;
 
@@ -110,7 +121,7 @@ class History_house extends CI_Controller {
 
         $adata = [];
         foreach ($dataprimary1 as $value) {
-            $adata[] = $value->grow_value.':00';
+            $adata[] = $value->tanggal_value.' '.$value->grow_value.':00';
         }
         $isigrowday1 = $adata;
 
@@ -122,7 +133,7 @@ class History_house extends CI_Controller {
         //END Data Utama
 
         //Data 2
-        $esql2  = "SELECT LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') AS grow_value,isi_value FROM `image2` ";
+        $esql2  = "SELECT LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') AS grow_value,isi_value, DATE_FORMAT(image2.tanggal_value,'%d-%m-%Y') AS tanggal_value FROM `image2` ";
         $esql2 .= "WHERE ".$where_kodep." ";
         $esql2 .= "AND kode_kandang = '".$id_farm."' ";
         $esql2 .= "AND nama_data = '4096' ";
@@ -141,7 +152,7 @@ class History_house extends CI_Controller {
             for ($k=0; $k < count($isigrowday1); $k++) { 
                 $cdata2[$k] = '';
                 foreach ($dataprimary2 as $value3) {
-                    if($isigrowday1[$k] == ($value3->grow_value.':00')){
+                    if($isigrowday1[$k] == ($value3->tanggal_value.' '.$value3->grow_value.':00')){
                         $cdata2[$k] = $value3->isi_value;
                     }
                 }
@@ -159,89 +170,6 @@ class History_house extends CI_Controller {
         echo json_encode(['status'=>true,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari'=>$growval,'linelabel'=>$linelabel]);
     }
 
-    // public function datajson(){
-    //     $cek_sess = $this->konfigurasi->cek_js();
-    //     if ($cek_sess == 0) {
-    //         echo json_encode(['sess' => $cek_sess]);
-    //     }else{
-    //         $fil1 = $this->input->post('value1');
-    //         $fil2 = $this->input->post('value2');
-    //         $fil3 = $this->input->post('value3');
-    //         $id_user   = $this->session->userdata('id_user');
-    //         $fildari   = $this->input->post('value4');
-    //         $filsampai = $this->input->post('value5');
-    //         $filhour = $this->input->post('value6');
-    //         $filperiode = $this->input->post('value7');
-
-    //         $where_kodep = "kode_perusahaan = '".$id_user."'";
-
-    //         if($fil1 == 'DAY_1'){
-    //             if (($fildari == '-1' AND $filsampai == '-1') OR $fildari == '-1' OR $filsampai == '-1') {
-    //                 $fildari = $this->db->query("SELECT ((SELECT grow_value FROM image2 WHERE kategori = '".$fil1."' AND nama_data = '".$fil2."' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$fil3."' ORDER BY grow_value DESC LIMIT 1) - 6) AS grow_value")->row_array()['grow_value'];
-    //                 $filsampai = $this->db->query("SELECT grow_value FROM image2 WHERE kategori = '".$fil1."' AND nama_data = '".$fil2."' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$fil3."' ORDER BY grow_value DESC LIMIT 1")->row_array()['grow_value'];
-    //             }
-
-    //             $esql  = "SELECT grow_value,isi_value FROM `image2` ";
-    //             $esql .= "WHERE ".$where_kodep." ";
-    //             $esql .= "AND kode_kandang = '".$fil3."' ";
-    //             $esql .= "AND nama_data = '".$fil2."' ";
-    //             $esql .= "AND kategori = '".$fil1."' ";
-    //             $esql .= "AND periode = '".$filperiode."' ";
-    //             $esql .= "AND grow_value BETWEEN '".$fildari."' AND '".$filsampai."' ";
-    //             $esql .= "ORDER BY grow_value ASC";
-    //         }
-    //         if($fil1 == 'HOUR_1'){
-    //             if($filhour == '-1'){
-    //                 $filhour = $this->db->query("SELECT grow_value FROM image2 WHERE kategori = '".$fil1."' AND nama_data = '".$fil2."' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$fil3."' ORDER BY grow_value DESC LIMIT 1")->row_array()['grow_value'];
-    //             }
-    //             $esql  = "SELECT LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') AS grow_value,isi_value FROM `image2` ";
-    //             $esql .= "WHERE ".$where_kodep." ";
-    //             $esql .= "AND kode_kandang = '".$fil3."' ";
-    //             $esql .= "AND nama_data = '".$fil2."' ";
-    //             $esql .= "AND kategori = '".$fil1."' ";
-    //             $esql .= "AND periode = '".$filperiode."' ";
-    //             $esql .= "AND grow_value = '".$filhour."' ";
-    //             $esql .= "ORDER BY tanggal_value ASC, LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') ASC";
-    //         }
-
-    //         $image2_raw = $this->db->query($esql);
-
-    //         //SET LABEL
-    //         if($fil1 == 'DAY_1'){$addlabel = ' : Grow Day '.$fildari.' s/d '.$filsampai.' ';}
-    //         if($fil1 == 'HOUR_1'){$addlabel = ' : Grow Day '.$filhour.' ';}
-    //         $label = $this->umum_model->get('kode_data',['kode_data'=>$fil2])->row_array()['nama_data'];
-    //         $glabel = $label.$addlabel;
-
-    //         $cek_image2 = $image2_raw->num_rows();
-    //         if($cek_image2 > 1){
-    //             $image2 = $image2_raw->result();
-    //             $data2 = [];
-    //             foreach ($image2 as $value) {
-    //                 if($fil1 == 'DAY_1'){
-    //                 $adata[]  = $value->grow_value;
-    //                 }
-    //                 if($fil1 == 'HOUR_1'){
-    //                 $adata[]  = $value->grow_value.':00';
-    //                 }
-    //             }
-    //             $labelgf = $adata;
-
-    //             foreach ($image2 as $value2) {
-    //                 $bdata[] = $value2->isi_value;
-    //             }
-    //             $adata2 = $bdata;
-
-    //             if($fil1 == 'DAY_1'){
-    //                 echo json_encode(['status'=>true,'labelgf'=>$labelgf,'data'=>$adata2,'label'=>$label,'glabel'=>$glabel,'daydari'=>$fildari,'daysampai'=>$filsampai]);
-    //             }
-    //             if($fil1 == 'HOUR_1'){
-    //                 echo json_encode(['status'=>true,'labelgf'=>$labelgf,'data'=>$adata2,'label'=>$label,'glabel'=>$glabel,'hourdari'=>$filhour]);
-    //             }
-    //         }else{
-    //             echo json_encode(['status'=>false,'message'=>'<p style="font-size: 14px">Data Tidak Ditemukan.</p>']);
-    //         }
-    //     }
-    // }
     public function data_select(){
         $cek_sess = $this->konfigurasi->cek_js();
         if ($cek_sess == 0) {
