@@ -39,7 +39,7 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
         });
         return;
       }
-      if ($('[name="growval"]').val() == '' || $('[name="growval"]').val() < 0) {
+      if (parseInt($('[name="growval"]').val()) > parseInt($('[name="growval2"]').val())) {
         swal.fire({
           title: "Peringatan!",
           html : '<p style="font-size: 14px">Data Grow Day Salah! Mohon set ulang</p>',
@@ -50,6 +50,7 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
       data_json = {
         'radio' : 'grow',
         'growval' : $('[name="growval"]').val(),
+        'growval2' : $('[name="growval2"]').val(),
         'periode' : $('#inputperiode').val(),
       };
     }
@@ -165,6 +166,7 @@ function loadtabel() {
       'radio' : 'grow',
       'kateg' : 'press',
       'growval' : $('[name="growval"]').val(),
+      'growval2' : $('[name="growval2"]').val(),
       'periode' : $('#inputperiode').val(),
     };
   }

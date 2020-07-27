@@ -98,7 +98,7 @@ class History_house extends CI_Controller {
 
         $where_kodep = "kode_perusahaan = '".$id_user."'";
 
-        $esql  = "SELECT LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') AS grow_value,isi_value, DATE_FORMAT(image2.tanggal_value,'%d-%m-%Y') AS tanggal_value FROM `image2` ";
+        $esql  = "SELECT grow_value AS grow, LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') AS grow_value,isi_value, DATE_FORMAT(image2.tanggal_value,'%d-%m-%Y') AS tanggal_value FROM `image2` ";
         $esql .= "WHERE ".$where_kodep." ";
         $esql .= "AND kode_kandang = '".$id_farm."' ";
         $esql .= "AND nama_data = '".$inidata."' ";
@@ -121,7 +121,7 @@ class History_house extends CI_Controller {
 
         $adata = [];
         foreach ($dataprimary1 as $value) {
-            $adata[] = $value->tanggal_value.' '.$value->grow_value.':00';
+            $adata[] = '('.$value->grow.') - '.$value->grow_value.':00';
         }
         $isigrowday1 = $adata;
 
@@ -133,7 +133,7 @@ class History_house extends CI_Controller {
         //END Data Utama
 
         //Data 2
-        $esql2  = "SELECT LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') AS grow_value,isi_value, DATE_FORMAT(image2.tanggal_value,'%d-%m-%Y') AS tanggal_value FROM `image2` ";
+        $esql2  = "SELECT grow_value AS grow, LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') AS grow_value,isi_value, DATE_FORMAT(image2.tanggal_value,'%d-%m-%Y') AS tanggal_value FROM `image2` ";
         $esql2 .= "WHERE ".$where_kodep." ";
         $esql2 .= "AND kode_kandang = '".$id_farm."' ";
         $esql2 .= "AND nama_data = '4096' ";
@@ -152,7 +152,7 @@ class History_house extends CI_Controller {
             for ($k=0; $k < count($isigrowday1); $k++) { 
                 $cdata2[$k] = '';
                 foreach ($dataprimary2 as $value3) {
-                    if($isigrowday1[$k] == ($value3->tanggal_value.' '.$value3->grow_value.':00')){
+                    if($isigrowday1[$k] == ('('.$value3->grow.') - '.$value3->grow_value.':00')){
                         $cdata2[$k] = $value3->isi_value;
                     }
                 }
@@ -268,9 +268,14 @@ class History_house extends CI_Controller {
 
         if ($radio = 'grow') {
             $growval = $this->input->post('growval');
+            $growval2 = $this->input->post('growval2');
             $periode = $this->input->post('periode');
             $esqlperiode = "AND periode = '".$periode."' ";
-            $esqlgrow = "AND grow_value = '".$growval."' ";
+            if($growval == $growval2){
+                $esqlgrow = "AND grow_value = '".$growval."' ";
+            }else{
+                $esqlgrow = "AND grow_value BETWEEN '".$growval."' AND '".$growval2."' ";
+            }
         }
 
         $adata = [];
@@ -280,6 +285,7 @@ class History_house extends CI_Controller {
         if($this->input->post('kateg') == 'feed'){$adata = $this->tabelsatukolom($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
         if($this->input->post('kateg') == 'water'){$adata = $this->tabelwater($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
         if($this->input->post('kateg') == 'press'){$adata = $this->tabelsatukolom($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
+        if($this->input->post('kateg') == 'fan'){$adata = $this->tabelsatukolom($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
 
         echo json_encode(['status' => true, 'dataSet' => $adata]);
     }

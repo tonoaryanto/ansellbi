@@ -26,6 +26,13 @@ function reload_grafik(){
   grafik(dataini[0][0],dataini[1][0],dataini[2][0],dataini[3][0],dataini[0].length,1);
 }
 
+function swipegf(ul){
+  var data1 = $('#gf1').html();
+  var data2 = $('#gf'+ul).html();
+  $('#gf'+ul).html(data1);
+  $('#gf1').html(data2);
+}
+
 function grafik(inidata,id,lebar,dtrow,count,ul){
   if(ul <= count){
     var datperiode = $('#inputperiode').val();
@@ -78,12 +85,14 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
             .attr({
               'class' : 'col-sm-'+lebar
             })
-            .html('<div class="box box-success"><div class="box-header with-border"><h3 class="box-title" id="titlegrafik'+id+'"><span style="color: #aaa;">-Set Options Terlebih Dahulu-</span></h3><div class="box-tools pull-right"><button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button></div></div><div class="box-body"><div id="inicanvas'+id+'"></div></div></div>')
+            .html('<div class="box box-success" id="gf'+ul+'"><div class="box-header with-border"><h3 class="box-title" id="titlegrafik'+id+'"><span style="color: #aaa;">-Set Options Terlebih Dahulu-</span></h3><div class="box-tools pull-right"><button type="button" class="btn btn-box-tool" onclick="swipegf('+ul+')"><i class="fa fa-clone"></i></button></div></div><div class="box-body"><div id="inicanvas'+id+'"></div></div></div>')
             .appendTo('#inihtmlbfr'+dtrow);
 
             $('#inicanvas'+id).empty();
             $('<canvas>')
-            .attr({'id' : 'chartcanvas'+id})
+            .attr({
+              'id' : 'chartcanvas'+id
+            })
             .appendTo('#inicanvas'+id);
 
           var lineChartData = {};
@@ -186,6 +195,7 @@ function loadtabel() {
       'radio' : 'grow',
       'kateg' : 'temp',
       'growval' : $('[name="growval"]').val(),
+      'growval2' : $('[name="growval2"]').val(),
       'periode' : $('#inputperiode').val(),
     };
   }
