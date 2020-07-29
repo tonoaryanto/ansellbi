@@ -43,7 +43,7 @@
                   </div>
                   <div class="form-group col-sm-3">
                     <button class="btn btn-default" onclick="reload_grafik();">Reload</button>
-                    <input type="text" name="order" value="1" min="1">
+                    <input type="hidden" name="order" value="1" min="1">
                   </div>
                 </div>
             </div>
