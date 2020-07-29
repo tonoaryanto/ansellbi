@@ -98,7 +98,7 @@ class History_house extends CI_Controller {
 
         $where_kodep = "kode_perusahaan = '".$id_user."'";
 
-        $esql  = "SELECT grow_value AS grow, LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') AS grow_value,isi_value, DATE_FORMAT(image2.tanggal_value,'%d-%m-%Y') AS tanggal_value FROM `image2` ";
+        $esql  = "SELECT grow_value AS grow, LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') AS jjam_value,isi_value, DATE_FORMAT(image2.tanggal_value,'%d-%m-%Y') AS ttanggal_value FROM `image2` ";
         $esql .= "WHERE ".$where_kodep." ";
         $esql .= "AND kode_kandang = '".$id_farm."' ";
         $esql .= "AND nama_data = '".$inidata."' ";
@@ -121,7 +121,7 @@ class History_house extends CI_Controller {
 
         $adata = [];
         foreach ($dataprimary1 as $value) {
-            $adata[] = '('.$value->grow.') - '.$value->grow_value.':00';
+            $adata[] = '('.$value->grow.') - '.$value->jjam_value.':00';
         }
         $isigrowday1 = $adata;
 
@@ -133,7 +133,7 @@ class History_house extends CI_Controller {
         //END Data Utama
 
         //Data 2
-        $esql2  = "SELECT grow_value AS grow, LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') AS grow_value,isi_value, DATE_FORMAT(image2.tanggal_value,'%d-%m-%Y') AS tanggal_value FROM `image2` ";
+        $esql2  = "SELECT grow_value AS grow, LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') AS jjam_value,isi_value, DATE_FORMAT(image2.tanggal_value,'%d-%m-%Y') AS ttanggal_value FROM `image2` ";
         $esql2 .= "WHERE ".$where_kodep." ";
         $esql2 .= "AND kode_kandang = '".$id_farm."' ";
         $esql2 .= "AND nama_data = '4096' ";
@@ -152,7 +152,7 @@ class History_house extends CI_Controller {
             for ($k=0; $k < count($isigrowday1); $k++) { 
                 $cdata2[$k] = '';
                 foreach ($dataprimary2 as $value3) {
-                    if($isigrowday1[$k] == ('('.$value3->grow.') - '.$value3->grow_value.':00')){
+                    if($isigrowday1[$k] == ('('.$value3->grow.') - '.$value3->jjam_value.':00')){
                         $cdata2[$k] = $value3->isi_value;
                     }
                 }
@@ -292,7 +292,7 @@ class History_house extends CI_Controller {
 
     private function tabeltemperature($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata)
     {
-        $esql1  = "SELECT image2.id,image2.grow_value, DATE_FORMAT(image2.tanggal_value,'%d-%m-%Y') AS tanggal_value, CONCAT(LPAD(SUBSTRING_INDEX(image2.jam_value, '-', 1), 2, '0'),':',LPAD(SUBSTRING_INDEX(SUBSTRING_INDEX(image2.jam_value, '-', 2), '-', -1), 2, '0'),':',LPAD(SUBSTRING_INDEX(image2.jam_value, '-', -1), 2, '0')) AS jam_value, image2.isi_value FROM `image2` ";
+        $esql1  = "SELECT image2.id,image2.grow_value, DATE_FORMAT(image2.tanggal_value,'%d-%m-%Y') AS ttanggal_value, CONCAT(LPAD(SUBSTRING_INDEX(image2.jam_value, '-', 1), 2, '0'),':',LPAD(SUBSTRING_INDEX(SUBSTRING_INDEX(image2.jam_value, '-', 2), '-', -1), 2, '0'),':',LPAD(SUBSTRING_INDEX(image2.jam_value, '-', -1), 2, '0')) AS jjam_value, image2.isi_value FROM `image2` ";
         $esql2 = "WHERE kode_perusahaan = '".$id_user."'";
         $esql3 = "AND kode_kandang = '".$id_farm."' ";
         $esql4 = "AND nama_data = '4096' ";
@@ -350,8 +350,8 @@ class History_house extends CI_Controller {
             $kolomdata = [];
             $kolomdata[0]  = $iz + 1;
             $kolomdata[1]  = $isidata['grow_value'];
-            $kolomdata[2]  = $isidata['tanggal_value'];
-            $kolomdata[3]  = $isidata['jam_value'];
+            $kolomdata[2]  = $isidata['ttanggal_value'];
+            $kolomdata[3]  = $isidata['jjam_value'];
             $kolomdata[4]  = $isidata['isi_value'];
             $kolomdata[5]  = $isidata2['isi_value'];
             $kolomdata[6]  = $isidata3['isi_value'];
@@ -368,7 +368,7 @@ class History_house extends CI_Controller {
 
     private function tabelwater($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata)
     {
-        $esql1  = "SELECT image2.id,image2.grow_value, DATE_FORMAT(image2.tanggal_value,'%d-%m-%Y') AS tanggal_value, CONCAT(LPAD(SUBSTRING_INDEX(image2.jam_value, '-', 1), 2, '0'),':',LPAD(SUBSTRING_INDEX(SUBSTRING_INDEX(image2.jam_value, '-', 2), '-', -1), 2, '0'),':',LPAD(SUBSTRING_INDEX(image2.jam_value, '-', -1), 2, '0')) AS jam_value, image2.isi_value FROM `image2` ";
+        $esql1  = "SELECT image2.id,image2.grow_value, DATE_FORMAT(image2.tanggal_value,'%d-%m-%Y') AS ttanggal_value, CONCAT(LPAD(SUBSTRING_INDEX(image2.jam_value, '-', 1), 2, '0'),':',LPAD(SUBSTRING_INDEX(SUBSTRING_INDEX(image2.jam_value, '-', 2), '-', -1), 2, '0'),':',LPAD(SUBSTRING_INDEX(image2.jam_value, '-', -1), 2, '0')) AS jjam_value, image2.isi_value FROM `image2` ";
         $esql2 = "WHERE kode_perusahaan = '".$id_user."'";
         $esql3 = "AND kode_kandang = '".$id_farm."' ";
         $esql4 = "AND nama_data = '".$inidata[0]."' ";
@@ -396,8 +396,8 @@ class History_house extends CI_Controller {
             $kolomdata = [];
             $kolomdata[0]  = $iz + 1;
             $kolomdata[1]  = $isidata['grow_value'];
-            $kolomdata[2]  = $isidata['tanggal_value'];
-            $kolomdata[3]  = $isidata['jam_value'];
+            $kolomdata[2]  = $isidata['ttanggal_value'];
+            $kolomdata[3]  = $isidata['jjam_value'];
             $kolomdata[4]  = $isidata['isi_value'];
             $kolomdata[5]  = $isidata2['isi_value'];
             $adata[$iz] = $kolomdata;
@@ -409,7 +409,7 @@ class History_house extends CI_Controller {
 
     private function tabelsatukolom($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata)
     {
-        $esql1  = "SELECT image2.id,image2.grow_value, DATE_FORMAT(image2.tanggal_value,'%d-%m-%Y') AS tanggal_value, CONCAT(LPAD(SUBSTRING_INDEX(image2.jam_value, '-', 1), 2, '0'),':',LPAD(SUBSTRING_INDEX(SUBSTRING_INDEX(image2.jam_value, '-', 2), '-', -1), 2, '0'),':',LPAD(SUBSTRING_INDEX(image2.jam_value, '-', -1), 2, '0')) AS jam_value, image2.isi_value FROM `image2` ";
+        $esql1  = "SELECT image2.id,image2.grow_value, DATE_FORMAT(image2.tanggal_value,'%d-%m-%Y') AS ttanggal_value, CONCAT(LPAD(SUBSTRING_INDEX(image2.jam_value, '-', 1), 2, '0'),':',LPAD(SUBSTRING_INDEX(SUBSTRING_INDEX(image2.jam_value, '-', 2), '-', -1), 2, '0'),':',LPAD(SUBSTRING_INDEX(image2.jam_value, '-', -1), 2, '0')) AS jjam_value, image2.isi_value FROM `image2` ";
         $esql2 = "WHERE kode_perusahaan = '".$id_user."'";
         $esql3 = "AND kode_kandang = '".$id_farm."' ";
         $esql4 = "AND nama_data = '".$inidata[0]."' ";
@@ -430,8 +430,8 @@ class History_house extends CI_Controller {
             $kolomdata = [];
             $kolomdata[0]  = $iz + 1;
             $kolomdata[1]  = $isidata['grow_value'];
-            $kolomdata[2]  = $isidata['tanggal_value'];
-            $kolomdata[3]  = $isidata['jam_value'];
+            $kolomdata[2]  = $isidata['ttanggal_value'];
+            $kolomdata[3]  = $isidata['jjam_value'];
             $kolomdata[4]  = $isidata['isi_value'];
             $adata[$iz] = $kolomdata;
         }

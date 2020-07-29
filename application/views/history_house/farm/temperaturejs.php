@@ -1,15 +1,33 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');?>
 
 var dataini = {
-  0 : ['7218','7197','7198','7199','7200','7203'],
-  1 : ['4','1','2','3','5','6'],
+  0: function(ini=null){
+    if(ini == null){
+      if($('[name="order"]').val() == 1){return ['7218','7197','7198','7199','7200','7203'];}
+      if($('[name="order"]').val() == 2){return ['7197','7198','7199','7200','7218','7203'];}
+      if($('[name="order"]').val() == 3){return ['7198','7197','7199','7200','7218','7203'];}
+      if($('[name="order"]').val() == 4){return ['7199','7197','7198','7200','7218','7203'];}
+      if($('[name="order"]').val() == 5){return ['7200','7197','7198','7199','7218','7203'];}
+      if($('[name="order"]').val() == 6){return ['7203','7197','7198','7199','7200','7218'];}
+    }
+    if(ini == 'table'){
+      return ['7218','7197','7198','7199','7200','7203'];
+    }
+  },
+  1 : function(){
+    if($('[name="order"]').val() == 1){return ['1','2','3','4','5','6'];}
+    if($('[name="order"]').val() == 2){return ['2','3','4','5','1','6'];}
+    if($('[name="order"]').val() == 3){return ['3','2','4','5','1','6'];}
+    if($('[name="order"]').val() == 4){return ['4','2','3','5','1','6'];}
+    if($('[name="order"]').val() == 5){return ['5','2','3','4','1','6'];}
+    if($('[name="order"]').val() == 6){return ['6','2','3','4','5','1'];}
+    },
   2 : ['12','6','6','6','6','6'],
   3 : ['1','2','2','2','2','2']
 };
 
 $(document).ready(function(){
  reload_grafik();
-  // selectdata_kandang();
 });
 
 function reload_grafik(){
@@ -23,14 +41,12 @@ function reload_grafik(){
       Swal.getTimerLeft()
     },
   });
-  grafik(dataini[0][0],dataini[1][0],dataini[2][0],dataini[3][0],dataini[0].length,1);
+  grafik(dataini[0]()[0],dataini[1]()[0],dataini[2][0],dataini[3][0],dataini[0]().length,1);
 }
 
 function swipegf(ul){
-  var data1 = $('#gf1').html();
-  var data2 = $('#gf'+ul).html();
-  $('#gf'+ul).html(data1);
-  $('#gf1').html(data2);
+  $('[name="order"]').val(ul);
+  reload_grafik();
 }
 
 function grafik(inidata,id,lebar,dtrow,count,ul){
@@ -85,7 +101,7 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
             .attr({
               'class' : 'col-sm-'+lebar
             })
-            .html('<div class="box box-success" id="gf'+ul+'"><div class="box-header with-border"><h3 class="box-title" id="titlegrafik'+id+'"><span style="color: #aaa;">-Set Options Terlebih Dahulu-</span></h3><div class="box-tools pull-right"><button type="button" class="btn btn-box-tool" onclick="swipegf('+ul+')"><i class="fa fa-clone"></i></button></div></div><div class="box-body"><div id="inicanvas'+id+'"></div></div></div>')
+            .html('<div class="box box-success" id="gf'+ul+'"><div class="box-header with-border"><h3 class="box-title" id="titlegrafik'+id+'"><span style="color: #aaa;">-Set Options Terlebih Dahulu-</span></h3><div class="box-tools pull-right"><button type="button" class="btn btn-box-tool" onclick="swipegf('+id+')"><i class="fa fa-clone"></i></button></div></div><div class="box-body"><div id="inicanvas'+id+'"></div></div></div>')
             .appendTo('#inihtmlbfr'+dtrow);
 
             $('#inicanvas'+id).empty();
@@ -162,7 +178,7 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
           $('#titlegrafik'+id).html(data.glabel);
           var cr = ul;
           ul = ul + 1;
-          grafik(dataini[0][cr],dataini[1][cr],dataini[2][cr],dataini[3][cr],dataini[0].length,ul);
+          grafik(dataini[0]()[cr],dataini[1]()[cr],dataini[2][cr],dataini[3][cr],dataini[0]().length,ul);
         }else{
           $('#inicanvas').html('-Data Tidak Ditemukan-');
           $('#tglresponse').empty();
@@ -199,7 +215,7 @@ function loadtabel() {
       'periode' : $('#inputperiode').val(),
     };
   }
-  data_json['inidata'] = dataini[0];
+  data_json['inidata'] = dataini[0]('table');
  
     $.ajax({
       type: "POST",
