@@ -78,7 +78,7 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
             .attr({
               'class' : 'col-sm-'+lebar
             })
-            .html('<div class="box box-success"><div class="box-header with-border"><h3 class="box-title" id="titlegrafik'+id+'"><span style="color: #aaa;">-Set Options Terlebih Dahulu-</span></h3><div class="box-tools pull-right"><button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button></div></div><div class="box-body"><div id="inicanvas'+id+'"></div></div></div>')
+            .html('<div class="box box-success"><div class="box-header with-border"><h3 class="box-title" id="titlegrafik'+id+'"><span style="color: #aaa;">-Set Options Terlebih Dahulu-</span></h3></div><div class="box-body"><div id="inicanvas'+id+'"></div></div></div>')
             .appendTo('#inihtmlbfr'+dtrow);
 
             $('#inicanvas'+id).empty();

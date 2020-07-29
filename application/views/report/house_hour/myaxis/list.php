@@ -2,7 +2,7 @@
 	<div class="col-sm-12">
 		<div class="nav-tabs-custom">
 			<ul class="nav nav-tabs">
-			<li class=""><a href="<?php echo base_url('report/history_house_day') ?>">Multi Data</a></li>
+			<li class=""><a href="<?php echo base_url('report/history_house_hour') ?>">Multi Data</a></li>
 			<li class="active"><a href="#">Yaxis Ganda</a></li>
 			</ul>
 			<div class="tab-content">
