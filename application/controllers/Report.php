@@ -16,38 +16,6 @@ class Report extends CI_Controller {
     public function history_house_day($site=null)
     {
         redirect('report/history_house_hour');
-        // if($site == null){
-        //     $this->konfigurasi->cek_url();
-        //     $data = [
-        //         'txthead1'     => 'Report Histori House ( DAY ) - Multi Data',
-        //         'head1'     => 'Report',
-        //         'link1'     => '#',
-        //         'head2'     => 'Histori House (DAY)',
-        //         'link2'     => 'report/history_house_day',
-        //         'head3'     => '<b>Multi Data</b>',
-        //         'link3'     => '#',
-        //         'isi'       => 'report/house_day/list',
-        //         'cssadd'    => 'report/house_day/cssadd',
-        //         'jsadd'     => 'report/house_day/jsadd',
-        //     ];
-        //     $this->load->view('template/wrapper',$data);
-        // }
-        // if($site == 'myaxis'){
-        //     $this->konfigurasi->cek_url();
-        //     $data = [
-        //         'txthead1'     => 'Report Histori House ( DAY ) - Yaxis Ganda',
-        //         'head1'     => 'Report',
-        //         'link1'     => '#',
-        //         'head2'     => '<b>Histori House (DAY)</b>',
-        //         'link2'     => 'report/history_house_day',
-        //         'head3'     => '<b>Yaxis Ganda</b>',
-        //         'link3'     => '#',
-        //         'isi'       => 'report/house_day/myaxis/list',
-        //         'cssadd'    => 'report/house_day/myaxis/cssadd',
-        //         'jsadd'     => 'report/house_day/myaxis/jsadd',
-        //     ];
-        //     $this->load->view('template/wrapper',$data);
-        // }
     }
 
     public function history_house_hour($site=null)
