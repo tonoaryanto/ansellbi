@@ -687,7 +687,8 @@ class Export_excel extends CI_Controller {
         $fil2 = $this->input->post('value2')[$url];
         $fil3 = $this->input->post('value3');
         $id_user   = $this->session->userdata('id_user');
-        $filhour = $this->input->post('value6');
+        $filhour1 = $this->input->post('value61');
+        $filhour2 = $this->input->post('value62');
         $filperiode = $this->input->post('value7');
         $nomor = $this->input->post('valnomor');
         $valpem = $this->input->post('valpem');
@@ -698,18 +699,29 @@ class Export_excel extends CI_Controller {
             $stringkd[$key->id] = $key->nama_kandang;
         }
 
-
-        if($filhour == '-1'){
-            $filhour = $this->db->query("SELECT grow_value FROM image2 WHERE kategori = '".$fil1."' AND nama_data = '".$fil2."' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$fil3."' ORDER BY grow_value DESC LIMIT 1")->row_array()['grow_value'];
+        if($filhour1 == $filhour2){
+            if($filhour1 == '-1'){
+                $filhour1 = $this->db->query("SELECT grow_value FROM image2 WHERE kategori = '".$fil1."' AND nama_data = '".$fil2."' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$fil3."' ORDER BY grow_value DESC LIMIT 1")->row_array()['grow_value'];
+                $filhour2 = $filhour1;
+            }
+            $esqlgrow = "AND grow_value = '".$filhour1."'";
+        }else{
+            $esqlgrow = "AND grow_value BETWEEN '".$filhour1."' AND '".$filhour2."'";
         }
 
-        $esqlgen  = "SELECT id,DATE_FORMAT(tanggal_value,'%d-%m-%Y') AS tanggal_value,CONCAT(LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0'),':',LPAD(SUBSTRING_INDEX(SUBSTRING_INDEX(jam_value, '-', 2), '-', -1), 2, '0'),':',LPAD(SUBSTRING_INDEX(jam_value, '-', -1), 2, '0')) AS jam_value,grow_value,isi_value FROM `image2` ";
+        $esqlgen  = "SELECT id, grow_value AS grow, DATE_FORMAT(tanggal_value,'%d-%m-%Y') AS ttanggal_value,CONCAT(LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0'),':',LPAD(SUBSTRING_INDEX(SUBSTRING_INDEX(jam_value, '-', 2), '-', -1), 2, '0')) AS jjam_value,grow_value,isi_value FROM `image2` ";
         $esqlgen .= "WHERE kode_perusahaan = '".$id_user."' AND kategori = '".$fil1."' ";
         $esqlnamadata = "AND nama_data = '".$fil2."'";
-        $esqlgrow = "AND grow_value = '".$filhour."'";
         $esqlorder = "ORDER BY tanggal_value ASC, LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') ASC";
 
-        if($fil1 == 'HOUR_1'){$addlabel = ' : Grow Day '.$filhour.' ';}
+        if($fil1 == 'HOUR_1'){
+            if($filhour1 == $filhour2){
+                $addlabel = ' : Grow Day '.$filhour1.' ';
+            }else{
+                $addlabel = ' : Grow Day '.$filhour1.' - '.$filhour2.' ';
+            }
+        }
+
         $label = $this->umum_model->get('kode_data',['kode_data'=>$fil2])->row_array()['nama_data'];
         $glabel = $label.$addlabel;
         $linelabel[0] = $stringkd[$fil3].' ('.$filperiode.')';
@@ -726,7 +738,7 @@ class Export_excel extends CI_Controller {
         $dataprimary = $this->db->query($esqlprimary)->result();
 
         foreach ($dataprimary as $value) {
-            $adata[]  = $value->jam_value;
+            $adata[]  = ('('.$value->grow.') - '.$value->jjam_value);
         }
         $isigrowday = $adata;
 
@@ -756,7 +768,7 @@ class Export_excel extends CI_Controller {
                 for ($k=0; $k < count($isigrowday); $k++) { 
                     $cdata[$k] = '';
                     foreach ($datasecondary as $value3) {
-                        if($isigrowday[$k] == $value3->jam_value){
+                        if($isigrowday[$k] == ('('.$value3->grow.') - '.$value3->jjam_value)){
                             $cdata[$k] = $value3->isi_value;
                         }
                     }
@@ -783,9 +795,8 @@ class Export_excel extends CI_Controller {
         ->setSubject($filename)
         ->setKeywords('Ansell Jaya')
         ->setCategory('dboansell');
-        if($nomor > 1){
+
         $spreadsheet->getActiveSheet()->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);                
-        }
         $spreadsheet->getActiveSheet()->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4);
         $spreadsheet->getActiveSheet()->getPageMargins()->setLeft(0.95);
     
@@ -843,11 +854,14 @@ class Export_excel extends CI_Controller {
         $sheet1->setCellValue('C22', 'Jam');
         $sheet1->setCellValue('D22', 'Grow Day');
         $sheet1->setCellValue('E22', $linelabel[0]);
+        $titrowlast = 0;
         if ($countsecond > 0) {
             for ($i=1; $i < count($linelabel); $i++) { 
             $sheet1->setCellValue($datacolum[($i - 1)].'22', $linelabel[$i]);
+            $titrowlast = $i - 1;
             }
         }
+        $sheet1->setCellValue($datacolum[7].'22', 'Grow & Jam');
 
         $getsheet1 = $spreadsheet->getActiveSheet();
 
@@ -858,21 +872,26 @@ class Export_excel extends CI_Controller {
         $getsheet1->getColumnDimension('C')->setWidth(15);
         $getsheet1->getColumnDimension('D')->setWidth(15);
         $getsheet1->getColumnDimension('E')->setWidth(15);
-        if ($countsecond > 0) {
-            for ($i=1; $i < count($linelabel); $i++) {
-            $getsheet1->getColumnDimension($datacolum[($i - 1)])->setWidth(14);
-            }
-        }
-        $getsheet1->getColumnDimension($datacolum[$nomor])->setWidth(1);
+        $getsheet1->getColumnDimension($datacolum[0])->setWidth(14);
+        $getsheet1->getColumnDimension($datacolum[1])->setWidth(14);
+        $getsheet1->getColumnDimension($datacolum[2])->setWidth(14);
+        $getsheet1->getColumnDimension($datacolum[3])->setWidth(14);
+        $getsheet1->getColumnDimension($datacolum[4])->setWidth(1);
+        $getsheet1->getColumnDimension($datacolum[7])->setWidth(14);
 
-        $getsheet1->getStyle('A1')->applyFromArray($stylejudul);
-        $getsheet1->getStyle('A22:'.$datacolum[$nomor].'22')->applyFromArray($stylejudultabel);
         if($nomor <= 0){
             $kolommulai = 'E';
+        }else if($nomor == 4){
+            $kolommulai = $datacolum[$nomor];
         }else{
             $kolommulai = $datacolum[($nomor - 1)];
         }
-        $spreadsheet->getActiveSheet()->mergeCells($kolommulai.'22:'.$datacolum[($nomor)].'22');
+
+        $getsheet1->getStyle('A1')->applyFromArray($stylejudul);
+        $getsheet1->getStyle('A22:'.$kolommulai.'22')->applyFromArray($stylejudultabel);
+        $getsheet1->getStyle($datacolum[7].'22')->applyFromArray($stylejudultabel);
+
+        $spreadsheet->getActiveSheet()->mergeCells($datacolum[3].'22:'.$datacolum[4].'22');
 
         //GENERATE DATA
         $anomor = 1;
@@ -881,17 +900,21 @@ class Export_excel extends CI_Controller {
         foreach ($dataprimary as $dataisi) {
             $endrow = (int)$anomor+22;
             $sheet1->setCellValue('A'.$endrow, $anomor);
-            $sheet1->setCellValue('B'.$endrow, tgl_indo_terbalik($dataisi->tanggal_value));
-            $sheet1->setCellValue('C'.$endrow, $dataisi->jam_value);
+            $sheet1->setCellValue('B'.$endrow, tgl_indo_terbalik($dataisi->ttanggal_value));
+            $sheet1->setCellValue('C'.$endrow, $dataisi->jjam_value);
             $sheet1->setCellValue('D'.$endrow, $dataisi->grow_value);
             $sheet1->setCellValue('E'.$endrow, floatval($dataisi->isi_value));
+            $rowlast = 0;
             if ($countsecond > 0) {
                 for ($i=1; $i < count($linelabel); $i++) {
-                $sheet1->setCellValue($datacolum[($i-1)].$endrow, $isisecondary[($i - 1)][($anomor - 1)]);
+                    $sheet1->setCellValue($datacolum[($i-1)].$endrow, $isisecondary[($i - 1)][($anomor - 1)]);
+                    $rowlast = $i - 1;
                 }
             }
-            $spreadsheet->getActiveSheet()->mergeCells($kolommulai.$endrow.':'.$datacolum[$nomor].$endrow);
-            $getsheet1->getStyle('A'.$endrow.':'.$datacolum[$nomor].$endrow)->applyFromArray($styleisitabel);
+            $sheet1->setCellValue($datacolum[7].$endrow, '('.$dataisi->grow_value.') '.$dataisi->jjam_value);
+            $spreadsheet->getActiveSheet()->mergeCells($datacolum[3].$endrow.':'.$datacolum[4].$endrow);
+            $getsheet1->getStyle('A'.$endrow.':'.$kolommulai.$endrow)->applyFromArray($styleisitabel);
+            $getsheet1->getStyle($datacolum[7].$endrow)->applyFromArray($styleisitabel);
             $anomor++;
         }
 
@@ -908,7 +931,7 @@ class Export_excel extends CI_Controller {
         }
 
         $xAxisTickValues = [
-            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, $xlabel.'!$C$23:$C$'.$endrow, null, 4), // Q1 to Q4
+            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, $xlabel.'!$'.$datacolum[7].'$23:$'.$datacolum[7].'$'.$endrow, null, 4), // Q1 to Q4
         ];
 
         $dataSeriesValues = [
@@ -958,12 +981,12 @@ class Export_excel extends CI_Controller {
 
         // Set the position where the chart should appear in the worksheet
         $chart->setTopLeftPosition('A3');
-        $chart->setBottomRightPosition($datacolum[$nomor].'20');
+        $chart->setBottomRightPosition($datacolum[4].'20');
 
         // Add the chart to the worksheet
         $getsheet1->addChart($chart);
 
-        $spreadsheet->getActiveSheet()->getPageSetup()->setPrintArea('A1:'.$datacolum[$nomor].$endrow);
+        $spreadsheet->getActiveSheet()->getPageSetup()->setPrintArea('A1:'.$datacolum[4].$endrow);
 
         // Save Excel 2007 file
         $filename = 'download/print_'.$xlabel.'.xlsx';//$helper->getFilename(__FILE__);

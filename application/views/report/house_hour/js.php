@@ -31,13 +31,22 @@ $(document).ready(function(){
     });
     return;
   }
+  if (parseInt($('[name="hourdari1"]').val()) > parseInt($('[name="hourdari2"]').val())) {
+    swal.fire({
+      title: "Peringatan!",
+      html : '<p style="font-size: 14px">Data Grow day Salah! Mohon set ulang</p>',
+      type : "warning",
+    });
+    return;
+  }
 
   var isiperbandingan = $('#boxpembanding').attr('data-val');
   var inijson = {
       'value1' : 'HOUR_1',
       'value2' : datgraf,
       'value3' : datkandang,
-      'value6' : $('[name="hourdari"]').val(),
+      'value61' : $('[name="hourdari1"]').val(),
+      'value62' : $('[name="hourdari2"]').val(),
       'value7' : datperiode,
       'valnomor' : isiperbandingan
     };
@@ -83,24 +92,25 @@ $(document).ready(function(){
   $('#btnprint').attr('disabled','true');
 
     var dt = {};
-  loopprint(inijson,1,datgraf.length,dt);
-
-  }));
-
-  selectdata_kandang();
-});
-
-function loopprint(dataini,awal,loop,dataurl) {
-  if(awal <= loop){
     Swal.fire({
       title: 'Memproses Data',
-      html: '<p style="font-size: 14px">Membuat file unduh '+awal+' dari '+loop+'</p>',
+      html: '<p style="font-size: 14px">Membuat file unduh</p>',
       allowOutsideClick: false,
       onBeforeOpen: () => {
         Swal.showLoading()
         Swal.getTimerLeft()
       },
     });
+  loopprint(inijson,1,datgraf.length,dt);
+
+  }));
+
+  selectdata_kandang();
+  selectdata();
+});
+
+function loopprint(dataini,awal,loop,dataurl) {
+  if(awal <= loop){
     url = awal - 1;
     $.ajax({
       type: "POST",
@@ -161,7 +171,7 @@ function isiselect_kandang(inidata){
     allowClear : true,
     data : inidata,
   }).on("change", function () {
-    selectdata();
+    //selectdata();
   });
 }
 
@@ -196,13 +206,22 @@ function grafik(){
     });
     return;
   }
+  if (parseInt($('[name="hourdari1"]').val()) > parseInt($('[name="hourdari2"]').val())) {
+    swal.fire({
+      title: "Peringatan!",
+      html : '<p style="font-size: 14px">Data Grow day Salah! Mohon set ulang</p>',
+      type : "warning",
+    });
+    return;
+  }
 
   var isiperbandingan = $('#boxpembanding').attr('data-val');
   var inijson = {
       'value1' : 'HOUR_1',
       'value2' : datgraf,
       'value3' : datkandang,
-      'value6' : $('[name="hourdari"]').val(),
+      'value61' : $('[name="hourdari1"]').val(),
+      'value62' : $('[name="hourdari2"]').val(),
       'value7' : datperiode,
       'valnomor' : isiperbandingan
     };
@@ -250,15 +269,6 @@ function grafik(){
 
 function loopgrafik(dataini,awal,loop) {
   if(awal <= loop){
-    Swal.fire({
-      title: 'Memproses Data',
-      html: '<p style="font-size: 14px">Membuat grafik '+awal+' dari '+loop+'</p>',
-      allowOutsideClick: false,
-      onBeforeOpen: () => {
-        Swal.showLoading()
-        Swal.getTimerLeft()
-      },
-    });
     url = awal - 1;
     $.ajax({
       type: "POST",
@@ -340,7 +350,8 @@ function loopgrafik(dataini,awal,loop) {
             }
           });
           $('#titlegrafik'+awal).html(data.glabel);
-          $('[name="hourdari"]').val(data.hourdari);
+          $('[name="hourdari1"]').val(data.hourdari1);
+          $('[name="hourdari2"]').val(data.hourdari2);
           $('#tglresponse').removeAttr('style');
           awal = awal + 1;
           loopgrafik(dataini,awal,loop);
@@ -433,7 +444,8 @@ function isiselect(inidata){
     placeholder : '-Pilih Data-',
     data : inidata,
   }).on("change", function () {
-    $('[name="hourdari"]').val('-1');
+    $('[name="hourdari1"]').val('-1');
+    $('[name="hourdari2"]').val('-1');
   });
 }
 

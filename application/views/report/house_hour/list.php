@@ -18,7 +18,7 @@
 								</div>
 								<div class="form-group col-sm-2">
 									<label>Periode</label>
-									<input name="val_periode" class="form-control" id="inputperiode" style="width: 100%;border-radius: 3px;" type="number" min="1" placeholder="-Masukan periode-" onchange="selectdata();">
+									<input name="val_periode" class="form-control" id="inputperiode" style="width: 100%;border-radius: 3px;" type="number" min="1" placeholder="-Masukan periode-" onchange="">
 								</div>
 								<div class="form-group col-sm-2">
 									<label>Data House</label>
@@ -34,10 +34,17 @@
 					                </div>
 								</div>
 								<div class="form-group col-sm-2">
-									<label>Grow Day</label>
+									<label> Star Grow Day</label>
 
 						            <div class="form-group">
-						                <input class="form-control" type="number" min="-1" name="hourdari" value="-1" style="border-radius:3px;">
+						                <input class="form-control" type="number" min="-1" name="hourdari1" value="-1" style="border-radius:3px;">
+						            </div>
+								</div>
+								<div class="form-group col-sm-2">
+									<label>End Grow Day</label>
+
+						            <div class="form-group">
+						                <input class="form-control" type="number" min="-1" name="hourdari2" value="-1" style="border-radius:3px;">
 						            </div>
 								</div>
 								<div class="form-group col-sm-2">

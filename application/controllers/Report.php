@@ -155,7 +155,8 @@ class Report extends CI_Controller {
             $fil2 = $this->input->post('value2')[$url];
             $fil3 = $this->input->post('value3');
             $id_user   = $this->session->userdata('id_user');
-            $filhour = $this->input->post('value6');
+            $filhour1 = $this->input->post('value61');
+            $filhour2 = $this->input->post('value62');
             $filperiode = $this->input->post('value7');
             $nomor = $this->input->post('valnomor');
             $valpem = $this->input->post('valpem');
@@ -166,17 +167,29 @@ class Report extends CI_Controller {
                 $stringkd[$key->id] = $key->nama_kandang;
             }
 
-            if($filhour == '-1'){
-                $filhour = $this->db->query("SELECT grow_value FROM image2 WHERE kategori = '".$fil1."' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$fil3."' ORDER BY grow_value DESC LIMIT 1")->row_array()['grow_value'];
+            if($filhour1 == $filhour2){
+                if($filhour1 == '-1'){
+                    $filhour1 = $this->db->query("SELECT grow_value FROM image2 WHERE kategori = '".$fil1."' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$fil3."' ORDER BY grow_value DESC LIMIT 1")->row_array()['grow_value'];
+                    $filhour2 = $filhour1;
+                }
+                $esqlgrow = "AND grow_value = '".$filhour1."'";
+            }else{
+                $esqlgrow = "AND grow_value BETWEEN '".$filhour1."' AND '".$filhour2."'";
             }
 
-            $esqlgen  = "SELECT LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') AS grow_value,isi_value FROM `image2` ";
+            $esqlgen  = "SELECT grow_value AS grow, DATE_FORMAT(image2.tanggal_value,'%d-%m-%Y') AS ttanggal_value, LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') AS jjam_value,isi_value FROM `image2` ";
             $esqlgen .= "WHERE kode_perusahaan = '".$id_user."' AND kategori = '".$fil1."' ";
             $esqlnamadata = "AND nama_data = '".$fil2."'";
-            $esqlgrow = "AND grow_value = '".$filhour."'";
             $esqlorder = "ORDER BY tanggal_value ASC, LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') ASC";
 
-            if($fil1 == 'HOUR_1'){$addlabel = ' : Grow Day '.$filhour.' ';}
+            if($fil1 == 'HOUR_1'){
+                if($filhour1 == $filhour2){
+                    $addlabel = ' : Grow Day '.$filhour1.' ';
+                }else{
+                    $addlabel = ' : Grow Day '.$filhour1.' - '.$filhour2.' ';
+                }
+            }
+
             $label = $this->umum_model->get('kode_data',['kode_data'=>$fil2])->row_array()['nama_data'];
             $glabel = $label.$addlabel;
             $linelabel[0] = $stringkd[$fil3].' ('.$filperiode.')';
@@ -193,7 +206,7 @@ class Report extends CI_Controller {
 
             $adata = [];
             foreach ($dataprimary as $value) {
-                $adata[]  = $value->grow_value.':00';
+                $adata[]  = '('.$value->grow.') - '.$value->jjam_value.':00';
             }
             $isigrowday = $adata;
 
@@ -225,7 +238,7 @@ class Report extends CI_Controller {
                     for ($k=0; $k < count($isigrowday); $k++) { 
                         $cdata[$k] = '';
                         foreach ($datasecondary as $value3) {
-                            if($isigrowday[$k] == $value3->grow_value){
+                            if($isigrowday[$k] == ('('.$value3->grow.') - '.$value3->jjam_value.':00')){
                                 $cdata[$k] = $value3->isi_value;
                             }
                         }
@@ -239,7 +252,7 @@ class Report extends CI_Controller {
                 $linelabel[$i+1] = $stringkd[$valpem['valkandang'.$urutan]].' ('.$valpem['valperiode'.$urutan].')';
             }
 
-            echo json_encode(['status'=>true,'labelgf'=>$isigrowday,'data'=>$isiprimary,'label'=>$label,'glabel'=>$glabel,'hourdari'=>$filhour,'datasecond'=>$isisecondary,'countsecond'=>$countsecond,'linelabel'=>$linelabel]);
+            echo json_encode(['status'=>true,'labelgf'=>$isigrowday,'data'=>$isiprimary,'label'=>$label,'glabel'=>$glabel,'hourdari1'=>$filhour1,'hourdari2'=>$filhour2,'datasecond'=>$isisecondary,'countsecond'=>$countsecond,'linelabel'=>$linelabel]);
 
     }
 
