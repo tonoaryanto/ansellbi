@@ -357,7 +357,8 @@ class Report extends CI_Controller {
         $data2periode = $this->input->post('data2periode');
         $data2data    = $this->input->post('data2data');
         $data2posisi  = $this->input->post('data2posisi');
-        $filhour      = $this->input->post('value6');
+        $filhour1      = $this->input->post('value61');
+        $filhour2      = $this->input->post('value62');
         $id_user      = $this->session->userdata('id_user');
 
         $namakd = $this->umum_model->get('data_kandang',['kode_perusahaan'=>$id_user])->result();
@@ -366,13 +367,18 @@ class Report extends CI_Controller {
             $stringkd[$key->id] = $key->nama_kandang;
         }
 
-            if($filhour == '-1'){
-                $filhour = $this->db->query("SELECT grow_value FROM image2 WHERE kategori = 'HOUR_1' AND nama_data = '".$data1data."' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$data1kandang."' ORDER BY grow_value DESC LIMIT 1")->row_array()['grow_value'];
+            if($filhour1 == $filhour2){
+                if($filhour1 == '-1'){
+                    $filhour1 = $this->db->query("SELECT grow_value FROM image2 WHERE kategori = 'HOUR_1' AND nama_data = '".$data1data."' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$data1kandang."' ORDER BY grow_value DESC LIMIT 1")->row_array()['grow_value'];
+                    $filhour2 = $filhour1;
+                }
+                $esqlgrow = "AND grow_value = '".$filhour1."'";
+            }else{
+                $esqlgrow = "AND grow_value BETWEEN '".$filhour1."' AND '".$filhour2."' ";
             }
 
-            $esqlgen  = "SELECT LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') AS grow_value,isi_value FROM `image2` ";
+            $esqlgen  = "SELECT grow_value AS grow, DATE_FORMAT(image2.tanggal_value,'%d-%m-%Y') AS ttanggal_value, LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') AS jjam_value,isi_value FROM `image2` ";
             $esqlgen .= "WHERE kode_perusahaan = '".$id_user."' AND kategori = 'HOUR_1' ";
-            $esqlgrow = "AND grow_value = '".$filhour."'";
             $esqlorder = "ORDER BY tanggal_value ASC, LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') ASC";
 
             $label = $this->umum_model->get('kode_data',['kode_data'=>$data1data])->row_array()['nama_data'];
@@ -391,7 +397,7 @@ class Report extends CI_Controller {
 
             $adata = [];
             foreach ($dataprimary1 as $value) {
-                $adata[] = $value->grow_value.':00';
+                $adata[] = '('.$value->grow.') - '.$value->jjam_value.':00';
             }
             $isigrowday1 = $adata;
 
@@ -420,7 +426,7 @@ class Report extends CI_Controller {
                 for ($k=0; $k < count($isigrowday1); $k++) { 
                     $cdata2[$k] = '';
                     foreach ($dataprimary2 as $value3) {
-                        if($isigrowday1[$k] == ($value3->grow_value.':00')){
+                        if($isigrowday1[$k] == '('.$value3->grow.') - '.$value3->jjam_value.':00'){
                             $cdata2[$k] = $value3->isi_value;
                         }
                     }
@@ -435,7 +441,7 @@ class Report extends CI_Controller {
             $linelabel[1] = $stringkd[$data2kandang].' ('.$data2periode.') - '.$label2;
             //END Data 2
 
-            echo json_encode(['status'=>true,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari'=>$filhour,'linelabel'=>$linelabel]);
+            echo json_encode(['status'=>true,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari1'=>$filhour1,'hourdari2'=>$filhour2,'linelabel'=>$linelabel]);
     }
 
     public function datatabel_dyaxish(){
@@ -443,18 +449,20 @@ class Report extends CI_Controller {
         $fil2 = $this->input->post('data1data');
         $fil3 = $this->input->post('data1kandang');
         $id_user   = $this->session->userdata('id_user');
-        $filhour      = $this->input->post('value6');
+        $filhour1      = $this->input->post('value61');
+        $filhour2      = $this->input->post('value62');
         $filperiode = $this->input->post('data1periode');
         $data2kandang = $this->input->post('data2kandang');
         $data2periode = $this->input->post('data2periode');
         $data2data    = $this->input->post('data2data');
 
-        if($filhour == '-1'){
-            $filhour = $this->db->query("SELECT grow_value FROM image2 WHERE kategori = '".$fil1."' AND nama_data = '".$fil2."' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$fil3."' AND periode = '".$filperiode."' ORDER BY grow_value DESC LIMIT 1")->row_array()['grow_value'];
-        }
 
         header('Content-Type: application/json');
-        echo $this->grafik_model->json_hour2($fil1,$fil2,$fil3,$id_user,$filhour,$filperiode,$data2kandang,$data2periode,$data2data);
+        if($filhour1 == $filhour2){
+            echo $this->grafik_model->json_hour2($fil1,$fil2,$fil3,$id_user,$filhour1,$filperiode,$data2kandang,$data2periode,$data2data);
+        }else{
+            echo $this->grafik_model->json_hour2_between($fil1,$fil2,$fil3,$id_user,$filhour1,$filhour2,$filperiode,$data2kandang,$data2periode,$data2data);
+        }
     }
 
     public function datatabel_dyaxisd(){

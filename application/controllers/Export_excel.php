@@ -42,7 +42,6 @@ class Export_excel extends CI_Controller {
 
         //SET LABEL
         if($fil1 == 'DAY_1'){$addlabel = ' : Grow Day '.$fildari.' s/d '.$filsampai.' ';}
-        if($fil1 == 'HOUR_1'){$addlabel = ' : Grow Day '.$filhour.' ';}
         $label = $this->umum_model->get('kode_data',['kode_data'=>$fil2])->row_array()['nama_data'];
         $xlabel = preg_replace("/[^a-zA-Z]/", "", $label);
 

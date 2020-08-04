@@ -83,13 +83,19 @@
 								<label>Nama Grafik</label>
 								<input style="border-radius: 5px" type="text" class="form-control" name="namagrafik" placeholder="Nama Grafik">
 							</div>
-							<div class="form-group col-sm-6">
-									<label>Grow Day</label>
-						            <div class="form-group">
-						                <input class="form-control" type="number" min="-1" name="hourdari" value="-1" style="border-radius:3px;">
-						            </div>
+							<div class="form-group col-sm-4">
+								<label>Star Grow Day</label>
+								<div class="form-group">
+									<input class="form-control" type="number" min="-1" name="hourdari1" value="-1" style="border-radius:3px;">
+								</div>
 							</div>
-							<div class="form-group col-sm-6">
+							<div class="form-group col-sm-4">
+								<label>End Grow Day</label>
+								<div class="form-group">
+									<input class="form-control" type="number" min="-1" name="hourdari2" value="-1" style="border-radius:3px;">
+								</div>
+							</div>
+							<div class="form-group col-sm-4">
 								<label>Actions</label>
 								<div>
 									<button class="btn btn-default" onclick="grafik();">Apply</button>

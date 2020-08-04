@@ -213,8 +213,8 @@ function loadtabel() {
         'data2kandang' : function () {return $('[name="val_kandang2"]').val();},
         'data2periode' : function () {return $('[name="val_periode2"]').val();},
         'data2data'    : function () {return $('[name="val_data2"]').val();},
-        'value6'       : function(){ return $('[name="hourdari"]').val();},
-
+        'value61'      : function () {return $('[name="hourdari1"]').val();},
+        'value62'      : function () {return $('[name="hourdari2"]').val();},
       }
     },
     columns:[
@@ -226,12 +226,12 @@ function loadtabel() {
         },
         {
             title: "TANGGAL",
-            data:"tanggal_value",
+            data:"ttanggal_value",
             orderable: false
         },
         {
             title: "JAM",
-            data:"jam_value",
+            data:"jjam_value",
             orderable: false
         },
         {
@@ -246,7 +246,7 @@ function loadtabel() {
         },
         {
             title: "DATA SUMBU Y KANAN",
-            data:"isi_value2",
+            data:"isi_value3",
             orderable: false
         },
     ],
@@ -307,6 +307,7 @@ function cekgrafik() {
   if (data1data == '' || data1data == null || data1data == undefined) {title = 'Data 1 input data house masih kosong!';cek = 1;}
   if (data1periode == '' || data1periode < 1) {title = 'Data 1 input periode masih kosong!';cek = 1;}
   if (data1kandang == '' || data1kandang == null || data1kandang == undefined) {title = 'Data 1 input kandang masih kosong!';cek = 1;}
+  if (parseInt($('[name="hourdari1"]').val()) > parseInt($('[name="hourdari2"]').val())) {title = 'Data Grow Day Salah!';cek = 1;}
 
   if(cek == 1){
     swal.fire({
@@ -342,7 +343,8 @@ function grafik(){
     'data2periode' : $('[name="val_periode2"]').val(),
     'data2data'    : $('[name="val_data2"]').val(),
     'data2posisi'  : $('[name="posisiy2"]').val(),
-    'value6'       : $('[name="hourdari"]').val(),
+    'value61'      : $('[name="hourdari1"]').val(),
+    'value62'      : $('[name="hourdari2"]').val(),
     'namagrafik'   : $('[name="namagrafik"]').val()
   };
 
@@ -438,7 +440,8 @@ function grafik(){
           });
 
           $('#titlegrafik').html(data.glabel);
-          $('[name="hourdari"]').val(data.hourdari);
+          $('[name="hourdari1"]').val(data.hourdari1);
+          $('[name="hourdari2"]').val(data.hourdari2);
           $('#boxtabel').removeAttr('style');
           $('#mytable').DataTable().ajax.url("<?php echo base_url('report/datatabel_dyaxish');?>").load();
          }else{
