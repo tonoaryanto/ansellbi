@@ -997,79 +997,279 @@ class Export_excel extends CI_Controller {
         echo json_encode(['status'=>true,'url'=>base_url($filename)]);
     }
 
-    public function ydhistory_house_day($value='')
-    {
-        $spreadsheet = new Spreadsheet();
-        $worksheet = $spreadsheet->getActiveSheet();
-        $worksheet->fromArray(
-            [
-                ['', 2010, 2011, 2012],
-                ['Q1', 12, 15, 21],
-                ['Q2', 56, 73, 86],
-                ['Q3', 52, 61, 69],
-                ['Q4', 30, 32, 0],
+    public function ydhistory_house_hour(){
+        $data1kandang = $this->input->post('data1kandang');
+        $data1periode = $this->input->post('data1periode');
+        $data1data    = $this->input->post('data1data');
+        $data1posisi  = $this->input->post('data1posisi');
+        $data2kandang = $this->input->post('data2kandang');
+        $data2periode = $this->input->post('data2periode');
+        $data2data    = $this->input->post('data2data');
+        $data2posisi  = $this->input->post('data2posisi');
+        $filhour1     = $this->input->post('value61');
+        $filhour2     = $this->input->post('value62');
+        $namagrafik   = $this->input->post('namagrafik');
+        $id_user      = $this->session->userdata('id_user');
+
+        $namakd = $this->umum_model->get('data_kandang',['kode_perusahaan'=>$id_user])->result();
+        $stringkd = [];
+        foreach ($namakd as $key) {
+            $stringkd[$key->id] = $key->nama_kandang;
+        }
+
+        if($filhour1 == $filhour2){
+            if($filhour1 == '-1'){
+                $filhour1 = $this->db->query("SELECT grow_value FROM image2 WHERE kategori = 'HOUR_1' AND nama_data = '".$data1data."' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$data1kandang."' ORDER BY grow_value DESC LIMIT 1")->row_array()['grow_value'];
+                $filhour2 = $filhour1;
+            }
+            $esqlgrow = "AND grow_value = '".$filhour1."'";
+        }else{
+            $esqlgrow = "AND grow_value BETWEEN '".$filhour1."' AND '".$filhour2."' ";
+        }
+
+        $esqlgen  = "SELECT grow_value AS grow, DATE_FORMAT(image2.tanggal_value,'%d-%m-%Y') AS ttanggal_value, LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') AS jjam_value,isi_value FROM `image2` ";
+        $esqlgen .= "WHERE kode_perusahaan = '".$id_user."' AND kategori = 'HOUR_1' ";
+        $esqlorder = "ORDER BY tanggal_value ASC, LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') ASC";
+
+        $label = $this->umum_model->get('kode_data',['kode_data'=>$data1data])->row_array()['nama_data'];
+        $glabel = $this->input->post('namagrafik');
+        $linelabel[0] = $stringkd[$data1kandang].' ('.$data1periode.') - '.$label;
+        $xlabel = preg_replace("/[^a-zA-Z]/", "", $namagrafik);
+
+        //Data Utama
+        $esql1  = $esqlgen;
+        $esql1 .= "AND nama_data = '".$data1data."'";
+        $esql1 .= "AND kode_kandang = '".$data1kandang."'";
+        $esql1 .= "AND periode = '".$data1periode."' ";
+        $esql1 .= $esqlgrow;
+        $esql1 .= $esqlorder;
+
+        $dataprimary1 = $this->db->query($esql1)->result();
+
+        $adata = [];
+        foreach ($dataprimary1 as $value) {
+            $adata[] = '('.$value->grow.') - '.$value->jjam_value.':00';
+        }
+        $isigrowday1 = $adata;
+
+        $bdata = [];
+        foreach ($dataprimary1 as $value2) {
+            $bdata[] = $value2->isi_value;
+        }
+        $isidatagrafik[0] = $bdata;
+        //END Data Utama
+
+        //Data 2
+        $esql2  = $esqlgen;
+        $esql2 .= "AND nama_data = '".$data2data."'";
+        $esql2 .= "AND kode_kandang = '".$data2kandang."'";
+        $esql2 .= "AND periode = '".$data2periode."' ";
+        $esql2 .= $esqlgrow;
+        $esql2 .= $esqlorder;
+
+        $dataprimary2 = $this->db->query($esql2)->result();
+        $cdata2 = [];
+        if ($dataprimary2 == null) {
+            for ($j=0; $j < count($isigrowday1); $j++) { 
+                $cdata2[$j] = 0;
+            }
+        }else{
+            for ($k=0; $k < count($isigrowday1); $k++) { 
+                $cdata2[$k] = '';
+                foreach ($dataprimary2 as $value3) {
+                    if($isigrowday1[$k] == '('.$value3->grow.') - '.$value3->jjam_value.':00'){
+                        $cdata2[$k] = $value3->isi_value;
+                    }
+                }
+                if($cdata2[$k] == '' OR $cdata2[$k] == null){
+                    $cdata2[$k] = 0; 
+                }
+            }
+        }
+
+        $isidatagrafik[1] = $cdata2;
+        $label2 = $this->umum_model->get('kode_data',['kode_data'=>$data2data])->row_array()['nama_data'];
+        $linelabel[1] = $stringkd[$data2kandang].' ('.$data2periode.') - '.$label2;
+        //END Data 2
+
+        $datacolum = ['F','G','H','I','J','K','L','M','N'];
+        $spreadsheet = new Spreadsheet(); // instantiate Spreadsheet
+
+        $filename = $namagrafik; // set filename for excel file to be exported
+
+        $spreadsheet->getProperties()->setCreator('Ansell Jaya Indonesia')
+        ->setLastModifiedBy('Ansell')
+        ->setTitle($filename)
+        ->setSubject($filename)
+        ->setKeywords('Ansell Jaya')
+        ->setCategory('dboansell');
+
+        $spreadsheet->getActiveSheet()->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);                
+        $spreadsheet->getActiveSheet()->getPageSetup()->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4);
+        $spreadsheet->getActiveSheet()->getPageMargins()->setLeft(0.95);
+
+        //STYLE
+        $stylejudul = [
+            'font' => [
+                'size' => 14,
+                'bold' => true,
             ]
-        );
+        ];
+        $stylejudultabel = [
+            'font' => [
+                'size' => 12,
+                'bold' => true,
+            ],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                'wrapText' => true
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ]
+        ];
+        $styleisitabel = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ]
+        ];
+        $styleisitabelcenter = [
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+                'wrapText' => true
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ]
+        ];
 
-        // Set the Labels for each data series we want to plot
-        //     Datatype
-        //     Cell reference for data
-        //     Format Code
-        //     Number of datapoints in series
-        //     Data values
-        //     Data Marker
+        // Add some data
+        $sheet1 = $spreadsheet->setActiveSheetIndex(0);
+
+        // manually set table data value
+        $sheet1->setCellValue('A1', $namagrafik);
+
+        $sheet1->setCellValue('A22', 'No');
+        $sheet1->setCellValue('B22', 'Tanggal');
+        $sheet1->setCellValue('C22', 'Jam');
+        $sheet1->setCellValue('D22', 'Grow Day');
+        $sheet1->setCellValue('E22', $linelabel[0]);
+        $sheet1->setCellValue('F22', $linelabel[1]);
+        $sheet1->setCellValue($datacolum[7].'22', 'Grow & Jam');
+
+        $getsheet1 = $spreadsheet->getActiveSheet();
+
+        //Setting Ukuran dan STYLE
+        $getsheet1->getRowDimension(3)->setRowHeight(32);
+        $getsheet1->getColumnDimension('A')->setWidth(5);
+        $getsheet1->getColumnDimension('B')->setWidth(18);
+        $getsheet1->getColumnDimension('C')->setWidth(15);
+        $getsheet1->getColumnDimension('D')->setWidth(15);
+        $getsheet1->getColumnDimension('E')->setWidth(25);
+        $getsheet1->getColumnDimension($datacolum[0])->setWidth(24);
+        $getsheet1->getColumnDimension($datacolum[1])->setWidth(10);
+        $getsheet1->getColumnDimension($datacolum[2])->setWidth(6);
+        $getsheet1->getColumnDimension($datacolum[3])->setWidth(6);
+        $getsheet1->getColumnDimension($datacolum[4])->setWidth(1);
+        $getsheet1->getColumnDimension($datacolum[7])->setWidth(14);
+
+        $getsheet1->getStyle('A1')->applyFromArray($stylejudul);
+        $getsheet1->getStyle('A22:F22')->applyFromArray($stylejudultabel);
+        $getsheet1->getStyle($datacolum[7].'22')->applyFromArray($stylejudultabel);
+
+        $spreadsheet->getActiveSheet()->mergeCells($datacolum[3].'22:'.$datacolum[4].'22');
+
+        //GENERATE DATA
+        $anomor = 1;
+
+        foreach ($dataprimary1 as $dataisi) {
+            $endrow = (int)$anomor+22;
+            $sheet1->setCellValue('A'.$endrow, $anomor);
+            $sheet1->setCellValue('B'.$endrow, tgl_indo_terbalik($dataisi->ttanggal_value));
+            $sheet1->setCellValue('C'.$endrow, $dataisi->jjam_value.':00');
+            $sheet1->setCellValue('D'.$endrow, $dataisi->grow);
+            $sheet1->setCellValue('E'.$endrow, floatval($dataisi->isi_value));
+            $sheet1->setCellValue('F'.$endrow, $isidatagrafik[1][($anomor - 1)]);
+            $sheet1->setCellValue($datacolum[7].$endrow, '('.$dataisi->grow.') '.$dataisi->jjam_value.':00');
+            $spreadsheet->getActiveSheet()->mergeCells($datacolum[3].$endrow.':'.$datacolum[4].$endrow);
+            $getsheet1->getStyle('A'.$endrow.':F'.$endrow)->applyFromArray($styleisitabel);
+            $getsheet1->getStyle($datacolum[7].$endrow)->applyFromArray($styleisitabel);
+            $anomor++;
+        }
+
+        $getsheet1->setTitle($xlabel);
+
         $dataSeriesLabels = [
-            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, 'Worksheet!$B$1', null, 1), // 2010
-            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, 'Worksheet!$C$1', null, 1), // 2011
-            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, 'Worksheet!$D$1', null, 1), // 2012
+            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, $xlabel.'!$E$22', null, 1),
         ];
-        // Set the X-Axis Labels
-        //     Datatype
-        //     Cell reference for data
-        //     Format Code
-        //     Number of datapoints in series
-        //     Data values
-        //     Data Marker
-        $xAxisTickValues = [
-            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, 'Worksheet!$A$2:$A$5', null, 4), // Q1 to Q4
-        ];
-        // Set the Data values for each data series we want to plot
-        //     Datatype
-        //     Cell reference for data
-        //     Format Code
-        //     Number of datapoints in series
-        //     Data values
-        //     Data Marker
-        $dataSeriesValues = [
-            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_NUMBER, 'Worksheet!$B$2:$B$5', null, 4),
-            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_NUMBER, 'Worksheet!$C$2:$C$5', null, 4),
-            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_NUMBER, 'Worksheet!$D$2:$D$5', null, 4),
-        ];
-        $dataSeriesValues[2]->setLineWidth(60000);
 
-        // Build the dataseries
+        $dataSeriesSecondaryLabels  = [
+            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, $xlabel.'!$F$22', null, 1),
+        ];
+
+        $xAxisTickValues = [
+            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_STRING, $xlabel.'!$'.$datacolum[7].'$23:$'.$datacolum[7].'$'.$endrow, null, 4), // Q1 to Q4
+        ];
+
+        $dataSeriesValues = [
+            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_NUMBER, $xlabel.'!$E$23:$E$'.$endrow, null, 4),
+        ];
+
+        $dataSeriesSecondaryValues  = [
+            new DataSeriesValues(DataSeriesValues::DATASERIES_TYPE_NUMBER, $xlabel.'!$F$23:$F$'.$endrow, null, 4),
+        ];
+        
+        //	Build the dataseries
         $series = new DataSeries(
             DataSeries::TYPE_LINECHART, // plotType
             DataSeries::GROUPING_STACKED, // plotGrouping
             range(0, count($dataSeriesValues) - 1), // plotOrder
             $dataSeriesLabels, // plotLabel
             $xAxisTickValues, // plotCategory
-            $dataSeriesValues,        // plotValues
-            null,
-            null,
-            null,
-            DataSeries::VALUE_AXIS_POSITION_RIGHT //Sumbu Y Berada dikanan
+            $dataSeriesValues        // plotValues
         );
+        
+        //	Build the dataseries
+        $seriesSecondary  = new DataSeries(
+            DataSeries::TYPE_LINECHART, // plotType
+            DataSeries::GROUPING_STACKED, // plotGrouping
+            range(0, count($dataSeriesSecondaryValues) - 1), // plotOrder
+            $dataSeriesSecondaryLabels, // plotLabel
+            $xAxisTickValues, // plotCategory
+            $dataSeriesSecondaryValues        // plotValues
+        );
+        
+        //construct(  $plotType = null, 
+        //            $plotGrouping = null, 
+        //            array $plotOrder = [], 
+        //            array $plotLabel = [], 
+        //            array $plotCategory = [], 
+        //            array $plotValues = [], 
+        //            $plotDirection = null, 
+        //            $smoothLine = false, 
+        //            $plotStyle = null)
+        
+        
+        //	Set the series in the plot area
+        $plotArea = new PlotArea(null, [$series], [$seriesSecondary]);
+        //	Set the chart legend
+        $legend = new Legend(Legend::POSITION_TOP, null, false);
+        
+        $title = new Title('Grafik '.$namagrafik);
 
-        // Set the series in the plot area
-        $plotArea = new PlotArea(null, [$series]);
-        // Set the chart legend
-        $legend = new Legend(Legend::POSITION_TOPRIGHT, null, false);
-
-        $title = new Title('Test Stacked Line Chart');
-        $yAxisLabel = new Title('Value ($k)');
-
-        // Create the chart
+        $yAxisLabel = new Title($label);
+        
+        $secondaryYAxisLabel  = new Title($label2);
+        
+        //	Create the chart
         $chart = new Chart(
             'chart1', // name
             $title, // title
@@ -1078,26 +1278,32 @@ class Export_excel extends CI_Controller {
             true, // plotVisibleOnly
             0, // displayBlanksAs
             null, // xAxisLabel
-            $yAxisLabel  // yAxisLabel
+            $yAxisLabel,  // yAxisLabel
+            null, // xAxis
+            null,  // yAxis
+            null,  // majorGridlines
+            null,  //minor Gridlines
+            $secondaryYAxisLabel    // secondaryYAxisLabel
         );
-
-
-        // Set the position where the chart should appear in the worksheet
-        $chart->setTopLeftPosition('A7');
-        $chart->setBottomRightPosition('H20');
-
+        
+        //	Set the position where the chart should appear in the worksheet
+        $chart->setTopLeftPosition('A3');
+        $chart->setBottomRightPosition($datacolum[4].'21');
+        
         // Add the chart to the worksheet
-        $worksheet->addChart($chart);
+        $getsheet1->addChart($chart);
 
-            // Save Excel 2007 file
-            $filename = 'download/print_test.xlsx';//$helper->getFilename(__FILE__);
-            $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-            $writer->setIncludeCharts(true);
-            $callStartTime = microtime(true);
-            $writer->save($filename);
+        $spreadsheet->getActiveSheet()->getPageSetup()->setPrintArea('A1:'.$datacolum[4].$endrow);
 
-            echo json_encode(['status'=>true,'url'=>base_url($filename)]);
-}
+        // Save Excel 2007 file
+        $filename = 'download/print_'.$xlabel.'.xlsx';//$helper->getFilename(__FILE__);
+        $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->setIncludeCharts(true);
+        $callStartTime = microtime(true);
+        $writer->save($filename);
+
+        echo json_encode(['status'=>true,'url'=>base_url($filename)]);
+    }
 
     public function zzydhistory_house_day(){
         $fil1 = 'DAY_1';

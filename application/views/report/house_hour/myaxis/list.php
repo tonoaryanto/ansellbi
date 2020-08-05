@@ -99,6 +99,7 @@
 								<label>Actions</label>
 								<div>
 									<button class="btn btn-default" onclick="grafik();">Apply</button>
+									<button class="btn btn-success" id="btnprint">Print</button>
 								</div>
 							</div>		
 						</div>

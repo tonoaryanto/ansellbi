@@ -43,6 +43,12 @@ class DataSeries
     const VALUE_AXIS_POSITION_LEFT  = 'l';
     const VALUE_AXIS_POSITION_RIGHT = 'r';
 
+
+    /**
+     * @var string
+     */
+    private $valueAxisPosition;
+
     /**
      * Series Plot Type.
      *
@@ -107,11 +113,6 @@ class DataSeries
     private $plotValues = [];
 
     /**
-     * @var string
-     */
-    private $valueAxisPosition;
-
-    /**
      * Create a new DataSeries.
      *
      * @param null|mixed $plotType
@@ -124,6 +125,8 @@ class DataSeries
      * @param bool $smoothLine
      * @param null|string $plotStyle
      */
+
+//    public function __construct($plotType = null, $plotGrouping = null, array $plotOrder = [], array $plotLabel = [], array $plotCategory = [], array $plotValues = [], $plotDirection = null, $smoothLine = false, $plotStyle = null)
     public function __construct($plotType = null, $plotGrouping = null, array $plotOrder = [], array $plotLabel = [], array $plotCategory = [], array $plotValues = [], $plotDirection = null, $smoothLine = false, $plotStyle = null, $valueAxisPosition = null)
     {
         $this->plotType = $plotType;
@@ -152,6 +155,30 @@ class DataSeries
         if ($valueAxisPosition === null) {
             $this->valueAxisPosition = self::VALUE_AXIS_POSITION_LEFT;
         }
+    }
+
+    /**
+     * Get Value Axis Position.
+     *
+     * @return string
+     */
+    public function getValueAxisPosition()
+    {
+        return $this->valueAxisPosition;
+    }
+
+    /**
+     * Set Value Axis Position.
+     * 
+     * @param string $valueAxisPosition
+     *
+     * @return string
+     */
+    public function setValueAxisPosition($valueAxisPosition)
+    {
+        $this->valueAxisPosition = $valueAxisPosition;
+
+        return $this;
     }
 
     /**
@@ -368,16 +395,6 @@ class DataSeries
     }
 
     /**
-     * Get Value Axis Position.
-     *
-     * @return string
-     */
-    public function getValueAxisPosition()
-    {
-        return $this->valueAxisPosition;
-    }
-
-    /**
      * Set Smooth Line.
      *
      * @param bool $smoothLine
@@ -387,20 +404,6 @@ class DataSeries
     public function setSmoothLine($smoothLine)
     {
         $this->smoothLine = $smoothLine;
-
-        return $this;
-    }
-
-    /**
-     * Set Value Axis Position.
-     * 
-     * @param string $valueAxisPosition
-     *
-     * @return string
-     */
-    public function setValueAxisPosition($valueAxisPosition)
-    {
-        $this->valueAxisPosition = $valueAxisPosition;
 
         return $this;
     }

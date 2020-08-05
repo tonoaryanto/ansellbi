@@ -6,92 +6,23 @@ $(document).ready(function(){
 
     e.preventDefault();
 
-    swal.fire({
-      title: "Underconstruction !",
-      html : '<p style="font-size: 14px">Sedang Dalam Pengembangan . . .</p>',
-      type : "warning",
-    });
+    if (cekgrafik() == 1) {return;}
 
-    return;
+    $('#btnprint').attr('disabled','true');
 
-
-  var datkandang = $('[name="val_kandang"]').val();
-  var datperiode = $('[name="val_periode"]').val();
-  var datgraf = $('#optionselect').val();
-
-  if (datkandang == '' || datkandang == null || datkandang == undefined) {
-    swal.fire({
-      title: "Peringatan!",
-      html : '<p style="font-size: 14px">Data Kandang Masih Kosong!</p>',
-      type : "warning",
-    });
-    return;
-  }
-  if (datgraf == '' || datgraf == null || datgraf == undefined) {
-    swal.fire({
-      title: "Peringatan!",
-      html : '<p style="font-size: 14px">Data Grafik Masih Kosong!</p>',
-      type : "warning",
-    });
-    return;
-  }
-  if (datperiode == '' || datperiode < 1) {
-    swal.fire({
-      title: "Peringatan!",
-      html : '<p style="font-size: 14px">Data Periode Salah! Mohon set ulang</p>',
-      type : "warning",
-    });
-    return;
-  }
-  if ($('[name="daydari"]').val() > $('[name="daysampai"]').val()) {
-    swal.fire({
-      title: "Peringatan!",
-      html : '<p style="font-size: 14px">Data filter Salah! Mohon set ulang</p>',
-      type : "warning",
-    });
-    return;
-  }
-
-  $('#btnprint').attr('disabled','true');
-
-  var isiperbandingan = $('#boxpembanding').attr('data-val');
-  var inijson = {
-      'value1' : 'DAY_1',
-      'value2' : datgraf,
-      'value3' : datkandang,
-      'value4' : $('[name="daydari"]').val(),
-      'value5' : $('[name="daysampai"]').val(),
-      'value7' : datperiode,
-      'valnomor' : isiperbandingan
+    var inijson = {
+      'data1kandang' : $('[name="val_kandang1"]').val(),
+      'data1periode' : $('[name="val_periode1"]').val(),
+      'data1data'    : $('[name="val_data1"]').val(),
+      'data1posisi'  : $('[name="posisiy1"]').val(),
+      'data2kandang' : $('[name="val_kandang2"]').val(),
+      'data2periode' : $('[name="val_periode2"]').val(),
+      'data2data'    : $('[name="val_data2"]').val(),
+      'data2posisi'  : $('[name="posisiy2"]').val(),
+      'value61'      : $('[name="hourdari1"]').val(),
+      'value62'      : $('[name="hourdari2"]').val(),
+      'namagrafik'   : $('[name="namagrafik"]').val()
     };
-
-  var isijson = {};
-  if (isiperbandingan > 0) {
-    for (var i = 1; i < (parseInt(isiperbandingan) + 1); i++) {
-      var nomor = 7 + i;
-
-      if ($('[name="val_pemkandang'+i+'"]').val() == '' || $('[name="val_pemkandang'+i+'"]').val() == null || $('[name="val_pemkandang'+i+'"]').val() == undefined) {
-        swal.fire({
-          title: "Peringatan!",
-          html : '<p style="font-size: 14px">Data Kandang pada pembanding '+i+' Masih Kosong!</p>',
-          type : "warning",
-        });
-        return;
-      }
-      if ($('[name="val_pemperiode'+i+'"]').val() == '' || $('[name="val_pemperiode'+i+'"]').val() == null || $('[name="val_pemperiode'+i+'"]').val() == undefined) {
-        swal.fire({
-          title: "Peringatan!",
-          html : '<p style="font-size: 14px">Data periode pada pembanding '+i+' Masih Kosong!</p>',
-          type : "warning",
-        });
-        return;
-      }
-
-      isijson['valkandang' + nomor] = $('[name="val_pemkandang'+i+'"]').val();
-      isijson['valperiode' + nomor] = $('[name="val_pemperiode'+i+'"]').val();
-    }
-  }
-  inijson['valpem'] = isijson;
 
     Swal.fire({
       title: 'Memproses Data',
@@ -103,9 +34,40 @@ $(document).ready(function(){
       },
     });
 
-    var dt = {};
-  loopprint(inijson,1,datgraf.length,dt);
-
+    $.ajax({
+        url : "<?php echo base_url('export_excel/ydhistory_house_hour');?>",
+        type: "POST",
+        data: inijson,
+        dataType:"JSON",
+        success: function(data){
+          get_sess(data.sess);
+          if(data.status == true){
+            swal.fire({
+              title: "Save File",
+              html : '<p style="font-size: 14px">Silahkan klik Save file</p>',
+            });
+            $('#btnprint').removeAttr('disabled');
+            location.replace(data.url);
+          }else{
+            $('#tombol').removeAttr('disabled');
+            swal.fire({
+              title: "Gagal!",
+              html : data.message,
+              type: "error",
+            });
+            $('#btnprint').removeAttr('disabled');
+          }
+        },
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+          $('#btnprint').removeAttr('disabled');
+          swal.fire({
+            title: "Gagal!",
+            html : '<p style="font-size: 14px">Terjadi Kesalahan!</p>',
+            type: "error",
+          });
+        }
+    });
   }));
 
   selectdata_kandang();
@@ -118,49 +80,13 @@ $(document).ready(function(){
 
 function loopprint(dataini,awal,loop,dataurl) {
   if(awal <= loop){
-    Swal.fire({
-      title: 'Memproses Data',
-      html: '<p style="font-size: 14px">Membuat file unduh '+awal+' dari '+loop+'</p>',
-      allowOutsideClick: false,
-      onBeforeOpen: () => {
-        Swal.showLoading()
-        Swal.getTimerLeft()
-      },
-    });
-    url = awal - 1;
-    $.ajax({
-      type: "POST",
-      url : "<?php echo base_url('export_excel/reportmtd_history_house_day/');?>"+url,
-      data : dataini,
-      dataType : "JSON",
-      success : function(data){
-        get_sess(data.sess);
-        if(data.status == true){
-          $('#btnprint').removeAttr('disabled');
 
-          dataurl[url] = data.url;
-          awal = awal + 1;
-          loopprint(dataini,awal,loop,dataurl);
-        }else{
-          swal.fire({
-            title: "Gagal!",
-            html : data.message,
-            type : "warning",
-          });
-        }
-      }
-    });
   }else{
     seturl = '' ;
     for (var i = 0; i < (awal - 1); i++) {
       seturl += '<br><div><a style="font-size: 14px" href="' + dataurl[i] + '">' + dataurl[i].split("/").pop() + '</a></div>';
     }
-    swal.fire({
-      title: "Save File",
-      html : '<p style="font-size: 14px">Silahkan klik file dibawah ini</p>'+seturl,
-      type : "success",
-      allowOutsideClick: false,
-    });
+
   }
 }
 
@@ -423,13 +349,19 @@ function grafik(){
             data: lineChartData,
             options: {
               responsive: true,
-              hoverMode: 'index',
-              stacked: true,
               title: {
                 display: true,
                 text: data.glabel
               },
-            scales: datascales,
+              tooltips: {
+                mode: 'index',
+                intersect: false,
+              },
+              hover: {
+                mode: 'nearest',
+                intersect: true
+              },
+              scales: datascales,
             }
           });
 

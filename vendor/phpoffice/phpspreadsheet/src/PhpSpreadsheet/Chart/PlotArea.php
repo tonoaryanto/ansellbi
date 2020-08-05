@@ -4,6 +4,8 @@ namespace PhpOffice\PhpSpreadsheet\Chart;
 
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
+//Roland Finke: Multiple Changes made to integrate secondary Yaxis
+
 class PlotArea
 {
     /**
@@ -19,6 +21,14 @@ class PlotArea
      * @var DataSeries[]
      */
     private $plotSeries = [];
+    
+    /**
+     * Secondary Plot Series.
+     *
+     * @var DataSeries[]
+     */
+    private $secondaryYAxisPlotSeries  = [];
+
 
     /**
      * Create a new PlotArea.
@@ -26,10 +36,11 @@ class PlotArea
      * @param null|Layout $layout
      * @param DataSeries[] $plotSeries
      */
-    public function __construct(Layout $layout = null, array $plotSeries = [])
+    public function __construct(Layout $layout = null, array $plotSeries = [], array $secondaryYAxisPlotSeries  = [] )
     {
         $this->layout = $layout;
         $this->plotSeries = $plotSeries;
+        $this->secondaryYAxisPlotSeries = $secondaryYAxisPlotSeries;
     }
 
     /**
@@ -51,6 +62,16 @@ class PlotArea
     {
         return count($this->plotSeries);
     }
+    
+    /**
+     * Get Number of Plot Secondary Groups.
+     *
+     * @return array of DataSeries
+     */
+    public function getPlotSecondaryGroupCount()
+    {
+        return count($this->secondaryYAxisPlotSeries);
+    }
 
     /**
      * Get Number of Plot Series.
@@ -66,6 +87,22 @@ class PlotArea
 
         return $seriesCount;
     }
+    
+    /**
+     * Get Number of Plot Secondary Series.
+     *
+     * @return int
+     */
+    public function getPlotSecondarySeriesCount()
+    {
+        $seriesCount = 0;
+        foreach ($this->secondaryYAxisPlotSeries  as $plot) {
+            $seriesCount += $plot->getPlotSecondarySeriesCount();
+        }
+
+        return $seriesCount;
+    }
+
 
     /**
      * Get Plot Series.
@@ -75,6 +112,16 @@ class PlotArea
     public function getPlotGroup()
     {
         return $this->plotSeries;
+    }
+    
+    /**
+     * Get Plot Secondary Series.
+     *
+     * @return array of DataSeries
+     */
+    public function getPlotSecondaryGroup()
+    {
+        return $this->secondaryYAxisPlotSeries;
     }
 
     /**
@@ -87,6 +134,18 @@ class PlotArea
     public function getPlotGroupByIndex($index)
     {
         return $this->plotSeries[$index];
+    }
+    
+    /**
+     * Get Plot Secondary Series by Index.
+     *
+     * @param mixed $index
+     *
+     * @return DataSeries
+     */
+    public function getPlotSecondaryGroupByIndex($index)
+    {
+        return $this->secondaryYAxisPlotSeries[$index];
     }
 
     /**
@@ -102,11 +161,32 @@ class PlotArea
 
         return $this;
     }
+    
+    /**
+     * Set Plot Secondary Series.
+     *
+     * @param DataSeries[] $plotSeries
+     *
+     * @return PlotArea
+     */
+    public function setPlotSecondarySeries(array $plotSeries)
+    {
+        $this->secondaryYAxisPlotSeries  = $plotSeries;
+
+        return $this;
+    }
 
     public function refresh(Worksheet $worksheet)
     {
         foreach ($this->plotSeries as $plotSeries) {
             $plotSeries->refresh($worksheet);
+        }
+        
+        if(count($this->secondaryYAxisPlotSeries) > 0)
+        {
+            foreach($this->secondaryYAxisPlotSeries as $plotSeries) {
+                $plotSeries->refresh($worksheet);
+            }
         }
     }
 }
