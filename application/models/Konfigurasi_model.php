@@ -36,8 +36,15 @@ class Konfigurasi_model extends CI_Model {
     }
 
     function cek_akses($data){
-//        if ($data == 'get_excel') {if ($this->session->userdata('status_user') != '2') {redirect(base_url('login/keluar'));}}
-//        if ($data == 'data_grafik') {if ($this->session->userdata('status_user') != '1') {redirect(base_url('login/keluar'));}}
+       if ($data == 'admin') {
+           if ($this->session->userdata('status_user') != '2') {
+               redirect(base_url('login/keluar'));
+            }
+        }else{
+            if ($this->session->userdata('status_user') != '1') {
+                redirect(base_url('login/keluar'));
+             } 
+        }
     }
 
     function optimizeafterupload()
