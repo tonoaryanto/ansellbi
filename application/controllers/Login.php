@@ -34,7 +34,7 @@ class Login extends CI_Controller {
 			if ($data_akses['status_user'] == '1') {
 				$url = base_url('history_house');
 			}else if($data_akses['status_user'] == '2'){
-				$url = base_url('admin/dashboard');
+				$url = base_url('admin/farm');
 			}
 
 			$this->session->set_userdata($dat_sess);

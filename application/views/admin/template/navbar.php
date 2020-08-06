@@ -6,28 +6,11 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
-        <li class="treeview <?php if(isset($head1) and $head1 == 'Data Farm'){echo 'active menu-open';}?>">
-          <a href="#">
+        <li class="<?php if(isset($head1) and $head1 == 'Data Farm'){echo 'active menu-open';}?>">
+          <a href="<?php echo base_url('admin/farm');?>">
             <i class="fa fa-file"></i>
             <span>Data Farm</span>
           </a>
-        </li>
-        <li class="<?php if(isset($head1) and $head1 == 'Histori Alarm'){echo 'active';}?>">
-          <a href="<?php echo base_url('histori_alarm')?>"><i class="fa fa-clock-o"></i> <span>Histori Alarm</span></a>
-        </li>
-        <li class="treeview <?php if(isset($head1) and $head1 == 'Report'){echo 'active menu-open';}?>">
-          <a href="#">
-            <i class="fa fa-file"></i>
-            <span>Report</span>
-          </a>
-          <ul class="treeview-menu">
-            <li class="<?php if(isset($head1) AND $head1 == 'Report' AND isset($head2) AND $head2 == 'Histori House (DAY)'){echo 'active';}?>">
-              <a href="<?php echo base_url('report/histori_house_day');?>"><i class="fa fa-circle-o"></i> <span>Histori House (DAY)</span></a>
-            </li>
-            <li class="<?php if(isset($head1) AND $head1 == 'Report' AND isset($head2) AND $head2 == 'Histori House (HOUR)'){echo 'active';}?>">
-              <a href="<?php echo base_url('report/histori_house_hour');?>"><i class="fa fa-circle-o"></i> <span>Histori House (HOUR)</span></a>
-            </li>
-          </ul>
         </li>
         <li class="treeview <?php if(isset($head1) and $head1 == 'Upload'){echo 'active menu-open';}?>">
           <a href="#">

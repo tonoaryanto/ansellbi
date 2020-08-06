@@ -35,7 +35,7 @@
   <!-- MY Style -->
   <link rel="stylesheet" href="<?php echo base_url('get_source/my_style/'.$css);?>">
   <?php } ?>
-  <link rel="stylesheet" href="<?php echo base_url('get_source/my_style/css/template-view_data-css.css');?>">
+  <link rel="stylesheet" href="<?php echo base_url('get_source/my_style/css/template-css.css');?>">
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
@@ -81,8 +81,6 @@
               </span>
             </a>
             <ul class="dropdown-menu dropmenu" style="width: 100px;">
-            	<li class="hidden-lg"><p style="text-align: center;padding:5px 10px;border-bottom: 1px solid #ddd;"><b><?php echo $this->session->userdata('nama_user');?></b> </p></li>
-              <!--li><a href="#" id="resetbtn"><i class="fa fa-refresh"></i> Reset</a></li-->
               <li><a href="#" id="logout"><i class="fa fa-power-off"></i> Log out</a></li>
             </ul>
           </li>

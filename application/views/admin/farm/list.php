@@ -3,9 +3,9 @@
     <div id="boxoption" class="box box-info">
       <div class="box-header with-border">
         <h3 class="box-title">Tabel Data Farm</h3>
-        <div class="box-tools pull-right">
-          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i id="ioption" class="fa fa-minus"></i></button>
-        </div>
+        <button class="btn btn-success btn-sm" id="btn-add-form">
+          <i class="fa fa-plus"></i> Tambah
+        </button>
       </div>
       <div class="box-body">
         <div class="table-responsive">
@@ -14,12 +14,13 @@
                   <tr>
                       <th class="teks-upper" width="50px">No</th>
                       <th class="teks-upper">Nama Farm</th>
-                      <th class="teks-upper">Actions</th>
+                      <th class="teks-upper">Alamat Farm</th>
                   </tr>
-              </thead>      
-          </table>            
+              </thead>
+          </table>
         </div>
       </div>
     </div>
   </div>
 </div>
+<?php $this->load->view('admin/farm/addfrom'); ?>

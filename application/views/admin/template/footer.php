@@ -19,7 +19,6 @@
 <!-- AdminLTE App -->
 <script src="<?php echo base_url();?>assets/dist/js/adminlte.min.js"></script>
 <script src="<?php echo base_url(); ?>assets/sweetalert/dist/sweetalert2.min.js"></script>
-<script src="<?php echo base_url('get_source/my_style/js/template-view_data-js.js');?>"></script>
-<script src="<?php echo base_url('get_source/my_style/js/template-reset_js.js');?>"></script>
+<script src="<?php echo base_url('get_source/my_style/js/template-js.js');?>"></script>
 <?php if(isset($jsadd)){ $this->load->view($jsadd); } ?>
 </html>

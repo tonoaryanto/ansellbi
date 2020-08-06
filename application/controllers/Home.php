@@ -12,7 +12,7 @@ class Home extends CI_Controller {
         if ($data_akses == '1') {
             redirect('history_house');
         }else if($data_akses == '2'){
-            redirect('get_excel');
+            redirect('admin/farm');
         }else{
             redirect('login/keluar');
         }		
