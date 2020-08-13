@@ -1,14 +1,18 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');?>
 
 var dataini = {
-  0 : ['64760'],
+  0 : [{
+    0 :'64760',
+    1 :'62001',
+    2 :'62002'
+  }],
   1 : ['4'],
   2 : ['12'],
   3 : ['1']
 };
 
 $(document).ready(function(){
- reload_grafik();
+  reload_grafik();
   // selectdata_kandang();
 });
 
@@ -23,7 +27,7 @@ function reload_grafik(){
       Swal.getTimerLeft()
     },
   });
-  grafik(dataini[0][0],dataini[1][0],dataini[2][0],dataini[3][0],dataini[0].length,1);
+  grafik(dataini[0],dataini[1][0],dataini[2][0],dataini[3][0],dataini[0].length,1);
 }
 
 function grafik(inidata,id,lebar,dtrow,count,ul){
@@ -54,11 +58,12 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
         'periode' : $('#inputperiode').val(),
       };
     }
+
       data_json['inidata'] = inidata;
 
     $.ajax({
       type: "POST",
-      url : "<?php echo base_url('history_house/grafik/'); ?>",
+      url : "<?php echo base_url('history_house/grafikwp/'); ?>",
       data : data_json,
       dataType : "JSON",
       success : function(data){
@@ -86,30 +91,38 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
             .attr({'id' : 'chartcanvas'+id})
             .appendTo('#inicanvas'+id);
 
+          var data_color = [window.chartColors.orange, window.chartColors.green, window.chartColors.red, window.chartColors.purple];
+
           var lineChartData = {};
           lineChartData['labels'] = data.labelgf;
           lineChartData['datasets'] = [{
                   label: data.linelabel[0],
-                  borderColor: window.chartColors.blue,
-                  backgroundColor: window.chartColors.blue,
+                  borderColor: data_color[1],
+                  backgroundColor: data_color[1],
                   fill: false,
                   data: data.data[0],
                   spanGaps: true,
                   }];
 
-          var datascales = {};
-          datascales['yAxes'] = {
-              yAxes: [{
-                  ticks: {
-                      beginAtZero:true
-                  },
-                  scaleLabel: {
-                       display: true,
-                       labelString: 'Moola',
-                       fontSize: 20 
-                    }
-              }] 
-          };
+          var adddt = {
+              label: data.linelabel[1],
+              borderColor: data_color[2],
+              backgroundColor: data_color[2],
+              fill: false,
+              data: data.data[1],
+              spanGaps: false,
+              };
+          lineChartData['datasets'].push(adddt);
+
+          var adddta = {
+              label: data.linelabel[2],
+              borderColor: window.chartColors.blue,
+              backgroundColor: window.chartColors.blue,
+              fill: false,
+              data: data.data[2],
+              spanGaps: false,
+              };
+          lineChartData['datasets'].push(adddta);
 
           var canvas = document.getElementById('chartcanvas'+id)
           var ctx = canvas.getContext('2d');
@@ -120,20 +133,42 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
             data: lineChartData,
             options: {
               responsive: true,
-              hoverMode: 'index',
-              stacked: true,
               title: {
                 display: true,
                 text: data.glabel
               },
-            scales: datascales
+              tooltips: {
+                mode: 'index',
+                intersect: false,
+              },
+              hover: {
+                mode: 'nearest',
+                intersect: true
+              },
+              scales: {
+                xAxes: [{
+                  display: true,
+                  ticks: {
+                    callback: function(dataLabel, index) {
+                      return index % 2 === 0 ? dataLabel : '';
+                    }
+                  }
+                }],
+                yAxes: [{
+                  display: true,
+                  scaleLabel: {
+                    display: true,
+                    labelString: 'Value'
+                  }
+                }]
+              }
             }
           });
 
           $('#titlegrafik'+id).html(data.glabel);
           var cr = ul;
           ul = ul + 1;
-          grafik(dataini[0][cr],dataini[1][cr],dataini[2][cr],dataini[3][cr],dataini[0].length,ul);
+          grafik(dataini[0],dataini[1][cr],dataini[2][cr],dataini[3][cr],dataini[0].length,ul);
         }else{
           $('#inicanvas').html('-Data Tidak Ditemukan-');
           $('#tglresponse').empty();
@@ -201,9 +236,17 @@ function loadtabel() {
                     orderable: false
                 },
                 {
-                    title: "WIND SPEED (ms)",
+                    title: "REQUIRED WIND SPEED (ms)",
                     orderable: false
-                }
+                },
+                {
+                    title: "MAX WIND SPEED (ms)",
+                    orderable: false
+                },
+                {
+                    title: "MIN WIND SPEED (ms)",
+                    orderable: false
+                },
               ]
           });
         }

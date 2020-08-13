@@ -170,6 +170,140 @@ class History_house extends CI_Controller {
         echo json_encode(['status'=>true,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari'=>$growval,'linelabel'=>$linelabel]);
     }
 
+    public function grafikwp(){
+        //Cek Seesion
+        $cek_sess = $this->konfigurasi->cek_js();
+        if ($cek_sess == 0) {echo json_encode(['sess' => $cek_sess]);return;}
+        //END Cek Session
+
+        $radio = $this->input->post('radio');
+        $id_user   = $this->session->userdata('id_user');
+        $id_farm   = $this->session->userdata('idfarm');
+        $inidata = $this->input->post('inidata');
+
+        if ($radio = 'grow') {
+            $growval = $this->input->post('growval');
+            $growval2 = $this->input->post('growval2');
+            $periode = $this->input->post('periode');
+
+            if($growval == $growval2){
+                $esqlgrow = "AND grow_value = '".$growval."' ";
+            }else{
+                $esqlgrow = "AND grow_value BETWEEN '".$growval."' AND '".$growval2."' ";
+            }
+
+            $esqlperiode = "AND periode = '".$periode."' ";
+        }
+
+        $where_kodep = "kode_perusahaan = '".$id_user."'";
+
+        $esql  = "SELECT grow_value AS grow, LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') AS jjam_value,isi_value, DATE_FORMAT(image2.tanggal_value,'%d-%m-%Y') AS ttanggal_value FROM `image2` ";
+        $esql .= "WHERE ".$where_kodep." ";
+        $esql .= "AND kode_kandang = '".$id_farm."' ";
+        $esql .= "AND nama_data = '".$inidata[0][0]."' ";
+        $esql .= "AND kategori = 'HOUR_1' ";
+        $esql .= $esqlperiode;
+        $esql .= $esqlgrow;
+        $esql .= "ORDER BY tanggal_value ASC, LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') ASC";
+
+        $label = $this->umum_model->get("(SELECT nama_data FROM kode_data WHERE kode_data = '".$inidata[0][0]."' LIMIT 1) as data")->row_array()['nama_data'];
+        if($growval == $growval2){
+            $addlabel = ' : Grow Day '.$growval.' ';
+        }else{
+            $addlabel = ' : Grow Day '.$growval.' - '.$growval2;
+        }
+        $glabel = 'Wind Speed'.$addlabel;
+        $linelabel[0] = $label;
+
+        //Data Utama
+        $dataprimary1 = $this->db->query($esql)->result();
+
+        $adata = [];
+        foreach ($dataprimary1 as $value) {
+            $adata[] = '('.$value->grow.') - '.$value->jjam_value.':00';
+        }
+        $isigrowday1 = $adata;
+
+        $bdata = [];
+        foreach ($dataprimary1 as $value2) {
+            $bdata[] = $value2->isi_value;
+        }
+        $isidatagrafik[0] = $bdata;
+        //END Data Utama
+
+        //Data 2
+        $esql2  = "SELECT grow_value AS grow, LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') AS jjam_value,isi_value, DATE_FORMAT(image2.tanggal_value,'%d-%m-%Y') AS ttanggal_value FROM `image2` ";
+        $esql2 .= "WHERE ".$where_kodep." ";
+        $esql2 .= "AND kode_kandang = '".$id_farm."' ";
+        $esql2 .= "AND nama_data = '".$inidata[0][1]."' ";
+        $esql2 .= "AND kategori = 'HOUR_1' ";
+        $esql2 .= $esqlperiode;
+        $esql2 .= $esqlgrow;
+        $esql2 .= "ORDER BY tanggal_value ASC, LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') ASC";
+
+        $dataprimary2 = $this->db->query($esql2)->result();
+        $cdata2 = [];
+        if ($dataprimary2 == null) {
+            for ($j=0; $j < count($isigrowday1); $j++) { 
+                $cdata2[$j] = 0;
+            }
+        }else{
+            for ($k=0; $k < count($isigrowday1); $k++) { 
+                $cdata2[$k] = '';
+                foreach ($dataprimary2 as $value3) {
+                    if($isigrowday1[$k] == ('('.$value3->grow.') - '.$value3->jjam_value.':00')){
+                        $cdata2[$k] = $value3->isi_value;
+                    }
+                }
+                if($cdata2[$k] == '' OR $cdata2[$k] == null){
+                    $cdata2[$k] = 0; 
+                }
+            }
+        }
+
+        $isidatagrafik[1] = $cdata2;
+        $label2 = $this->umum_model->get("(SELECT nama_data FROM kode_data WHERE kode_data = '".$inidata[0][1]."' LIMIT 1) as data")->row_array()['nama_data'];
+        $linelabel[1] = $label2;
+        //END Data 2
+
+        //Data 3
+        $esql3  = "SELECT grow_value AS grow, LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') AS jjam_value,isi_value, DATE_FORMAT(image2.tanggal_value,'%d-%m-%Y') AS ttanggal_value FROM `image2` ";
+        $esql3 .= "WHERE ".$where_kodep." ";
+        $esql3 .= "AND kode_kandang = '".$id_farm."' ";
+        $esql3 .= "AND nama_data = '".$inidata[0][2]."' ";
+        $esql3 .= "AND kategori = 'HOUR_1' ";
+        $esql3 .= $esqlperiode;
+        $esql3 .= $esqlgrow;
+        $esql3 .= "ORDER BY tanggal_value ASC, LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') ASC";
+
+        $dataprimary3 = $this->db->query($esql3)->result();
+        $cdata3 = [];
+        if ($dataprimary3 == null) {
+            for ($j=0; $j < count($isigrowday1); $j++) { 
+                $cdata3[$j] = 0;
+            }
+        }else{
+            for ($k=0; $k < count($isigrowday1); $k++) { 
+                $cdata3[$k] = '';
+                foreach ($dataprimary3 as $value4) {
+                    if($isigrowday1[$k] == ('('.$value4->grow.') - '.$value4->jjam_value.':00')){
+                        $cdata3[$k] = $value4->isi_value;
+                    }
+                }
+                if($cdata3[$k] == '' OR $cdata3[$k] == null){
+                    $cdata3[$k] = 0; 
+                }
+            }
+        }
+
+        $isidatagrafik[2] = $cdata3;
+        $label3 = $this->umum_model->get("(SELECT nama_data FROM kode_data WHERE kode_data = '".$inidata[0][2]."' LIMIT 1) as data")->row_array()['nama_data'];
+        $linelabel[2] = $label3;
+        //END Data 3
+
+        echo json_encode(['status'=>true,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari'=>$growval,'linelabel'=>$linelabel]);
+    }
+
     public function data_select(){
         $cek_sess = $this->konfigurasi->cek_js();
         if ($cek_sess == 0) {
@@ -281,7 +415,7 @@ class History_house extends CI_Controller {
         $adata = [];
         if($this->input->post('kateg') == 'temp'){$adata = $this->tabeltemperature($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
         if($this->input->post('kateg') == 'hum'){$adata = $this->tabelsatukolom($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
-        if($this->input->post('kateg') == 'wind'){$adata = $this->tabelsatukolom($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
+        if($this->input->post('kateg') == 'wind'){$adata = $this->tabelwind($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata[0][0],$inidata[0][1],$inidata[0][2]);}
         if($this->input->post('kateg') == 'feed'){$adata = $this->tabelsatukolom($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
         if($this->input->post('kateg') == 'water'){$adata = $this->tabelwater($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
         if($this->input->post('kateg') == 'press'){$adata = $this->tabelsatukolom($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
@@ -433,6 +567,55 @@ class History_house extends CI_Controller {
             $kolomdata[2]  = $isidata['ttanggal_value'];
             $kolomdata[3]  = $isidata['jjam_value'];
             $kolomdata[4]  = $isidata['isi_value'];
+            $adata[$iz] = $kolomdata;
+        }
+        //END Data Utama
+
+        return $adata;
+    }
+
+    private function tabelwind($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata1,$inidata2,$inidata3)
+    {
+        $esql1  = "SELECT image2.id,image2.grow_value, DATE_FORMAT(image2.tanggal_value,'%d-%m-%Y') AS ttanggal_value, CONCAT(LPAD(SUBSTRING_INDEX(image2.jam_value, '-', 1), 2, '0'),':',LPAD(SUBSTRING_INDEX(SUBSTRING_INDEX(image2.jam_value, '-', 2), '-', -1), 2, '0'),':',LPAD(SUBSTRING_INDEX(image2.jam_value, '-', -1), 2, '0')) AS jjam_value, image2.isi_value FROM `image2` ";
+        $esql2 = "WHERE kode_perusahaan = '".$id_user."'";
+        $esql3 = "AND kode_kandang = '".$id_farm."' ";
+        $esql4 = "AND nama_data = '".$inidata1."' ";
+        $esql5 = "AND kategori = 'HOUR_1' ";
+        $esql6 = $esqlperiode;
+        $esql7 = $esqlgrow;
+        $esql8 = "ORDER BY tanggal_value ASC, LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0') ASC";
+
+        $datsql1  = $esql1;$datsql1 .= $esql2;$datsql1 .= $esql3;
+        $datsql1 .= $esql4;$datsql1 .= $esql5;$datsql1 .= $esql6;
+        $datsql1 .= $esql7;$datsql1 .= $esql8;
+
+        $esql41 = "AND nama_data = '".$inidata2."' ";
+        $datsql2  = $esql1 ;$datsql2 .= $esql2;$datsql2 .= $esql3;
+        $datsql2 .= $esql41;$datsql2 .= $esql5;$datsql2 .= $esql6;
+        $datsql2 .= $esql7 ;$datsql2 .= $esql8;
+
+        $esql42 = "AND nama_data = '".$inidata3."' ";
+        $datsql3  = $esql1 ;$datsql3 .= $esql2;$datsql3 .= $esql3;
+        $datsql3 .= $esql42;$datsql3 .= $esql5;$datsql3 .= $esql6;
+        $datsql3 .= $esql7 ;$datsql3 .= $esql8;
+
+        //Data Utama
+        $dataprimary1 = $this->db->query($datsql1);
+        $dataprimary2 = $this->db->query($datsql2);
+        $dataprimary3 = $this->db->query($datsql3);
+        $adata = [];
+        for ($iz=0; $iz < $dataprimary1->num_rows(); $iz++) {
+            $isidata = $dataprimary1->row_array($iz);
+            $isidata2 = $dataprimary2->row_array($iz);
+            $isidata3 = $dataprimary3->row_array($iz);
+            $kolomdata = [];
+            $kolomdata[0]  = $iz + 1;
+            $kolomdata[1]  = $isidata['grow_value'];
+            $kolomdata[2]  = $isidata['ttanggal_value'];
+            $kolomdata[3]  = $isidata['jjam_value'];
+            $kolomdata[4]  = $isidata['isi_value'];
+            $kolomdata[5]  = $isidata2['isi_value'];
+            $kolomdata[6]  = $isidata3['isi_value'];
             $adata[$iz] = $kolomdata;
         }
         //END Data Utama
