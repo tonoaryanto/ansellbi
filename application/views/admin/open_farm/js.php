@@ -30,17 +30,14 @@ $(document).ready(function(){
         responsive: true,
         processing: true,
         serverSide: true,
-        ajax: {"url": "<?php echo base_url('admin/farm/json'); ?>", "type": "POST"},
+        ajax: {"url": "<?php echo base_url('admin/openfarm/json'); ?>", "type": "POST"},
         columns: [
             {
                 "data": "id",
                 "orderable": false
             },
             {
-                "data": "nama_farm"
-            },
-            {
-                "data": "alamat_farm"
+                "data": "nama_kandang"
             }
         ],
         order: [[0, 'desc']],
@@ -53,7 +50,7 @@ $(document).ready(function(){
             var btnedit = '<li><a href="#" onclick="edit_form(' + data.id + ');"><i class="fa fa-edit"></i> Edit</a></li>';
 
             var btnhapus = '<li><a href="#" id="btn-hapus-form" onclick="_delete(' + data.id + ');"><i class="fa fa-trash"></i> Hapus</a></li>';
-            var btnview = '<li><a href="' + '<?php echo base_url("admin/openfarm/data/");?>' + data.id + '" id="btn-view-form"><i class="fa fa-sticky-note-o"></i> View Data House</a></li>';
+            var btnview = '<li><a href="' + '<?php echo base_url("admin/openfarm/data/");?>' + data.id + '" id="btn-view-form"><i class="fa fa-sticky-note-o"></i> View</a></li>';
 
             var btn = '<div class="btn-group dropup"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 2px 7px;"><span class="caret"></span></button><ul class="dropdown-menu">' + btnview + btnedit + btnhapus +'</ul></div>';
             $('td:eq(0)', row).html(index + '&nbsp;' + btn);

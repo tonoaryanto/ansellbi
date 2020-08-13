@@ -12,7 +12,13 @@
             <span>Data Farm</span>
           </a>
         </li>
-        <li class="treeview <?php if(isset($head1) and $head1 == 'Upload'){echo 'active menu-open';}?>">
+        <li class="<?php if(isset($head1) and $head1 == 'User Login'){echo 'active menu-open';}?>">
+          <a href="#">
+            <i class="fa fa-user"></i>
+            <span>User Login</span>
+          </a>
+        </li>
+        <!--li class="treeview <?php if(isset($head1) and $head1 == 'Upload'){echo 'active menu-open';}?>">
           <a href="#">
             <i class="fa fa-upload"></i>
             <span>Upload</span>
@@ -25,7 +31,7 @@
               <a href="<?php echo base_url('get_excel/alarm');?>"><i class="fa fa-circle-o"></i> <span>Upload Data Alarm</span></a>
             </li>
           </ul>
-        </li>
+        </li-->
       </ul>
     </section>
     <!-- /.sidebar -->
