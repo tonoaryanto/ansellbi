@@ -58,8 +58,8 @@ class Konfigurasi_model extends CI_Model {
             $data1 = $this->db->get()->result();
 
             $dataini1 = [array('id'   => '','text' => '',)];
-            // $datsqlz = "DELETE FROM image2 WHERE kategori = 'DAY_1' OR nama_data NOT IN ('ansell'";
-            $datsqlz = "DELETE FROM image2 WHERE nama_data NOT IN ('ansell'";
+            $datsqlz = "DELETE FROM image2 WHERE kategori = 'DAY_1' OR nama_data NOT IN ('ansell'";
+            //$datsqlz = "DELETE FROM image2 WHERE nama_data NOT IN ('ansell'";
             foreach ($data1 as $data1) {
                 $datsqlz .= ",'".$data1->id."'";
             }
