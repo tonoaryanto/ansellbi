@@ -41,6 +41,10 @@ $(document).ready(function(){
             },
             {
                 "data": "alamat_farm"
+            },
+            {
+                "data": "id",
+                "orderable": false
             }
         ],
         order: [[0, 'desc']],
@@ -53,10 +57,13 @@ $(document).ready(function(){
             var btnedit = '<li><a href="#" onclick="edit_form(' + data.id + ');"><i class="fa fa-edit"></i> Edit</a></li>';
 
             var btnhapus = '<li><a href="#" id="btn-hapus-form" onclick="_delete(' + data.id + ');"><i class="fa fa-trash"></i> Hapus</a></li>';
-            var btnview = '<li><a href="' + '<?php echo base_url("admin/openfarm/data/");?>' + data.id + '" id="btn-view-form"><i class="fa fa-sticky-note-o"></i> View Data House</a></li>';
+            var btnview = '';
 
             var btn = '<div class="btn-group dropup"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 2px 7px;"><span class="caret"></span></button><ul class="dropdown-menu">' + btnview + btnedit + btnhapus +'</ul></div>';
             $('td:eq(0)', row).html(index + '&nbsp;' + btn);
+
+            var bview = '<a class="btn btn-sm btn-default" href="' + '<?php echo base_url("admin/openfarm/data/");?>' + data.id + '">Open</a>';
+            $('td:eq(3)', row).html(bview);
         }
     });
 

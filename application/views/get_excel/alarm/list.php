@@ -50,7 +50,7 @@
                     <label>Upload File Disini!</label>
                     <div class="form-group">
                       <input type="file" name="userfile" size="20" class="pfile" width="100px">
-                      <p style="color: #888;padding: 2px">Contoh : history_[nama farm]_[kode farm]_ENG.csv</p>
+                      <p style="color: #888;padding: 2px">Contoh : AlarmHistory_[nama farm]_[kode farm]_ENG.csv</p>
                     </div>
                     <div class="form-group">
                       <div class="col-sm-12 controls" style="text-align: right;" id="framebtn">

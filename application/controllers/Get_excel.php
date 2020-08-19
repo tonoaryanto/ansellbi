@@ -48,7 +48,12 @@ class Get_excel extends CI_Controller {
         if ($cek_sess == 0) {
             echo json_encode(['sess' => $cek_sess]);
         }else{
-            $kode_perusahaan = $this->session->userdata('id_user');
+            if ($this->input->post('select_data') != ''){
+                $kode_perusahaan = $this->session->userdata('data_openfarm');
+            }else{
+                $kode_perusahaan = $this->session->userdata('id_user');
+            }
+
             $value_periode = $this->input->post('periode');
             $id_kandang = $this->input->post('select_kandang');
     

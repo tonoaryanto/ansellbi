@@ -14,6 +14,7 @@
                   <tr>
                       <th class="teks-upper" width="50px">No</th>
                       <th class="teks-upper">Nama Kandang</th>
+                      <th class="teks-upper">Data House</th>
                   </tr>
               </thead>
           </table>
@@ -23,3 +24,4 @@
   </div>
 </div>
 <?php $this->load->view('admin/open_farm/addfrom'); ?>
+<?php $this->load->view('admin/open_farm/uploadfrom'); ?>

@@ -1,5 +1,99 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');?>
 $(document).ready(function(){
+    $('#uploadform-aksi').on('submit',(function(e){
+
+    e.preventDefault();
+
+    if ($('[name="periode"]').val() == '') {
+    swal.fire({
+        title: "peringatan!",
+        html : '<p style="font-size: 14px">Mohon Input Periode Di Isi Terlebih Dahulu!</p>',
+        type: "warning",
+    });
+    $('[name="periode"]').focus();
+    return;
+    }
+    if ($('[name="select_data"]').val() == null) {
+    swal.fire({
+        title: "peringatan!",
+        html : '<p style="font-size: 14px">Mohon pilih data yang akan di upload terlebih dahulu!</p>',
+        type: "warning",
+    });
+    $('[name="select_kandang"]').focus();
+    return;
+    }
+
+    $('#tombol').attr('disabled','true');
+
+    $('#textlog').text('');
+    var datatext = "Memproses data . . .";
+    $('#textprogres').text(datatext);
+    $('#textlog').html('- '+datatext);
+
+    var senddata = new FormData(this);
+
+    Swal.fire({
+    title: 'Memproses Data',
+    html: '<p style="font-size: 14px">Mohon tunggu proses ini memerlukan waktu.</p>',
+    allowOutsideClick: false,
+    onBeforeOpen: () => {
+        Swal.showLoading()
+        Swal.getTimerLeft()
+    },
+    });
+
+    if ($('[name="select_data"]').val() == 'house') {
+    var daturl = "<?php echo base_url('get_excel/open_file');?>";
+    }
+    if ($('[name="select_data"]').val() == 'alarm') {
+    var daturl = "<?php echo base_url('get_excel/open_file_alarm');?>";
+    }
+
+    $.ajax({
+        url : daturl,
+        type: "POST",
+        data: senddata,
+        contentType: false,
+        cache: false,
+        processData: false,
+        dataType:"JSON",
+        success: function(data){
+        get_sess(data.sess);
+        if(data.status == true){
+            swal.fire({
+                title: "Berhasil!",
+                html : '<p style="font-size: 14px">Data berhasil diupload!</p>',
+                type: "success",
+            });
+            var sebelumnya = $('#textlog').html();
+            $('#textlog').html(sebelumnya + data.datamessage);
+            $('#tombol').removeAttr('disabled');
+        }else{
+            $('#tombol').removeAttr('disabled');
+            swal.fire({
+                title: "Data tidak disimpan!",
+                html : data.message,
+                type: "success",
+            });
+        var sebelumnya = $('#textlog').html();
+        $('#textlog').html(sebelumnya + data.datamessage);
+        }
+        },
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+        $('#btnstop').remove();
+        $('#tombol').removeAttr('disabled');
+        swal.fire({
+            title: "Gagal!",
+            html : '<p style="font-size: 14px">Terjadi Kesalahan!</p>',
+            type: "error",
+        });
+        var datatext = $('#textlog').html() + "&#10;- Error . . .";
+        $('#textlog').html(datatext);
+        }
+    });
+    }));
+
     $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
     {
         return {
@@ -38,6 +132,10 @@ $(document).ready(function(){
             },
             {
                 "data": "nama_kandang"
+            },
+            {
+                "data": "id",
+                "orderable": false
             }
         ],
         order: [[0, 'desc']],
@@ -50,10 +148,14 @@ $(document).ready(function(){
             var btnedit = '<li><a href="#" onclick="edit_form(' + data.id + ');"><i class="fa fa-edit"></i> Edit</a></li>';
 
             var btnhapus = '<li><a href="#" id="btn-hapus-form" onclick="_delete(' + data.id + ');"><i class="fa fa-trash"></i> Hapus</a></li>';
-            var btnview = '<li><a href="' + '<?php echo base_url("admin/openhouse/data/");?>' + data.id + '" id="btn-view-form"><i class="fa fa-sticky-note-o"></i> View</a></li>';
+            var btnview = '<li><a href="#" onclick="upload_form(' + data.id + ');"><i class="fa fa-upload"></i> Upload</a></li>';
 
             var btn = '<div class="btn-group dropup"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 2px 7px;"><span class="caret"></span></button><ul class="dropdown-menu">' + btnview + btnedit + btnhapus +'</ul></div>';
             $('td:eq(0)', row).html(index + '&nbsp;' + btn);
+
+            var bhouse = '<a class="btn btn-sm btn-default" href="' + '<?php echo base_url("admin/openhouse/datahouse/");?>' + data.id + '">History House</a>';
+            var balarm = '<a class="btn btn-sm btn-default" href="' + '<?php echo base_url("admin/openhouse/dataalarm/");?>' + data.id + '">History Alarm</a>';
+            $('td:eq(2)', row).html(bhouse+' '+balarm);
         }
     });
 
@@ -63,6 +165,8 @@ $(document).ready(function(){
         $('#title-form').text('Tambah Data House');
         $('#form-aksi').attr('data-form','input');
     });
+
+    $(".select2").select2();
 });
 
 function reset_form(){
@@ -194,6 +298,49 @@ function edit_form(id){
               html : '<p style="font-size: 14px">Terjadi Kesalahan saat mengambil data!</p>',
               type: "error",
             });
+        }
+    });
+}
+
+function upload_form(id){
+                $('#title-uploadform').text('Upload Data');
+                $('[name="select_kandang"]').val(id);
+                $('#uploadform-aksi').attr('data-form','upload');
+                $('#modal-uploadform').modal('show');
+}
+
+function data_terakhir() {
+    if ($('[name="periode"]').val() == '') {
+      return;
+    }
+    if ($('[name="select_data"]').val() == null) {
+      return;
+    }
+
+    if ($('[name="select_data"]').val() == 'house') {
+    $('#txtctt').html('Contoh : history_[nama farm]_[kode farm]_ENG.csv');
+    }
+    if ($('[name="select_data"]').val() == 'alarm') {
+    $('#txtctt').html('Contoh : AlarmHistory_[nama farm]_[kode farm]_ENG.csv');
+    }
+
+
+    $('[name="last_periode"]').val('On Process. . .');
+    $('[name="last_growday"]').val('On Process. . .');
+
+    $.ajax({
+        url : "<?php echo base_url('admin/openfarm/last_data');?>",
+        type: "GET",
+        data: {
+          'value1' : $('[name="periode"]').val(),
+          'value2' : $('[name="select_kandang"]').val(),
+          'value3' : $('[name="select_data"]').val(),
+        },
+        cache: false,
+        dataType:"JSON",
+        success: function(data){
+          $('[name="last_periode"]').val(data.periode);
+          $('[name="last_growday"]').val(data.growday);
         }
     });
 }

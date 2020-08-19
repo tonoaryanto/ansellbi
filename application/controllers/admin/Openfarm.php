@@ -99,4 +99,26 @@ class Openfarm extends CI_Controller {
         }
     }
 
+
+    public function last_data()
+    {
+        $kode_perusahaan = $this->session->userdata('data_openfarm');
+        $periode = $this->input->get('value1');
+        $kandang = $this->input->get('value2');
+        $jenisdata = $this->input->get('value3');
+
+        $isi = '';
+        if($jenisdata == 'house'){
+            $isi = $this->db->query("SELECT periode,grow_value FROM image2 WHERE kode_perusahaan = '".$kode_perusahaan."' AND periode = '".$periode."' AND kode_kandang = '".$kandang."' ORDER BY grow_value DESC LIMIT 1")->row_array();
+        }
+
+        if($jenisdata == 'alarm'){
+            $isi = $this->db->query("SELECT periode,growday as grow_value FROM history_alarm WHERE id_user = '".$kode_perusahaan."' AND periode = '".$periode."' AND kode_kandang = '".$kandang."' ORDER BY growday DESC LIMIT 1")->row_array();
+        }
+
+        if ($isi['periode'] == '')    {$isip = 'kosong';}else{$isip = $isi['periode'];}
+        if ($isi['grow_value'] == '') {$isig = 'kosong';}else{$isig = $isi['grow_value'];}
+
+        echo json_encode(['status'=>true,'periode'=>$isip,'growday'=>$isig]);
+    }
 }

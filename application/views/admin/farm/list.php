@@ -15,6 +15,7 @@
                       <th class="teks-upper" width="50px">No</th>
                       <th class="teks-upper">Nama Farm</th>
                       <th class="teks-upper">Alamat Farm</th>
+                      <th class="teks-upper">Data Farm</th>
                   </tr>
               </thead>
           </table>

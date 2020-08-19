@@ -16,21 +16,7 @@
                   <div class="col-sm-3">
                     <div class="form-group">
                       <label>Nama Kandang</label>
-                      <div class="input-group input-group-sm" id="list_select_kandang">
                         <select type="text" name="select_kandang" class="form-control select2 test"></select>
-                            <span class="input-group-btn">
-                              <button type="button" class="btn btn-info" style="height: 34px;border-radius: 5px;border-style:solid;border-width: thin;border-color: #a0a0a0;" onclick="add_new_kandang()">Tambah</button>
-                            </span>
-                      </div>
-                      <div class="input-group input-group-sm" id="new_select_kandang" style="display: none;">
-                      <input placeholder="Masukan Nama Kandang Baru" type="text" name="tambah_kandang" class="form-control" width="100px" style="border-radius:5px;height: 34px;">
-                            <span class="input-group-btn">
-                              <button type="button" class="btn btn-default" style="height: 34px;border-radius: 5px;border-style:solid;border-width: thin;border-color: #a0a0a0;" onclick="batal_new_kandang()">Batal</button>
-                            </span>
-                            <span class="input-group-btn">
-                              <button type="button" class="btn btn-primary" style="height: 34px;border-radius: 5px;border-style:solid;border-width: thin;border-color: #a0a0a0;" onclick="save_new_kandang()">Simpan</button>
-                            </span>
-                      </div>
                     </div>
                   </div>
                   <div class="col-sm-3">
