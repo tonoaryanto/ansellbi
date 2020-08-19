@@ -22,4 +22,4 @@
     </div>
   </div>
 </div>
-<?php $this->load->view('admin/farm/addfrom'); ?>
+<?php $this->load->view('admin/open_farm/addfrom'); ?>

@@ -13,9 +13,12 @@ class Openfarm extends CI_Controller {
     }
 
     public function data($data){
-        $this->session->set_userdata([ 'data_openfarm' => $data]);
-        $isifarm = $this->umum_model->get('data_kandang',['kode_perusahaan' => $data])->row_array();
         $isidata = $this->umum_model->get('user',['id' => $data])->row_array();
+        if($isidata['nama_user'] == ''){
+            $this->session->unset_userdata('data_openfarm');
+            return redirect('admin/farm');
+        }
+        $this->session->set_userdata([ 'data_openfarm' => $data]);
 
         $this->konfigurasi->cek_url();
         $data = [
@@ -36,4 +39,64 @@ class Openfarm extends CI_Controller {
         $inidata = $this->session->userdata('data_openfarm');
         echo $this->house_model->json($inidata);
     }
+
+    public function simpan(){
+        $cek_sess = $this->konfigurasi->cek_js();
+        if ($cek_sess == 0) {
+            echo json_encode(['sess' => $cek_sess]);
+        }else{
+            $data = array(
+    			'nama_kandang' => $this->input->post('nama_house',TRUE),
+    			'kode_perusahaan' => $this->session->userdata('data_openfarm')
+			);
+			
+            $this->umum_model->insert('data_kandang',$data);
+            echo json_encode(['status' => true,'message' => 'Data berhasil disimpan!']);
+        }
+    }
+
+    public function delete(){
+        $cek_sess = $this->konfigurasi->cek_js();
+        if ($cek_sess == 0) {
+            echo json_encode(['sess' => $cek_sess]);
+        }else{
+            $this->umum_model->delete('image2',['kode_kandang' => $this->input->post('value')]);
+            $this->umum_model->delete('history_alarm',['kode_kandang' => $this->input->post('value')]);
+            $this->umum_model->delete('data_kandang',['id' => $this->input->post('value')]);
+            echo json_encode(array("status" => TRUE));
+        }
+    }
+
+    public function update(){
+        $cek_sess = $this->konfigurasi->cek_js();
+        if ($cek_sess == 0) {
+            echo json_encode(['sess' => $cek_sess]);
+        }else{
+            $data = array(
+    			'nama_kandang' => $this->input->post('nama_house',TRUE)
+			);
+ 
+            $where = ['id' => $this->input->post('id',TRUE)];
+
+            $this->umum_model->update('data_kandang',$data,$where);
+            echo json_encode(['status' => true,'message' => 'Data berhasil disimpan!']);
+        }
+    }
+
+    public function edit($id){
+        $cek_sess = $this->konfigurasi->cek_js();
+        if ($cek_sess == 0) {
+            echo json_encode(['sess' => $cek_sess]);
+        }else{
+            $row = $this->umum_model->get('data_kandang',['id' => $id])->row();
+
+            $data = array(
+    			'id' => $row->id,
+    			'nama_house' => $row->nama_kandang,
+			);
+			
+    	    echo json_encode(['status' => true, 'data' => $data]);
+        }
+    }
+
 }

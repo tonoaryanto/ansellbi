@@ -50,7 +50,7 @@ $(document).ready(function(){
             var btnedit = '<li><a href="#" onclick="edit_form(' + data.id + ');"><i class="fa fa-edit"></i> Edit</a></li>';
 
             var btnhapus = '<li><a href="#" id="btn-hapus-form" onclick="_delete(' + data.id + ');"><i class="fa fa-trash"></i> Hapus</a></li>';
-            var btnview = '<li><a href="' + '<?php echo base_url("admin/openfarm/data/");?>' + data.id + '" id="btn-view-form"><i class="fa fa-sticky-note-o"></i> View</a></li>';
+            var btnview = '<li><a href="' + '<?php echo base_url("admin/openhouse/data/");?>' + data.id + '" id="btn-view-form"><i class="fa fa-sticky-note-o"></i> View</a></li>';
 
             var btn = '<div class="btn-group dropup"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 2px 7px;"><span class="caret"></span></button><ul class="dropdown-menu">' + btnview + btnedit + btnhapus +'</ul></div>';
             $('td:eq(0)', row).html(index + '&nbsp;' + btn);
@@ -60,7 +60,7 @@ $(document).ready(function(){
     jQuery('#btn-add-form').click(function(){
         $('#modal-form').modal('show');
         reset_form();
-        $('#title-form').text('Tambah Data Farm');
+        $('#title-form').text('Tambah Data House');
         $('#form-aksi').attr('data-form','input');
     });
 });
@@ -74,10 +74,18 @@ function reload_table(){
     $("#mytable").DataTable().ajax.reload();
 }
 
+function enter(ini){
+    document.getElementById(ini).onkeypress = function(event){
+        if (event.keyCode == 13 || event.which == 13){
+            save();
+        }
+    };
+}
+
 function save(){
     var aksi = $('#form-aksi').attr('data-form');
-    if(aksi == 'input'){var ling = '<?php echo base_url('admin/farm/simpan'); ?>';}
-    if(aksi == 'edit'){var ling = '<?php echo base_url('admin/farm/update'); ?>';}
+    if(aksi == 'input'){var ling = '<?php echo base_url('admin/openfarm/simpan'); ?>';}
+    if(aksi == 'edit'){var ling = '<?php echo base_url('admin/openfarm/update'); ?>';}
     var cek = validasi();
     if(aksi != '' && cek != 1){
         $.ajax({
@@ -100,19 +108,25 @@ function save(){
                 }
             }
         });
+    }else{
+        swal.fire({
+            title: "Peringatan!",
+            html : '<p style="font-size: 14px">Input value masih kosong atau value salah!</p>',
+            type: "warning",
+        });
     }
 }
 
 function validasi(){
     var cek = 0;
-    if($('[name="nama_farm"]').val() == ''){cek = 1;}
+    if($('[name="nama_house"]').val() == ''){cek = 1;}
     return cek;
 }
 
 function _delete(id){
     swal.fire({
       title: "Apakah anda yakin akan menghapus data ini?",
-      html: '<p style="font-size: 15px">Ini akan menghapus data kandang, histori house, user login, histori alarm, dan semua yang berkaitan dengan nama farm ini!</p>',
+      html: '<p style="font-size: 15px">Ini akan menghapus data kandang, histori house, histori alarm!</p>',
       type: "warning",
       confirmButtonColor: '#d33',
       showCancelButton: true,
@@ -121,7 +135,7 @@ function _delete(id){
     }).then(result => {
         if (result.value) {
             $.ajax({
-                url : '<?php echo base_url("admin/farm/delete");?>',
+                url : '<?php echo base_url("admin/openfarm/delete");?>',
                 type: "POST",
                 data: {'value' : id},
                 dataType: "JSON",
@@ -158,7 +172,7 @@ function _delete(id){
 
 function edit_form(id){
     $.ajax({
-        url : '<?php echo base_url('admin/farm/edit/')?>' + id,
+        url : '<?php echo base_url('admin/openfarm/edit/')?>' + id,
         type : "GET",
         dataType : "JSON",
         success : function(data)
@@ -167,9 +181,8 @@ function edit_form(id){
             if(data.status == true){
                 var data = data.data;
                 $('[name="id"]').val(data.id);
-                $('[name="nama_farm"]').val(data.nama_farm);
-                $('[name="alamat_farm"]').text(data.alamat_farm);
-                $('#title-form').text('Edit Data Farm');
+                $('[name="nama_house"]').val(data.nama_house);
+                $('#title-form').text('Edit Data House');
                 $('#form-aksi').attr('data-form','edit');
                 $('#modal-form').modal('show');
             }

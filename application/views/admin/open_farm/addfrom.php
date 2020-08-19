@@ -7,14 +7,10 @@
             <h4 class="modal-title" id="title-form">Default Modal</h4>
           </div>
           <div class="modal-body">
-            <form id="form-aksi">
+            <form id="form-aksi" action="javascript:void(0);">
                     <div class="form-group">
-                        <label>Nama Farm</label>
-                        <input type="text" class="form-control" name="nama_farm" placeholder="Nama Farm"/>
-                    </div>
-                    <div class="form-group">
-                        <label>Alamat Farm</label>
-                        <textarea class="form-control" name="alamat_farm" placeholder="Alamat Farm"></textarea>
+                        <label>Nama House</label>
+                        <input type="text" class="form-control" name="nama_house" id="nama_house" placeholder="Nama Farm" onkeyup="enter('nama_house');" />
                     </div>
                 <input type="hidden" name="id"/> 
             </form>
