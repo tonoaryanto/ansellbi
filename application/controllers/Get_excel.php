@@ -52,6 +52,7 @@ class Get_excel extends CI_Controller {
                 $kode_perusahaan = $this->session->userdata('data_openfarm');
             }else{
                 $kode_perusahaan = $this->session->userdata('id_user');
+
             }
 
             $value_periode = $this->input->post('periode');
@@ -160,7 +161,7 @@ class Get_excel extends CI_Controller {
                                             $value['jam_value']  = str_replace(" ","",$sheetData[$j][2]);
                                             $value['grow_value'] = str_replace(" ","",$sheetData[$j][3]);
                                             $value['isi_value'] = $isivalue;
-                                            $value['kode_perusahaan'] = $this->session->userdata('id_user');
+                                            $value['kode_perusahaan'] = $kode_perusahaan;
                                             $value['kode_kandang'] = $id_kandang;
                                             $value['periode'] = $value_periode;
                                             $data3[] = $value;

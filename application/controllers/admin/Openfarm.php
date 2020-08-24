@@ -25,7 +25,7 @@ class Openfarm extends CI_Controller {
             'txthead1'  => 'Open farm - ' . $isidata['nama_user'],
             'head1'     => 'Data Farm',
             'link1'     => 'admin/farm',
-            'head2'     => 'Open Farm - ' . $isidata['nama_user'],
+            'head2'     => '<b>'.$isidata['nama_user'].'</b>',
             'link2'     => '#',
             'isi'       => 'admin/open_farm/list',
             'cssadd'    => 'admin/open_farm/cssadd',
