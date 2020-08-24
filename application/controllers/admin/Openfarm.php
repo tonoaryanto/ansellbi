@@ -67,6 +67,48 @@ class Openfarm extends CI_Controller {
         }
     }
 
+    public function rsetdata(){
+        $cek_sess = $this->konfigurasi->cek_js();
+        if ($cek_sess == 0) {
+            echo json_encode(['sess' => $cek_sess]);
+        }else{
+            $tipe = $this->input->post('select_datarset');
+            
+            if($this->input->post('rsetall') == 'all'){
+                if($tipe == 'house'){
+                    $this->umum_model->delete('image2',['kode_kandang' => $this->input->post('select_kandangrset')]);
+                }
+                if($tipe == 'alarm'){
+                    $this->umum_model->delete('history_alarm',['kode_kandang' => $this->input->post('select_kandangrset')]);
+                }     
+            }else{
+                if($tipe == 'house'){
+                    $datasql  = "DELETE FROM `image2` WHERE ";
+                    $datasql .= "periode = '".$this->input->post('perioderset')."' AND ";
+                    if($this->input->post('startgrowrset') == $this->input->post('endgrowrset')){
+                        $datasql .= "grow_value = '".$this->input->post('startgrowrset')."' AND ";
+                    }else{
+                        $datasql .= "grow_value BETWEEN '".$this->input->post('startgrowrset')."' AND '".$this->input->post('endgrowrset')."' AND ";
+                    }
+                    $datasql .= "kode_kandang = '".$this->input->post('select_kandangrset')."' ";
+                }
+                if($tipe == 'alarm'){
+                    $datasql  = "DELETE FROM `history_alarm` WHERE ";
+                    $datasql .= "periode = '".$this->input->post('perioderset')."' AND ";
+                    if($this->input->post('startgrowrset') == $this->input->post('endgrowrset')){
+                        $datasql .= "growday = '".$this->input->post('startgrowrset')."' AND ";
+                    }else{
+                        $datasql .= "growday BETWEEN '".$this->input->post('startgrowrset')."' AND '".$this->input->post('endgrowrset')."' AND ";
+                    }
+                    $datasql .= "kode_kandang = '".$this->input->post('select_kandangrset')."' ";
+                }    
+                $this->db->query($datasql);
+            }
+
+            echo json_encode(array("status" => TRUE));
+        }
+    }
+
     public function update(){
         $cek_sess = $this->konfigurasi->cek_js();
         if ($cek_sess == 0) {

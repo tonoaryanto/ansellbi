@@ -214,60 +214,17 @@ class Get_excel extends CI_Controller {
         }
     }
 
-    public function reset_data(){
-        $cek_sess = $this->konfigurasi->cek_js();
-        if ($cek_sess == 0) {
-            echo json_encode(['sess' => $cek_sess]);
-        }else{
-            $id_user = $this->session->userdata('id_user');
-            $kode_kandang = base64_decode($this->input->post('value1'));
-            $value2 = base64_decode($this->input->post('value2'));
-            $value3 = base64_decode($this->input->post('value3'));
-
-            $datak = $this->umum_model->get('data_kandang',['id' => $kode_kandang])->row_array();
-
-            $dataini = [
-                'id_user'         => $id_user,
-                'kode_kandang'    => $kode_kandang,
-                'nama_penanggung' => $value2,
-            ];
-/*
-            if ($datak['keterangan'] == 'history_alarm') {
-                $this->umum_model->delete('history_alarm',['id_user' => $id_user,'kode_kandang' => $kode_kandang]);
-                $test2 = $this->db->affected_rows();
-                if($test2 >= 1){
-                    if ($test2 >= 1) {$addtext2 = 'Riwayat Alarm (direset)';}else{$addtext2 = 'Riwayat Alarm (dtidak direset)';}
-                    $dataini['keterangan'] = $value3.' &#10;'.$addtext2;
-                    $this->umum_model->insert('log_reset',$dataini);
-                    $this->umum_model->delete('data_kandang',['id' => $kode_kandang]);
-                    echo json_encode(['status'=>true,'data'=>$test2]);
-                }else{
-                    echo json_encode(['status'=>false,'data'=>$test2]);
-                }
-            }
-
-            if ($datak['keterangan'] == 'history_house') {
-                $this->umum_model->delete('image2',['kode_perusahaan' => $id_user,'kode_kandang' => $kode_kandang]);
-                $test = $this->db->affected_rows();
-                if($test >= 1){
-                    if ($test >= 1) {$addtext1 = 'Riwayat House (direset)';}else{$addtext1 = 'Riwayat House (dtidak direset)';}
-                    $dataini['keterangan'] = $value3.' &#10;'.$addtext1;
-                    $this->umum_model->insert('log_reset',$dataini);
-                    $this->umum_model->delete('data_kandang',['id' => $kode_kandang]);
-                    echo json_encode(['status'=>true,'data'=>$test]);
-                }else{
-                    echo json_encode(['status'=>false,'data'=>$test]);
-                }
-            }
-*/            
-        }
-    }
-
     public function open_file_alarm(){
         $cek_sess = $this->konfigurasi->cek_js();
         if ($cek_sess == 0) {
             echo json_encode(['sess' => $cek_sess]);
         }else{
+            if ($this->input->post('select_data') != ''){
+                $kode_perusahaan = $this->session->userdata('data_openfarm');
+            }else{
+                $kode_perusahaan = $this->session->userdata('id_user');
+            }
+            $id_kandang = $this->input->post('select_kandang');
 
             $arr_file = explode('.', $_FILES['userfile']['name']);
             $nama_file = explode('_', $arr_file[0]);
@@ -277,16 +234,14 @@ class Get_excel extends CI_Controller {
 
                 $value_periode = $this->input->post('periode');
 
-                $cek_periode = $this->db->query("SELECT id FROM periode WHERE kode_perusahaan = '".$this->session->userdata('id_user')."' AND value_periode = '".$value_periode."'")->num_rows();
+                $cek_periode = $this->db->query("SELECT id FROM periode WHERE kode_perusahaan = '".$kode_perusahaan."' AND value_periode = '".$value_periode."'")->num_rows();
 
                 if ($cek_periode == 0) {
                     $this->umum_model->insert('periode',[
                         'value_periode' => $value_periode,
-                        'kode_perusahaan' => $this->session->userdata('id_user'),
+                        'kode_perusahaan' => $kode_perusahaan,
                     ]);
                 }
-
-                $id_kandang = $this->input->post('select_kandang');
 
                 $file_mimes = array('text/x-comma-separated-values', 'text/comma-separated-values', 'application/octet-stream', 'application/vnd.ms-excel', 'application/x-csv', 'text/x-csv', 'text/csv', 'application/csv', 'application/excel', 'application/vnd.msexcel', 'text/plain', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
 
@@ -320,7 +275,7 @@ class Get_excel extends CI_Controller {
                     $isi2 = $sheetData[$j][1];
                     $isi3 = explode(',', $sheetData[$j][2]);
 
-                    $idata['value1']  = $this->session->userdata('id_user');
+                    $idata['value1']  = $kode_perusahaan;
                     $idata['value2']  = $id_kandang;
                     $idata['value3']  = $isi3[1];
                     $idata['value4']  = $isi3[2];

@@ -2,96 +2,194 @@
 $(document).ready(function(){
     $('#uploadform-aksi').on('submit',(function(e){
 
-    e.preventDefault();
+        e.preventDefault();
 
-    if ($('[name="periode"]').val() == '') {
-    swal.fire({
-        title: "peringatan!",
-        html : '<p style="font-size: 14px">Mohon Input Periode Di Isi Terlebih Dahulu!</p>',
-        type: "warning",
-    });
-    $('[name="periode"]').focus();
-    return;
-    }
-    if ($('[name="select_data"]').val() == null) {
-    swal.fire({
-        title: "peringatan!",
-        html : '<p style="font-size: 14px">Mohon pilih data yang akan di upload terlebih dahulu!</p>',
-        type: "warning",
-    });
-    $('[name="select_kandang"]').focus();
-    return;
-    }
+        if ($('[name="periode"]').val() == '') {
+        swal.fire({
+            title: "peringatan!",
+            html : '<p style="font-size: 14px">Mohon Input Periode Di Isi Terlebih Dahulu!</p>',
+            type: "warning",
+        });
+        $('[name="periode"]').focus();
+        return;
+        }
+        if ($('[name="select_data"]').val() == null) {
+        swal.fire({
+            title: "peringatan!",
+            html : '<p style="font-size: 14px">Mohon pilih data yang akan di upload terlebih dahulu!</p>',
+            type: "warning",
+        });
+        $('[name="select_kandang"]').focus();
+        return;
+        }
 
-    $('#tombol').attr('disabled','true');
+        $('#tombol').attr('disabled','true');
 
-    $('#textlog').text('');
-    var datatext = "Memproses data . . .";
-    $('#textprogres').text(datatext);
-    $('#textlog').html('- '+datatext);
+        $('#textlog').text('');
+        var datatext = "Memproses data . . .";
+        $('#textprogres').text(datatext);
+        $('#textlog').html('- '+datatext);
 
-    var senddata = new FormData(this);
+        var senddata = new FormData(this);
 
-    Swal.fire({
-    title: 'Memproses Data',
-    html: '<p style="font-size: 14px">Mohon tunggu proses ini memerlukan waktu.</p>',
-    allowOutsideClick: false,
-    onBeforeOpen: () => {
-        Swal.showLoading()
-        Swal.getTimerLeft()
-    },
-    });
+        Swal.fire({
+        title: 'Memproses Data',
+        html: '<p style="font-size: 14px">Mohon tunggu proses ini memerlukan waktu.</p>',
+        allowOutsideClick: false,
+        onBeforeOpen: () => {
+            Swal.showLoading()
+            Swal.getTimerLeft()
+        },
+        });
 
-    if ($('[name="select_data"]').val() == 'house') {
-    var daturl = "<?php echo base_url('get_excel/open_file');?>";
-    }
-    if ($('[name="select_data"]').val() == 'alarm') {
-    var daturl = "<?php echo base_url('get_excel/open_file_alarm');?>";
-    }
+        if ($('[name="select_data"]').val() == 'house') {
+        var daturl = "<?php echo base_url('get_excel/open_file');?>";
+        }
+        if ($('[name="select_data"]').val() == 'alarm') {
+        var daturl = "<?php echo base_url('get_excel/open_file_alarm');?>";
+        }
 
-    $.ajax({
-        url : daturl,
-        type: "POST",
-        data: senddata,
-        contentType: false,
-        cache: false,
-        processData: false,
-        dataType:"JSON",
-        success: function(data){
-        get_sess(data.sess);
-        if(data.status == true){
-            swal.fire({
-                title: "Berhasil!",
-                html : '<p style="font-size: 14px">Data berhasil diupload!</p>',
-                type: "success",
-            });
+        $.ajax({
+            url : daturl,
+            type: "POST",
+            data: senddata,
+            contentType: false,
+            cache: false,
+            processData: false,
+            dataType:"JSON",
+            success: function(data){
+            get_sess(data.sess);
+            if(data.status == true){
+                swal.fire({
+                    title: "Berhasil!",
+                    html : '<p style="font-size: 14px">Data berhasil diupload!</p>',
+                    type: "success",
+                });
+                var sebelumnya = $('#textlog').html();
+                $('#textlog').html(sebelumnya + data.datamessage);
+                $('#tombol').removeAttr('disabled');
+            }else{
+                $('#tombol').removeAttr('disabled');
+                swal.fire({
+                    title: "Data tidak disimpan!",
+                    html : data.message,
+                    type: "success",
+                });
             var sebelumnya = $('#textlog').html();
             $('#textlog').html(sebelumnya + data.datamessage);
-            $('#tombol').removeAttr('disabled');
-        }else{
+            }
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+            $('#btnstop').remove();
             $('#tombol').removeAttr('disabled');
             swal.fire({
-                title: "Data tidak disimpan!",
-                html : data.message,
-                type: "success",
+                title: "Gagal!",
+                html : '<p style="font-size: 14px">Terjadi Kesalahan!</p>',
+                type: "error",
             });
-        var sebelumnya = $('#textlog').html();
-        $('#textlog').html(sebelumnya + data.datamessage);
-        }
-        },
-        error: function (jqXHR, textStatus, errorThrown)
-        {
-        $('#btnstop').remove();
-        $('#tombol').removeAttr('disabled');
-        swal.fire({
-            title: "Gagal!",
-            html : '<p style="font-size: 14px">Terjadi Kesalahan!</p>',
-            type: "error",
+            var datatext = $('#textlog').html() + "&#10;- Error . . .";
+            $('#textlog').html(datatext);
+            }
         });
-        var datatext = $('#textlog').html() + "&#10;- Error . . .";
-        $('#textlog').html(datatext);
-        }
-    });
+    }));
+
+    $('#rsetform-aksi').on('submit',(function(e){
+
+        e.preventDefault();
+
+        if($('input[name="rsetall"]').is(':checked') == false){
+            if ($('[name="perioderset"]').val() == '') {
+            swal.fire({
+                title: "peringatan!",
+                html : '<p style="font-size: 14px">Mohon Input Periode Di Isi Terlebih Dahulu!</p>',
+                type: "warning",
+            });
+            $('[name="perioderset"]').focus();
+            return;
+            }
+            if ($('[name="startgrowrset"]').val() == '') {
+            swal.fire({
+                title: "peringatan!",
+                html : '<p style="font-size: 14px">Mohon input Star Growday terlebih dahulu!</p>',
+                type: "warning",
+            });
+            $('[name="startgrowrset"]').focus();
+            return;
+            }
+            if ($('[name="endgrowrset"]').val() == '') {
+            swal.fire({
+                title: "peringatan!",
+                html : '<p style="font-size: 14px">Mohon input End Growday terlebih dahulu!</p>',
+                type: "warning",
+            });
+            $('[name="endgrowrset"]').focus();
+            return;
+            }
+            if ($('[name="startgrowrset"]').val() > $('[name="endgrowrset"]').val()) {
+            swal.fire({
+                title: "peringatan!",
+                html : '<p style="font-size: 14px">Range Growday salah!</p>',
+                type: "warning",
+            });
+            $('[name="startgrowrset"]').focus();
+            return;
+            }
+        }     
+
+        $('#tombol').attr('disabled','true');
+
+        var senddata = new FormData(this);
+
+        Swal.fire({
+        title: 'Memproses Data',
+        html: '<p style="font-size: 14px">Mohon tunggu proses ini memerlukan waktu.</p>',
+        allowOutsideClick: false,
+        onBeforeOpen: () => {
+            Swal.showLoading()
+            Swal.getTimerLeft()
+        },
+        });
+
+        var daturl = "<?php echo base_url('admin/openfarm/rsetdata');?>";
+
+        $.ajax({
+            url : daturl,
+            type: "POST",
+            data: senddata,
+            contentType: false,
+            cache: false,
+            processData: false,
+            dataType:"JSON",
+            success: function(data){
+            get_sess(data.sess);
+            if(data.status == true){
+                swal.fire({
+                    title: "Berhasil!",
+                    html : '<p style="font-size: 14px">Data berhasil direset!</p>',
+                    type: "success",
+                });
+                $('#tombol').removeAttr('disabled');
+            }else{
+                $('#tombol').removeAttr('disabled');
+                swal.fire({
+                    title: "Data tidak disimpan!",
+                    html : data.message,
+                    type: "success",
+                });
+            }
+            },
+            error: function (jqXHR, textStatus, errorThrown)
+            {
+            $('#btnstop').remove();
+            $('#tombol').removeAttr('disabled');
+            swal.fire({
+                title: "Gagal!",
+                html : '<p style="font-size: 14px">Terjadi Kesalahan!</p>',
+                type: "error",
+            });
+            }
+        });
     }));
 
     $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
@@ -149,8 +247,9 @@ $(document).ready(function(){
 
             var btnhapus = '<li><a href="#" id="btn-hapus-form" onclick="_delete(' + data.id + ');"><i class="fa fa-trash"></i> Hapus</a></li>';
             var btnview = '<li><a href="#" onclick="upload_form(' + data.id + ');"><i class="fa fa-upload"></i> Upload</a></li>';
+            var btnrst = '<li><a href="#" onclick="restform(' + data.id + ')"><i class="fa fa-recycle"></i> Reset History House</a></li>';
 
-            var btn = '<div class="btn-group dropup"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 2px 7px;"><span class="caret"></span></button><ul class="dropdown-menu">' + btnview + btnedit + btnhapus +'</ul></div>';
+            var btn = '<div class="btn-group dropdown"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 2px 7px;"><span class="caret"></span></button><ul class="dropdown-menu">' + btnrst + btnview + btnedit + btnhapus +'</ul></div>';
             $('td:eq(0)', row).html(index + '&nbsp;' + btn);
 
             var bhouse = '<a class="btn btn-sm btn-default" href="' + '<?php echo base_url("admin/openhouse/datahouse/");?>' + data.id + '">History House</a>';
@@ -165,9 +264,16 @@ $(document).ready(function(){
         $('#title-form').text('Tambah Data House');
         $('#form-aksi').attr('data-form','input');
     });
-
     $(".select2").select2();
 });
+
+function cekrset(){
+if($('input[name="rsetall"]').is(':checked')){
+    $('#inputrset').hide();
+}else{
+    $('#inputrset').show();
+}
+}
 
 function reset_form(){
     $('#form-aksi')[0].reset();
@@ -302,6 +408,12 @@ function edit_form(id){
     });
 }
 
+function restform(id){
+        $('#modal-rsetform').modal('show');
+        $('#title-rsetform').text('Reset Data History');
+        $('#rsetform-aksi').attr('data-form','input');
+        $('[name="select_kandangrset"]').val(id);
+}
 function upload_form(id){
                 $('#title-uploadform').text('Upload Data');
                 $('[name="select_kandang"]').val(id);

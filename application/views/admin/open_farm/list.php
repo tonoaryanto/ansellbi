@@ -23,5 +23,6 @@
     </div>
   </div>
 </div>
-<?php $this->load->view('admin/open_farm/addfrom'); ?>
-<?php $this->load->view('admin/open_farm/uploadfrom'); ?>
+<?php $this->load->view('admin/open_farm/addform'); ?>
+<?php $this->load->view('admin/open_farm/uploadform'); ?>
+<?php $this->load->view('admin/open_farm/resetform'); ?>
