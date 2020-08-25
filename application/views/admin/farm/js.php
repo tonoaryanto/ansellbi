@@ -30,17 +30,21 @@ $(document).ready(function(){
         responsive: true,
         processing: true,
         serverSide: true,
-        ajax: {"url": "<?php echo base_url('admin/userlogin/json'); ?>", "type": "POST"},
+        ajax: {"url": "<?php echo base_url('admin/farm/json'); ?>", "type": "POST"},
         columns: [
             {
                 "data": "id",
                 "orderable": false
             },
             {
-                "data": "username"
+                "data": "nama_farm"
             },
             {
-                "data": "nama_farm"
+                "data": "alamat_farm"
+            },
+            {
+                "data": "id",
+                "orderable": false
             }
         ],
         order: [[0, 'desc']],
@@ -53,45 +57,37 @@ $(document).ready(function(){
             var btnedit = '<li><a href="#" onclick="edit_form(' + data.id + ');"><i class="fa fa-edit"></i> Edit</a></li>';
 
             var btnhapus = '<li><a href="#" id="btn-hapus-form" onclick="_delete(' + data.id + ');"><i class="fa fa-trash"></i> Hapus</a></li>';
+            var btnview = '';
 
-            var btn = '<div class="btn-group dropdown"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 2px 7px;"><span class="caret"></span></button><ul class="dropdown-menu">' + btnedit + btnhapus +'</ul></div>';
+            var btn = '<div class="btn-group dropup"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 2px 7px;"><span class="caret"></span></button><ul class="dropdown-menu">' + btnview + btnedit + btnhapus +'</ul></div>';
             $('td:eq(0)', row).html(index + '&nbsp;' + btn);
+
+            var bview = '<a class="btn btn-sm btn-default" href="' + '<?php echo base_url("admin/openfarm/data/");?>' + data.id + '">Open</a>';
+            $('td:eq(3)', row).html(bview);
         }
     });
 
     jQuery('#btn-add-form').click(function(){
         $('#modal-form').modal('show');
         reset_form();
-        $('#title-form').text('Tambah Data User Login');
+        $('#title-form').text('Tambah Data Farm');
         $('#form-aksi').attr('data-form','input');
     });
-    $(".select2").select2();
-
-    select_user();
 });
 
 function reset_form(){
     $('#form-aksi')[0].reset();
-    $('[name="password"]').attr('placeholder','Password');
-    $('[name="password2"]').attr('placeholder','Password');
+    $('[name="alamat_farm"]').text('');
 }
 
 function reload_table(){
     $("#mytable").DataTable().ajax.reload();
 }
 
-function enter(ini){
-    document.getElementById(ini).onkeypress = function(event){
-        if (event.keyCode == 13 || event.which == 13){
-            save();
-        }
-    };
-}
-
 function save(){
     var aksi = $('#form-aksi').attr('data-form');
-    if(aksi == 'input'){var ling = '<?php echo base_url('admin/userlogin/simpan'); ?>';}
-    if(aksi == 'edit'){var ling = '<?php echo base_url('admin/userlogin/update'); ?>';}
+    if(aksi == 'input'){var ling = '<?php echo base_url('admin/farm/simpan'); ?>';}
+    if(aksi == 'edit'){var ling = '<?php echo base_url('admin/farm/update'); ?>';}
     var cek = validasi();
     if(aksi != '' && cek != 1){
         $.ajax({
@@ -114,31 +110,19 @@ function save(){
                 }
             }
         });
-    }else{
-        swal.fire({
-            title: "Terjadi Kesalahan!",
-            html : '<p style="font-size: 14px">Cek ulang input anda dan pastikan password yang anda masukan sesuai!</p>',
-            type: "warning",
-        });
     }
 }
 
 function validasi(){
     var cek = 0;
-    if($('[name="nama_farm"]').val() == null){cek = 1;}
-    if($('[name="username"]').val() == ''){cek = 1;}
-    if($('#form-aksi').attr('data-form') == 'input'){
-        if($('[name="password"]').val() == ''){cek = 1;}
-        if($('[name="password2"]').val() == ''){cek = 1;}
-        if($('[name="password"]').val() != $('[name="password2"]').val()){cek = 1;}
-    }
+    if($('[name="nama_farm"]').val() == ''){cek = 1;}
     return cek;
 }
 
 function _delete(id){
     swal.fire({
       title: "Apakah anda yakin akan menghapus data ini?",
-      html: '<p style="font-size: 15px">data tidak bisa dikembalikan setelah dihapus!</p>',
+      html: '<p style="font-size: 15px">Ini akan menghapus data kandang, histori house, user login, histori alarm, dan semua yang berkaitan dengan nama farm ini!</p>',
       type: "warning",
       confirmButtonColor: '#d33',
       showCancelButton: true,
@@ -147,7 +131,7 @@ function _delete(id){
     }).then(result => {
         if (result.value) {
             $.ajax({
-                url : '<?php echo base_url("admin/userlogin/delete");?>',
+                url : '<?php echo base_url("admin/farm/delete");?>',
                 type: "POST",
                 data: {'value' : id},
                 dataType: "JSON",
@@ -184,7 +168,7 @@ function _delete(id){
 
 function edit_form(id){
     $.ajax({
-        url : '<?php echo base_url('admin/userlogin/edit/')?>' + id,
+        url : '<?php echo base_url('admin/farm/edit/')?>' + id,
         type : "GET",
         dataType : "JSON",
         success : function(data)
@@ -192,16 +176,10 @@ function edit_form(id){
             get_sess(data.sess);
             if(data.status == true){
                 var data = data.data;
-                $('[name="nama_farm"]')
-                .empty()
-                .append($("<option>/").val(data.id_farm).text(data.nama_farm))
-                .val(data.id_farm)
-                .trigger('change.select2');
                 $('[name="id"]').val(data.id);
-                $('[name="username"]').val(data.username);
-                $('[name="password"]').attr('placeholder','Kosongkan jika tidak diubah');
-                $('[name="password2"]').attr('placeholder','Kosongkan jika tidak diubah');
-                $('#title-form').text('Edit Data User Login');
+                $('[name="nama_farm"]').val(data.nama_farm);
+                $('[name="alamat_farm"]').text(data.alamat_farm);
+                $('#title-form').text('Edit Data Farm');
                 $('#form-aksi').attr('data-form','edit');
                 $('#modal-form').modal('show');
             }
@@ -215,23 +193,4 @@ function edit_form(id){
             });
         }
     });
-}
-
-function select_user(){
-    $('[name="nama_farm"]')
-    .select2({
-      allowClear: true,
-      placeholder: '- Pilih Farm -',
-      ajax: {
-        dataType: 'json',
-        url:  '<?php echo base_url("admin/userlogin/select_user"); ?>',
-        type: "GET",
-        data: function(params) {return {
-            search: params.term
-        }},
-        processResults: function (data, page) {return {
-          results: data
-        }},
-      }
-    });    
 }

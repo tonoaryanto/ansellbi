@@ -10,6 +10,7 @@ class Userlogin extends CI_Controller {
 
     public function index(){
         $this->konfigurasi->cek_url();
+        
         $data = [
             'txthead1'  => 'User Login',
             'head1'     => 'User Login',
@@ -32,12 +33,14 @@ class Userlogin extends CI_Controller {
             echo json_encode(['sess' => $cek_sess]);
         }else{
             $data = array(
-    			'nama_user' => $this->input->post('nama_farm',TRUE),
-    			'alamat_user' => $this->input->post('alamat_farm',TRUE),
-    			'keterangan' => 'customer'
+    			'id_user'   => $this->input->post('nama_farm',TRUE),
+    			'userlogin' => $this->input->post('username',TRUE),
+    			'username'  => $this->input->post('username',TRUE),
+    			'password'  => md5($this->input->post('password',TRUE)),
+    			'status_user' => '1'
 			);
-			
-            $this->umum_model->insert('user',$data);
+
+            $this->umum_model->insert('data_operator',$data);
             echo json_encode(['status' => true,'message' => 'Data berhasil disimpan!']);
         }
     }
@@ -48,13 +51,19 @@ class Userlogin extends CI_Controller {
             echo json_encode(['sess' => $cek_sess]);
         }else{
             $data = array(
-    			'nama_user' => $this->input->post('nama_farm',TRUE),
-    			'alamat_user' => $this->input->post('alamat_farm',TRUE),
+    			'id_user'   => $this->input->post('nama_farm',TRUE),
+    			'userlogin' => $this->input->post('username',TRUE),
+    			'username'  => $this->input->post('username',TRUE),
+    			'status_user' => '1'
 			);
- 
+
+            if($this->input->post('password',TRUE) != ''){
+    			$data['password']  = md5($this->input->post('password',TRUE));
+            }
+            
             $where = ['id' => $this->input->post('id',TRUE)];
 
-            $this->umum_model->update('user',$data,$where);
+            $this->umum_model->update('data_operator',$data,$where);
             echo json_encode(['status' => true,'message' => 'Data berhasil disimpan!']);
         }
     }
@@ -64,16 +73,7 @@ class Userlogin extends CI_Controller {
         if ($cek_sess == 0) {
             echo json_encode(['sess' => $cek_sess]);
         }else{
-            $ket = $this->umum_model->get('user',['id' => $this->input->post('value')])->row_array()['keterangan'];
-
-            if($ket == 'customer'){
-                $this->umum_model->delete('user',['id' => $this->input->post('value')]);                
-                $this->umum_model->delete('data_operator',['id_user' => $this->input->post('value')]);
-            }
-            $this->umum_model->delete('periode',['kode_perusahaan' => $this->input->post('value')]);
-            $this->umum_model->delete('image2',['kode_perusahaan' => $this->input->post('value')]);
-            $this->umum_model->delete('history_alarm',['id_user' => $this->input->post('value')]);
-            $this->umum_model->delete('data_kandang',['kode_perusahaan' => $this->input->post('value')]);
+            $this->umum_model->delete('data_operator',['id' => $this->input->post('value')]);
             echo json_encode(array("status" => TRUE));
         }
     }
@@ -83,15 +83,39 @@ class Userlogin extends CI_Controller {
         if ($cek_sess == 0) {
             echo json_encode(['sess' => $cek_sess]);
         }else{
-            $row = $this->umum_model->get('user',['id' => $id])->row();
+            $row = $this->umum_model->get('data_operator',['id' => $id])->row();
+            $row2 = $this->umum_model->get('user',['id' => $row->id_user])->row();
 
             $data = array(
-    			'id' => $row->id,
-    			'nama_farm' => $row->nama_user,
-    			'alamat_farm' => $row->alamat_user,
+                'id' => $row->id,
+                'id_farm' => $row->id_user,
+                'nama_farm' => $row2->nama_user,
+    			'username' => $row->username
 			);
 			
     	    echo json_encode(['status' => true, 'data' => $data]);
+        }
+    }
+
+    public function select_user(){
+        $fil=$this->input->get('search')?$this->input->get('search'):NULL;
+        $this->db->select(['id','nama_user']);
+        $this->db->from('user');
+        $this->db->like('nama_user',$fil,'both');
+        $this->db->limit(50);
+        $db =$this->db->get();
+        $data = [];
+        foreach ($db->result() as $d) {
+            $data[]= array(
+                'id'   => $d->id,
+                'text' => $d->nama_user,
+             );
+        }
+        $send= $data;
+        if($fil == NULL){
+             echo json_encode($send);
+        }else{
+             echo json_encode($send);
         }
     }
 

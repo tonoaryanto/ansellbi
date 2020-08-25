@@ -8,14 +8,23 @@
           </div>
           <div class="modal-body">
             <form id="form-aksi" action="javascript:void(0);">
-            <div class="form-group">
-                      <label>Nama House</label>
-                      <input type="text" class="form-control" name="nama_house" id="nama_house" placeholder="Nama Farm" onkeyup="enter('nama_house');" />
-                  </div>
-                  <div class="form-group">
-                      <label>Nama House</label>
-                      <input type="text" class="form-control" name="nama_house" id="nama_house" placeholder="Nama Farm" onkeyup="enter('nama_house');" />
-                  </div>
+                <div class="form-group">
+                  <label>Nama Farm</label>
+                  <select class="form-control select2" name="nama_farm" placeholder="Nama Farm" style="width: 100%;" onkeyup="enter('nama_house');">
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Username</label>
+                  <input type="text" class="form-control" name="username" placeholder="username" onkeyup="enter('nama_house');" />
+                </div>
+                <div class="form-group">
+                  <label>Password</label>
+                  <input type="password" class="form-control" name="password" onkeyup="enter('nama_house');" />
+                </div>
+                <div class="form-group">
+                  <label>Masukan ulang Password</label>
+                  <input type="password" class="form-control" name="password2" onkeyup="enter('nama_house');" />
+                </div>
                 <input type="hidden" name="id"/> 
             </form>
           </div>
