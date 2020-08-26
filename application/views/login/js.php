@@ -10,10 +10,10 @@ function masuk(){
             success: function(data)
             {
                 if( data.status == true){
-                  notifikasi('Berhasil Masuk!','Selamat datang <b>'+data.nama_user+'</b>!','success');
+                  notifikasi('Login Success!','Welcome back<b>'+data.nama_user+'</b>!','success');
                   location.replace(data.url);
                 }else{
-                  notifikasi('Peringatan!',data.message,'danger');                
+                  notifikasi('Warning!',data.message,'danger');                
               }
             }
         });
@@ -22,12 +22,12 @@ function masuk(){
 
 function validasi(){
     if($('[name="username"]').val() == ''){
-        notifikasi('Peringatan!','<b>Username</b> tidak boleh kosong.','warning');
+        notifikasi('Warning!','<b>Username</b> is empty.','warning');
         $('[name="username"]').focus();
         return 1;
     }
     if($('[name="password"]').val() == ''){
-        notifikasi('Peringatan!','<b>Password</b> tidak boleh kosong.','warning');
+        notifikasi('Warning!','<b>Password</b> is empty.','warning');
         $('[name="password"]').focus();
         return 1;
     }

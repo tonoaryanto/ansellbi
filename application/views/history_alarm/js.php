@@ -22,7 +22,7 @@ function isiselect_kandang(inidata){
   $('#optionselect_kandang')
   .val('')
   .select2({
-    placeholder : '-Pilih Kandang-',
+    placeholder : '-Select House-',
     allowClear : true,
     data : inidata,
   });
@@ -36,40 +36,40 @@ function data_alarm(){
 
   if (datkandang == '' || datkandang == null || datkandang == undefined) {
     swal.fire({
-      title: "Peringatan!",
-      html : '<p style="font-size: 14px">Data Kandang Masih Kosong!</p>',
+      title: "Warning!",
+      html : '<p style="font-size: 14px">Incorrect house data</p>',
       type : "warning",
     });
     return;
   }
   if (dari == '') {
     swal.fire({
-      title: "Peringatan!",
-      html : '<p style="font-size: 14px">Data filter tanggal dari masih kosong</p>',
+      title: "Warning!",
+      html : '<p style="font-size: 14px">Incorrect date data</p>',
       type : "warning",
     });
     return;
   }
   if (datperiode == '' || datperiode < 1) {
     swal.fire({
-      title: "Peringatan!",
-      html : '<p style="font-size: 14px">Data Periode Salah! Mohon set ulang</p>',
+      title: "Warning!",
+      html : '<p style="font-size: 14px">Incorrect period data</p>',
       type : "warning",
     });
     return;
   }
   if (sampai == '') {
     swal.fire({
-      title: "Peringatan!",
-      html : '<p style="font-size: 14px">Data filter tanggal sampai masih kosong</p>',
+      title: "Warning!",
+      html : '<p style="font-size: 14px">Start date is empty</p>',
       type : "warning",
     });
     return;
   }
   if (dari > sampai && dari == '' && sampai == '') {
     swal.fire({
-      title: "Peringatan!",
-      html : '<p style="font-size: 14px">Data filter Salah! Mohon set ulang</p>',
+      title: "Warning!",
+      html : '<p style="font-size: 14px">End date is empty</p>',
       type : "warning",
     });
     return;

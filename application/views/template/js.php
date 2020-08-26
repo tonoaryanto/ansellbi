@@ -73,8 +73,8 @@
 
 	$('#logout').on('click',function(){
 	    Swal.fire({
-	      title: 'Peringatan!',
-	      html : '<p style="font-size: 14px">Apakah anda yakin akan melakukan <b>Log out</b>?</p>',
+	      title: 'Warning!',
+	      html : '<p style="font-size: 14px">Are you sure you want to <b>quit</b>?</p>',
 	      type: 'warning',
 	      showCancelButton: true,
 	      confirmButtonColor: '#3085d6',

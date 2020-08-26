@@ -14,23 +14,23 @@
 									<label style="color: #3c8dbc;text-align: center;width: 100%;font-size: 15px;padding: 10px 5px;background: aliceblue;border-radius: 5px;">Data 1</label>
 									<hr style="margin: 0px 0px 10px 0px">
 									<div class="form-group">
-									<label>Data Kandang</label>
+									<label>Data House</label>
 									<select name="val_kandang1" class="form-control optionselect_kandang" id="optionselect_kandang1" style="width: 100%">
-									<option disabled selected>-Pilih Data Kandang-</option>
+									<option disabled selected>-Select Data House-</option>
 									</select>
 									</div>
 									<div class="form-group">
-										<label>Periode</label>
-										<input name="val_periode1" class="form-control" id="inputperiode1" style="width: 100%;border-radius: 3px;" type="number" min="1" placeholder="-Masukan periode-" onchange="selectdata(1);">
+										<label>Period</label>
+										<input name="val_periode1" class="form-control" id="inputperiode1" style="width: 100%;border-radius: 3px;" type="number" min="1" placeholder="-Input period-" onchange="selectdata(1);">
 									</div>
 									<div class="form-group">
-										<label>Data House</label>
+										<label>Data Parameter</label>
 						                <select name="val_data1" class="form-control" id="optionselect1" style="width: 100%;border-radius: 3px;">
-						                  <option disabled selected>-Pilih Kandang Dahulu-</option>
+						                  <option disabled selected>-</option>
 						                </select>
 									</div>
 									<div class="form-group">
-										<label>Posisi Yaxis</label>
+										<label>Yaxis Position</label>
 										<input type="text" class="form-control" name="posisiy1" value="left" readonly>
 									</div>
 									<div class="form-group" style="visibility: hidden;">
@@ -46,23 +46,23 @@
 									<label style="color: #3c8dbc;text-align: center;width: 100%;font-size: 15px;padding: 10px 5px;background: aliceblue;border-radius: 5px;">Data 2</label>
 									<hr style="margin: 0px 0px 10px 0px">
 									<div class="form-group">
-									<label>Data Kandang</label>
+									<label>Data House</label>
 									<select name="val_kandang2" class="form-control optionselect_kandang" id="optionselect_kandang2" style="width: 100%">
-									<option disabled selected>-Pilih Data Kandang-</option>
+									<option disabled selected>-select Data house-</option>
 									</select>
 									</div>
 									<div class="form-group">
-										<label>Periode</label>
-										<input name="val_periode2" class="form-control" id="inputperiode2" style="width: 100%;border-radius: 3px;" type="number" min="1" placeholder="-Masukan periode-" onchange="selectdata(2);">
+										<label>Period</label>
+										<input name="val_periode2" class="form-control" id="inputperiode2" style="width: 100%;border-radius: 3px;" type="number" min="1" placeholder="-Input period-" onchange="selectdata(2);">
 									</div>
 									<div class="form-group">
-										<label>Data House</label>
+										<label>Data Parameter</label>
 						                <select name="val_data2" class="form-control" id="optionselect2" style="width: 100%;border-radius: 3px;">
-						                  <option disabled selected>-Pilih Kandang Dahulu-</option>
+						                  <option disabled selected>-</option>
 						                </select>
 									</div>
 									<div class="form-group">
-										<label>Posisi Yaxis</label>
+										<label>Yaxis Position</label>
 										<input type="text" class="form-control" name="posisiy2" value="right" readonly>
 									</div>
 									<div class="form-group" style="visibility: hidden;">
@@ -80,7 +80,7 @@
 						</div>
 						<div class="box-footer">
 							<div class="form-group col-sm-12">
-								<label>Nama Grafik</label>
+								<label>Chart name</label>
 								<input style="border-radius: 5px" type="text" class="form-control" name="namagrafik" placeholder="Nama Grafik">
 							</div>
 							<div class="form-group col-sm-4">

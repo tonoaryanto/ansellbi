@@ -9,32 +9,32 @@ $(document).ready(function(){
 
   if (datkandang == '' || datkandang == null || datkandang == undefined) {
     swal.fire({
-      title: "Peringatan!",
-      html : '<p style="font-size: 14px">Data Kandang Masih Kosong!</p>',
+      title: "Warning!",
+      html : '<p style="font-size: 14px">Data house is empty!</p>',
       type : "warning",
     });
     return;
   }
   if (datgraf == '' || datgraf == null || datgraf == undefined) {
     swal.fire({
-      title: "Peringatan!",
-      html : '<p style="font-size: 14px">Data Grafik Masih Kosong!</p>',
+      title: "Warning!",
+      html : '<p style="font-size: 14px">Data parameter  is empty!</p>',
       type : "warning",
     });
     return;
   }
   if (datperiode == '' || datperiode < 1) {
     swal.fire({
-      title: "Peringatan!",
-      html : '<p style="font-size: 14px">Data Periode Salah! Mohon set ulang</p>',
+      title: "Warning!",
+      html : '<p style="font-size: 14px">Data Period is empty</p>',
       type : "warning",
     });
     return;
   }
   if (parseInt($('[name="hourdari1"]').val()) > parseInt($('[name="hourdari2"]').val())) {
     swal.fire({
-      title: "Peringatan!",
-      html : '<p style="font-size: 14px">Data Grow day Salah! Mohon set ulang</p>',
+      title: "Warning!",
+      html : '<p style="font-size: 14px">Data Grow is incorrect</p>',
       type : "warning",
     });
     return;
@@ -58,16 +58,16 @@ $(document).ready(function(){
 
       if ($('[name="val_pemkandang'+i+'"]').val() == '' || $('[name="val_pemkandang'+i+'"]').val() == null || $('[name="val_pemkandang'+i+'"]').val() == undefined) {
         swal.fire({
-          title: "Peringatan!",
-          html : '<p style="font-size: 14px">Data Kandang pada pembanding '+i+' Masih Kosong!</p>',
+          title: "Warning!",
+          html : '<p style="font-size: 14px">Data House '+i+' is empty!</p>',
           type : "warning",
         });
         return;
       }
       if ($('[name="val_pemperiode'+i+'"]').val() == '' || $('[name="val_pemperiode'+i+'"]').val() == null || $('[name="val_pemperiode'+i+'"]').val() == undefined) {
         swal.fire({
-          title: "Peringatan!",
-          html : '<p style="font-size: 14px">Data periode pada pembanding '+i+' Masih Kosong!</p>',
+          title: "Warning!",
+          html : '<p style="font-size: 14px">Data period '+i+' is empty!</p>',
           type : "warning",
         });
         return;
@@ -79,22 +79,22 @@ $(document).ready(function(){
   }
   inijson['valpem'] = isijson;
 
-    Swal.fire({
-      title: 'Memproses Data',
-      html: '<p style="font-size: 14px">Mohon tunggu proses ini memerlukan waktu.</p>',
-      allowOutsideClick: false,
-      onBeforeOpen: () => {
-        Swal.showLoading()
-        Swal.getTimerLeft()
-      },
-    });
+  Swal.fire({
+    title: 'Processing data',
+    html: '<p style="font-size: 14px">Please Wait . . .</p>',
+    allowOutsideClick: false,
+    onBeforeOpen: () => {
+      Swal.showLoading()
+      Swal.getTimerLeft()
+    },
+  });
 
   $('#btnprint').attr('disabled','true');
 
     var dt = {};
     Swal.fire({
-      title: 'Memproses Data',
-      html: '<p style="font-size: 14px">Membuat file unduh</p>',
+      title: 'Processing data',
+      html: '<p style="font-size: 14px">Please wait . . .</p>',
       allowOutsideClick: false,
       onBeforeOpen: () => {
         Swal.showLoading()
@@ -127,7 +127,7 @@ function loopprint(dataini,awal,loop,dataurl) {
           loopprint(dataini,awal,loop,dataurl);
         }else{
           swal.fire({
-            title: "Gagal!",
+            title: "Error!",
             html : data.message,
             type : "warning",
           });
@@ -141,7 +141,7 @@ function loopprint(dataini,awal,loop,dataurl) {
     }
     swal.fire({
       title: "Save File",
-      html : '<p style="font-size: 14px">Silahkan klik file dibawah ini</p>'+seturl,
+      html : '<p style="font-size: 14px">Please click button file to download</p>'+seturl,
       type : "success",
       allowOutsideClick: false,
     });
@@ -167,7 +167,7 @@ function isiselect_kandang(inidata){
   $('#optionselect_kandang')
   .val('')
   .select2({
-    placeholder : '-Pilih Kandang-',
+    placeholder : '-Select house-',
     allowClear : true,
     data : inidata,
   }).on("change", function () {
@@ -184,32 +184,32 @@ function grafik(){
 
   if (datkandang == '' || datkandang == null || datkandang == undefined) {
     swal.fire({
-      title: "Peringatan!",
-      html : '<p style="font-size: 14px">Data Kandang Masih Kosong!</p>',
+      title: "Warning!",
+      html : '<p style="font-size: 14px">Data House is empty!</p>',
       type : "warning",
     });
     return;
   }
   if (datgraf == '' || datgraf == null || datgraf == undefined) {
     swal.fire({
-      title: "Peringatan!",
-      html : '<p style="font-size: 14px">Data Grafik Masih Kosong!</p>',
+      title: "Warning!",
+      html : '<p style="font-size: 14px">Data parameter is empty!</p>',
       type : "warning",
     });
     return;
   }
   if (datperiode == '' || datperiode < 1) {
     swal.fire({
-      title: "Peringatan!",
-      html : '<p style="font-size: 14px">Data Periode Salah! Mohon set ulang</p>',
+      title: "Warning!",
+      html : '<p style="font-size: 14px">Data Period is empty</p>',
       type : "warning",
     });
     return;
   }
   if (parseInt($('[name="hourdari1"]').val()) > parseInt($('[name="hourdari2"]').val())) {
     swal.fire({
-      title: "Peringatan!",
-      html : '<p style="font-size: 14px">Data Grow day Salah! Mohon set ulang</p>',
+      title: "Warning!",
+      html : '<p style="font-size: 14px">Data Grow day is wrong</p>',
       type : "warning",
     });
     return;
@@ -233,16 +233,16 @@ function grafik(){
 
       if ($('[name="val_pemkandang'+i+'"]').val() == '' || $('[name="val_pemkandang'+i+'"]').val() == null || $('[name="val_pemkandang'+i+'"]').val() == undefined) {
         swal.fire({
-          title: "Peringatan!",
-          html : '<p style="font-size: 14px">Data Kandang pada pembanding '+i+' Masih Kosong!</p>',
+          title: "Warning!",
+          html : '<p style="font-size: 14px">Data house '+i+' is empty!</p>',
           type : "warning",
         });
         return;
       }
       if ($('[name="val_pemperiode'+i+'"]').val() == '' || $('[name="val_pemperiode'+i+'"]').val() == null || $('[name="val_pemperiode'+i+'"]').val() == undefined) {
         swal.fire({
-          title: "Peringatan!",
-          html : '<p style="font-size: 14px">Data periode pada pembanding '+i+' Masih Kosong!</p>',
+          title: "Warning!",
+          html : '<p style="font-size: 14px">Data period '+i+' is empty!</p>',
           type : "warning",
         });
         return;
@@ -255,8 +255,8 @@ function grafik(){
   inijson['valpem'] = isijson;
 
   Swal.fire({
-    title: 'Memproses Data',
-    html: '<p style="font-size: 14px">Mohon tunggu proses ini memerlukan waktu.</p>',
+    title: 'Processing data',
+    html: '<p style="font-size: 14px">Please Wait . . .</p>',
     allowOutsideClick: false,
     onBeforeOpen: () => {
       Swal.showLoading()
@@ -356,10 +356,10 @@ function loopgrafik(dataini,awal,loop) {
           awal = awal + 1;
           loopgrafik(dataini,awal,loop);
         }else{
-          $('#inicanvas').html('-Data Tidak Ditemukan-');
+          $('#inicanvas').html('-Data not found-');
           $('#tglresponse').empty();
           swal.fire({
-            title: "Gagal!",
+            title: "Error!",
             html : data.message,
             type : "warning",
           });
@@ -368,8 +368,8 @@ function loopgrafik(dataini,awal,loop) {
     });
   }else{
     swal.fire({
-      title: "Selesai!",
-      html : '<p style="font-size: 14px">Grafik telah dibuat</p>',
+      title: "Finish!",
+      html : '<p style="font-size: 14px">Chart has been created</p>',
       type : "success",
     });
   }
@@ -391,31 +391,31 @@ function addpembanding() {
 
   if(isibox == 1){
     $('<button>')
-    .attr({'class' : 'btn btn-danger', 'onclick' : 'hapuspembanding();' , 'id' : 'btnhapuspem', 'title' : 'Hapus Pembanding'})
+    .attr({'class' : 'btn btn-danger', 'onclick' : 'hapuspembanding();' , 'id' : 'btnhapuspem', 'title' : 'Delete comparison'})
     .html('<i class="fa fa-minus"></i>')
     .appendTo('#actionpem');
   }
   $('<div>')
     .attr({'class' : 'col-sm-6','id' : 'bodypem'+ isibox})
-    .html('<label>Data pembanding '+isibox+'</label><div style="padding:10px;border-style: solid;border-width: thin;border-radius: 5px;border-color:#ccc;margin-bottom:10px;"><div class="row"><div class="form-group col-sm-4"><label>Data Kandang</label><select name="val_pemkandang'+isibox+'" class="form-control" id="optionselect_kandang" style="width: 100%"><option disabled selected>-Pilih Data Kandang-</option></select></div><div class="form-group col-sm-4"><label>Periode</label><input name="val_pemperiode'+isibox+'" class="form-control" id="inputperiode" style="width: 100%;border-radius: 3px;" type="number" min="1" placeholder="-Masukan periode-"></div></div></div>')
+    .html('<label>Data comparison '+isibox+'</label><div style="padding:10px;border-style: solid;border-width: thin;border-radius: 5px;border-color:#ccc;margin-bottom:10px;"><div class="row"><div class="form-group col-sm-4"><label>Data house</label><select name="val_pemkandang'+isibox+'" class="form-control" id="optionselect_kandang" style="width: 100%"><option disabled selected>-Select Data house-</option></select></div><div class="form-group col-sm-4"><label>Period</label><input name="val_pemperiode'+isibox+'" class="form-control" id="inputperiode" style="width: 100%;border-radius: 3px;" type="number" min="1" placeholder="-Input period-"></div></div></div>')
     .appendTo('#boxpembanding');
 
   $('[name="val_pemkandang'+isibox+'"]').empty();
   $('[name="val_pemkandang'+isibox+'"]')
   .val('')
   .select2({
-    placeholder : '-Pilih Kandang-',
+    placeholder : '-Select House-',
     allowClear : true,
     data : dtkandang,
   });
 }
 
 function selectdata(){
-  $('[id="thisbtndata"]').html('Sedang memproses . . .');
+  $('[id="thisbtndata"]').html('Processing . . .');
   $('#optionselect').empty();
   $('<option>')
   .attr({'selected' : 'true','disabled' : 'true'})
-  .text('Sedang memproses . . .')
+  .text('Processing . . .')
   .appendTo('#optionselect');
 
   var inidata = $.ajax({
@@ -435,13 +435,13 @@ function selectdata(){
 }
 
 function isiselect(inidata){
-  $('[id="thisbtndata"]').html('-Pilih Data-');
+  $('[id="thisbtndata"]').html('-Select Data-');
   $('#optionselect').empty();
   $('#optionselect')
   .val('')
   .select2({
     allowClear : true,
-    placeholder : '-Pilih Data-',
+    placeholder : '-Select Data-',
     data : inidata,
   }).on("change", function () {
     $('[name="hourdari1"]').val('-1');

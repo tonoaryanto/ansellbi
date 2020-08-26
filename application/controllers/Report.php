@@ -39,7 +39,7 @@ class Report extends CI_Controller {
         if($site == 'myaxis'){
             $this->konfigurasi->cek_url();
             $data = [
-                'txthead1'     => 'Report Histori House - Yaxis Ganda',
+                'txthead1'     => 'Report Histori House - Double Yaxis',
                 'head1'     => 'Report',
                 'link1'     => '#',
                 'head2'     => '<b>Histori House</b>',

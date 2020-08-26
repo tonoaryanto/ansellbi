@@ -5,8 +5,8 @@ $(document).ready(function(){
 
     if ($('[name="periode"]').val() == '') {
       swal.fire({
-        title: "peringatan!",
-        html : '<p style="font-size: 14px">Mohon Input Periode Di Isi Terlebih Dahulu!</p>',
+        title: "Warning!",
+        html : '<p style="font-size: 14px">Please Input Period!</p>',
         type: "warning",
       });
       $('[name="periode"]').focus();
@@ -14,8 +14,8 @@ $(document).ready(function(){
     }
     if ($('[name="select_kandang"]').val() == null) {
       swal.fire({
-        title: "peringatan!",
-        html : '<p style="font-size: 14px">Mohon Input Nama Kandang Di Isi Terlebih Dahulu!</p>',
+        title: "Warning!",
+        html : '<p style="font-size: 14px">Please Input House name!</p>',
         type: "warning",
       });
       $('[name="select_kandang"]').focus();
@@ -25,15 +25,15 @@ $(document).ready(function(){
     $('#tombol').attr('disabled','true');
 
     $('#textlog').text('');
-    var datatext = "Memproses data . . .";
+    var datatext = "Processing . . .";
     $('#textprogres').text(datatext);
     $('#textlog').html('- '+datatext);
 
     var senddata = new FormData(this);
 
     Swal.fire({
-      title: 'Memproses Data',
-      html: '<p style="font-size: 14px">Mohon tunggu proses ini memerlukan waktu.</p>',
+      title: 'Processing data',
+      html: '<p style="font-size: 14px">Please Wait . . .</p>',
       allowOutsideClick: false,
       onBeforeOpen: () => {
         Swal.showLoading()
@@ -53,8 +53,8 @@ $(document).ready(function(){
           get_sess(data.sess);
           if(data.status == true){
               swal.fire({
-                title: "Berhasil!",
-                html : '<p style="font-size: 14px">Data berhasil diupload!</p>',
+                title: "Success!",
+                html : '<p style="font-size: 14px">Upload was successful!</p>',
                 type: "success",
               });
               var sebelumnya = $('#textlog').html();
@@ -63,7 +63,7 @@ $(document).ready(function(){
           }else{
             $('#tombol').removeAttr('disabled');
             swal.fire({
-              title: "Gagal!",
+              title: "Error!",
               html : data.message,
               type: "error",
             });
@@ -76,8 +76,8 @@ $(document).ready(function(){
           $('#btnstop').remove();
           $('#tombol').removeAttr('disabled');
           swal.fire({
-            title: "Gagal!",
-            html : '<p style="font-size: 14px">Terjadi Kesalahan!</p>',
+            title: "Error!",
+            html : '<p style="font-size: 14px">There is an error!</p>',
             type: "error",
           });
           var datatext = $('#textlog').html() + "&#10;- Error . . .";
@@ -95,7 +95,7 @@ function select_kandang() {
     $('[name="select_kandang"]')
     .select2({
       allowClear: true,
-      placeholder: '- Pilih Kandang -',
+      placeholder: '- Select House -',
       ajax: {
         dataType: 'json',
         url:  "<?php echo base_url('get_excel/dtkandang');?>",
@@ -149,49 +149,4 @@ function data_terakhir() {
           $('[name="last_growday"]').val(data.growday);          
         }
     });
-}
-
-function save_new_kandang() {
-  var cek = $('[name="tambah_kandang"]').val();
-  if (cek == '') {
-    swal.fire({
-      title: "Peringatan!",
-      html : '<p style="font-size: 14px">Mohon Isi Input Nama Kandang!</p>',
-      type: "warning",
-    });
-  }else{
-    $.ajax({
-        url : "<?php echo base_url('get_excel/add_new_kandang');?>",
-        type: "POST",
-        data: {'value1' : $('[name="tambah_kandang"]').val()},
-        cache: false,
-        dataType:"JSON",
-        success: function(data){
-          get_sess(data.sess);
-          if(data.status == true){
-              swal.fire({
-                title: "Berhasil!",
-                html : '<p style="font-size: 14px">Nama Kandang Telah Ditambahkan!</p>',
-                type: "success",
-              });
-              batal_new_kandang();
-              select_kandang();
-          }else{
-            swal.fire({
-              title: "Gagal!",
-              html : data.message,
-              type: "error",
-            });
-          }
-        },
-        error: function (jqXHR, textStatus, errorThrown)
-        {
-          swal.fire({
-            title: "Gagal!",
-            html : '<p style="font-size: 14px">Terjadi Kesalahan!</p>',
-            type: "error",
-          });
-        }
-    });
-  }
 }

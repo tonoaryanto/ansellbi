@@ -232,7 +232,7 @@ class Export_excel extends CI_Controller {
         $filename = $label.$addlabel; // set filename for excel file to be exported
 
         $spreadsheet->getProperties()->setCreator('Ansell Jaya Indonesia')
-        ->setLastModifiedBy('Tono Ariyanto')
+        ->setLastModifiedBy('Ansell')
         ->setTitle($filename)
         ->setSubject($filename)
         ->setKeywords('Ansell Jaya')
@@ -736,11 +736,13 @@ class Export_excel extends CI_Controller {
 
         $dataprimary = $this->db->query($esqlprimary)->result();
 
+        $adata = [];
         foreach ($dataprimary as $value) {
             $adata[]  = ('('.$value->grow.') - '.$value->jjam_value);
         }
         $isigrowday = $adata;
 
+        $bdata = [];
         foreach ($dataprimary as $value2) {
             $bdata[] = $value2->isi_value;
         }

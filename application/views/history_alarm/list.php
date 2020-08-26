@@ -10,30 +10,30 @@
       <div id="boxoption_body" class="box-body">
         <div class="row" style="padding-left: 10px;padding-right: 10px">
           <div class="col-sm-6">
-            <p><label>Data Kandang : </label></p>
+            <p><label>Data House : </label></p>
             <div class="form-group col-sm-4">
               <select class="form-control" id="optionselect_kandang" style="width: 100%">
-                <option disabled selected>-Pilih Data-</option>
+                <option disabled selected>-Select Data-</option>
               </select>
             </div>
             <div class="form-group col-sm-4">
-              <input class="form-control" id="inputperiode" style="width: 100%;border-radius: 3px;" type="number" min="1" placeholder="-Masukan periode-">
+              <input class="form-control" id="inputperiode" style="width: 100%;border-radius: 3px;" type="number" min="1" placeholder="-Input Period-">
             </div>
             <div class="form-group col-sm-4">
               <button class="btn btn-default" onclick="data_alarm()">Apply</button>
             </div>
           </div>
           <div class="col-sm-6">
-            <p><label>Filter Berdasarkan Tanggal :</label></p>
+            <p><label>Filter by date :</label></p>
             <div class="form-group col-sm-4">
               <div class="input-group">
-                <span class="input-group-addon" style="border-top-left-radius:4px;border-bottom-left-radius:4px;">Dari</span>
+                <span class="input-group-addon" style="border-top-left-radius:4px;border-bottom-left-radius:4px;">Start</span>
                 <input type="text" class="form-control pull-right datepicker" name="tanggal_dari" id="tanggal_dari" placeholder="<?php echo date('m/d/Y'); ?>" value="<?php echo date('m/d/Y'); ?>">
               </div>
             </div>
             <div class="form-group col-sm-4">
               <div class="input-group">
-                <span class="input-group-addon" style="border-top-left-radius:4px;border-bottom-left-radius:4px;">Sampai</span>
+                <span class="input-group-addon" style="border-top-left-radius:4px;border-bottom-left-radius:4px;">End</span>
                 <input type="text" class="form-control pull-right datepicker" name="tanggal_sampai" id="tanggal_sampai" placeholder="<?php echo date('m/d/Y'); ?>" value="<?php echo date('m/d/Y'); ?>">
               </div>
             </div>

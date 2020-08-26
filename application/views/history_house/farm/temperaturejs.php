@@ -33,8 +33,8 @@ $(document).ready(function(){
 function reload_grafik(){
   $('#inihtml').empty();
   Swal.fire({
-    title: 'Memproses Data',
-    html: '<p style="font-size: 14px">Mohon tunggu proses ini memerlukan waktu.</p>',
+    title: 'Processing data',
+    html: '<p style="font-size: 14px">Please Wait . . .</p>',
     allowOutsideClick: false,
     onBeforeOpen: () => {
       Swal.showLoading()
@@ -56,16 +56,16 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
     if($('#optiongrow').is(':checked')) {
       if (datperiode == '' || datperiode < 0) {
         swal.fire({
-          title: "Peringatan!",
-          html : '<p style="font-size: 14px">Data Periode Salah! Mohon set ulang</p>',
+          title: "Warning!",
+          html : '<p style="font-size: 14px">Periode is incorrect!</p>',
           type : "warning",
         });
         return;
       }
       if (parseInt($('[name="growval"]').val()) > parseInt($('[name="growval2"]').val())) {
         swal.fire({
-          title: "Peringatan!",
-          html : '<p style="font-size: 14px">Data Grow Day Salah! Mohon set ulang</p>',
+          title: "Warning!",
+          html : '<p style="font-size: 14px">Growday is incorrect!</p>',
           type : "warning",
         });
         return;
@@ -101,7 +101,7 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
             .attr({
               'class' : 'col-sm-'+lebar
             })
-            .html('<div class="box box-success" id="gf'+ul+'"><div class="box-header with-border"><h3 class="box-title" id="titlegrafik'+id+'"><span style="color: #aaa;">-Set Options Terlebih Dahulu-</span></h3><div class="box-tools pull-right"><button type="button" class="btn btn-box-tool" onclick="swipegf('+id+')"><i class="fa fa-clone"></i></button></div></div><div class="box-body"><div id="inicanvas'+id+'"></div></div></div>')
+            .html('<div class="box box-success" id="gf'+ul+'"><div class="box-header with-border"><h3 class="box-title" id="titlegrafik'+id+'"><span style="color: #aaa;">-Set Options-</span></h3><div class="box-tools pull-right"><button type="button" class="btn btn-box-tool" onclick="swipegf('+id+')"><i class="fa fa-clone"></i></button></div></div><div class="box-body"><div id="inicanvas'+id+'"></div></div></div>')
             .appendTo('#inihtmlbfr'+dtrow);
 
             $('#inicanvas'+id).empty();
@@ -180,10 +180,10 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
           ul = ul + 1;
           grafik(dataini[0]()[cr],dataini[1]()[cr],dataini[2][cr],dataini[3][cr],dataini[0]().length,ul);
         }else{
-          $('#inicanvas').html('-Data Tidak Ditemukan-');
+          $('#inicanvas').html('-Data Not Found-');
           $('#tglresponse').empty();
           swal.fire({
-            title: "Gagal!",
+            title: "Error!",
             html : data.message,
             type : "warning",
           });

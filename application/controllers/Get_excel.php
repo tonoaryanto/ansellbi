@@ -307,10 +307,10 @@ class Get_excel extends CI_Controller {
                 if ($hasilini['status'] == 1) {
                 echo json_encode(['status'=>true, 'datamessage'=>$hasilini['message']]);
                 }else{
-                echo json_encode(['status'=>false, 'datamessage'=>$hasilini['message'],'message'=>'<p style="font-size: 14px">Terjadi Kesalahan saat memproses data!</p>']);
+                echo json_encode(['status'=>false, 'datamessage'=>$hasilini['message'],'message'=>'<p style="font-size: 14px">An error occurred during the execution!</p>']);
                 }
             }else{
-                echo json_encode(['status'=>false, 'message'=>'<p style="font-size: 14px">Mohon hanya memasukan file Farm anda dan dengan format yang benar!<br>Contoh : AlarmHistory_[nama farm]_[kode farm]_ENG.csv</p>']);
+                echo json_encode(['status'=>false, 'message'=>'<p style="font-size: 14px">The file format is not the same!<br>Example : AlarmHistory_[nama farm]_[kode farm]_ENG.csv</p>']);
             }
         }
     }
@@ -363,20 +363,20 @@ class Get_excel extends CI_Controller {
                     $message .= ", " . $isidata[$i]['value5'];
                     $message .= ", " . $isidata[$i]['value6'];
                     $message .= ", " . $isidata[$i]['value19'];
-                    $message .= ") - Berhasil";
+                    $message .= ") - Success";
                 }else{
                     $message .= "&#10;- Data (" . $isidata[$i]['value3'];
                     $message .= ", " . $isidata[$i]['value4'];
                     $message .= ", " . $isidata[$i]['value5'];
                     $message .= ", " . $isidata[$i]['value6'];
                     $message .= ", " . $isidata[$i]['value19'];
-                    $message .= ") - Sudah ada";                
+                    $message .= ") - Already available";                
                 }
 
                 //Hapus Session
                 if( (int)$i == ((int)$bnykdata - 1)){
                     $this->session->unset_userdata('kode_excel');
-                    $message .= "&#10;- Selesai . . .";
+                    $message .= "&#10;- Finish . . .";
                     $sstatus = 1;
                 }
             }else{
@@ -463,7 +463,7 @@ class Get_excel extends CI_Controller {
         if ($this->db->affected_rows() == 1) {
          echo json_encode(['status'=>true]);
         }else{
-         echo json_encode(['status'=>false,"message"=>'<p style="font-size: 14px">Terjadi Kesalahan.</p>']);
+         echo json_encode(['status'=>false,"message"=>'<p style="font-size: 14px">There is an error!</p>']);
         }
     }
 

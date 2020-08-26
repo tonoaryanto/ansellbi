@@ -7,36 +7,30 @@
             <form id="form-aksi">
               <div class="col-sm-12">
                 <div class="row">
-                  <div class="col-sm-3">
+                  <div class="col-sm-4">
                     <div class="form-group">
-                      <label>Periode</label>
-                      <input placeholder="Masukan Periode" type="number" min="1" name="periode" size="20" class="form-control" width="100px" style="border-radius:5px;" onchange="data_terakhir();">
+                      <label>Period</label>
+                      <input placeholder="input Period" type="number" min="1" name="periode" size="20" class="form-control" width="100px" style="border-radius:5px;" onchange="data_terakhir();">
                     </div>
                   </div>
-                  <div class="col-sm-3">
+                  <div class="col-sm-4">
                     <div class="form-group">
-                      <label>Nama Kandang</label>
+                      <label>House name</label>
                         <select type="text" name="select_kandang" class="form-control select2 test"></select>
                     </div>
                   </div>
-                  <div class="col-sm-3">
+                  <div class="col-sm-4">
                     <div class="form-group">
-                      <label>Periode Terakhir</label>
-                      <input type="text" name="last_periode" size="20" class="form-control" style="border-style:none;border-bottom-style:solid;background-color: transparent;" readonly="" placeholder="kosong">
-                    </div>
-                  </div>
-                  <div class="col-sm-3">
-                    <div class="form-group">
-                      <label>Growday Terakhir</label>
+                      <label>Last Growday</label>
                       <input type="text" name="last_growday" size="20" class="form-control" style="border-style:none;border-bottom-style:solid;background-color: transparent;" readonly="" placeholder="kosong">
                     </div>
                   </div>
                 </div>
                   <div class="col-sm-12" style="border:1px solid #ddd;padding: 10px;border-radius:5px;">
-                    <label>Upload File Disini!</label>
+                    <label>Upload File here!</label>
                     <div class="form-group">
                       <input type="file" name="userfile" size="20" class="pfile" width="100px">
-                      <p style="color: #888;padding: 2px">Contoh : history_[nama farm]_[kode farm]_ENG.csv</p>
+                      <p style="color: #888;padding: 2px">Example : history_[nama farm]_[kode farm]_ENG.csv</p>
                     </div>
                     <div class="form-group">
                       <div class="col-sm-12 controls" style="text-align: right;" id="framebtn">

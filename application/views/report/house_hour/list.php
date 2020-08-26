@@ -11,19 +11,19 @@
 						<div class="box-body">
 							<div class="row">
 								<div class="form-group col-sm-2">
-									<label>Data Kandang</label>
+									<label>Data House</label>
 									<select name="val_kandang" class="form-control" id="optionselect_kandang" style="width: 100%">
-									<option disabled selected>-Pilih Data Kandang-</option>
+									<option disabled selected>-Select data house-</option>
 									</select>
 								</div>
 								<div class="form-group col-sm-2">
-									<label>Periode</label>
-									<input name="val_periode" class="form-control" id="inputperiode" style="width: 100%;border-radius: 3px;" type="number" min="1" placeholder="-Masukan periode-" onchange="">
+									<label>Period</label>
+									<input name="val_periode" class="form-control" id="inputperiode" style="width: 100%;border-radius: 3px;" type="number" min="1" placeholder="-Input period-" onchange="">
 								</div>
 								<div class="form-group col-sm-2">
-									<label>Data House</label>
+									<label>Data parameter</label>
 									<div class="input-group-btn" id="btndatapop">
-					                  <button type="button" class="btn btn-default btn-block" style="border-radius: 5px;" onclick="btn_data()" id="thisbtndata" data-toggle="0" aria-expanded="false"> -Pilih Data-</button>
+					                  <button type="button" class="btn btn-default btn-block" style="border-radius: 5px;" onclick="btn_data()" id="thisbtndata" data-toggle="0" aria-expanded="false"> -Select Data-</button>
 					                  <ul class="dropdown-menu" style="border: none;background: transparent;">
 					                    <li>
 									<select name="val_data[]" multiple="" class="form-control" id="optionselect" style="width: 100%;border-radius: 3px;max-height: 35px;">
@@ -51,7 +51,7 @@
 									<label>Action</label>
 									<div class="row">
 										<div class="col-sm-12" id="actionpem">
-											<button class="btn btn-success" onclick="addpembanding();" title="Tambah Pembanding"><i class="fa fa-plus"></i></button>
+											<button class="btn btn-success" onclick="addpembanding();" title="Added the comparator"><i class="fa fa-plus"></i></button>
 										</div>
 									</div>
 								</div>

@@ -25,8 +25,8 @@ $(document).ready(function(){
     };
 
     Swal.fire({
-      title: 'Memproses Data',
-      html: '<p style="font-size: 14px">Mohon tunggu proses ini memerlukan waktu.</p>',
+      title: 'Processing data',
+      html: '<p style="font-size: 14px">Please Wait . . .</p>',
       allowOutsideClick: false,
       onBeforeOpen: () => {
         Swal.showLoading()
@@ -44,14 +44,14 @@ $(document).ready(function(){
           if(data.status == true){
             swal.fire({
               title: "Save File",
-              html : '<p style="font-size: 14px">Silahkan klik Save file</p>',
+              html : '<p style="font-size: 14px">Please click button Save file</p>',
             });
             $('#btnprint').removeAttr('disabled');
             location.replace(data.url);
           }else{
             $('#tombol').removeAttr('disabled');
             swal.fire({
-              title: "Gagal!",
+              title: "Error!",
               html : data.message,
               type: "error",
             });
@@ -62,7 +62,7 @@ $(document).ready(function(){
         {
           $('#btnprint').removeAttr('disabled');
           swal.fire({
-            title: "Gagal!",
+            title: "Error!",
             html : '<p style="font-size: 14px">Terjadi Kesalahan!</p>',
             type: "error",
           });
@@ -73,7 +73,7 @@ $(document).ready(function(){
   selectdata_kandang();
 
   $('.select2posisi').select2({
-  placeholder : 'Pilih Posisi Y axis',
+  placeholder : 'Select Y axis position',
   allowClear : true
   });
 });
@@ -124,7 +124,7 @@ function loadtabel() {
     },
     language: {
                "infoFiltered": "",
-               "processing": "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Sedang mengambil data..."
+               "processing": "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Please wait..."
              },
     responsive:true,
     processing:true,
@@ -225,19 +225,19 @@ function cekgrafik() {
   var data2data    = $('[name="val_data2"]').val();
   var data2posisi  = $('[name="posisiy2"]').val();
   
-  if (data2posisi == '' || data2posisi == null || data2posisi == undefined) {title = 'Data 2 input posisi masih kosong!';cek = 1;}
-  if (data2data == '' || data2data == null || data2data == undefined) {title = 'Data 2 input data house masih kosong!';cek = 1;}
-  if (data2periode == '' || data2periode < 1) {title = 'Data 2 input periode masih kosong!';cek = 1;}
-  if (data2kandang == '' || data2kandang == null || data2kandang == undefined) {title = 'Data 2 input kandang masih kosong!';cek = 1;}
-  if (data1posisi == '' || data1posisi == null || data1posisi == undefined) {title = 'Data 1 input posisi masih kosong!';cek = 1;}
-  if (data1data == '' || data1data == null || data1data == undefined) {title = 'Data 1 input data house masih kosong!';cek = 1;}
-  if (data1periode == '' || data1periode < 1) {title = 'Data 1 input periode masih kosong!';cek = 1;}
-  if (data1kandang == '' || data1kandang == null || data1kandang == undefined) {title = 'Data 1 input kandang masih kosong!';cek = 1;}
-  if (parseInt($('[name="hourdari1"]').val()) > parseInt($('[name="hourdari2"]').val())) {title = 'Data Grow Day Salah!';cek = 1;}
+  if (data2posisi == '' || data2posisi == null || data2posisi == undefined) {title = 'Data 2 input position is empty!';cek = 1;}
+  if (data2data == '' || data2data == null || data2data == undefined) {title = 'Data 2 input data parameter is empty!';cek = 1;}
+  if (data2periode == '' || data2periode < 1) {title = 'Data 2 input period is empty!';cek = 1;}
+  if (data2kandang == '' || data2kandang == null || data2kandang == undefined) {title = 'Data 2 input house is empty!';cek = 1;}
+  if (data1posisi == '' || data1posisi == null || data1posisi == undefined) {title = 'Data 1 input position is empty!';cek = 1;}
+  if (data1data == '' || data1data == null || data1data == undefined) {title = 'Data 1 input data parameter is empty!';cek = 1;}
+  if (data1periode == '' || data1periode < 1) {title = 'Data 1 input period is empty!';cek = 1;}
+  if (data1kandang == '' || data1kandang == null || data1kandang == undefined) {title = 'Data 1 input house is empty!';cek = 1;}
+  if (parseInt($('[name="hourdari1"]').val()) > parseInt($('[name="hourdari2"]').val())) {title = 'Data Grow Day is worng!';cek = 1;}
 
   if(cek == 1){
     swal.fire({
-      title: "Peringatan!",
+      title: "Warning!",
       html : '<p style="font-size: 14px">'+title+'</p>',
       type : "warning",
     });
@@ -251,8 +251,8 @@ function grafik(){
   if (cekgrafik() == 1) {return;}
 
   Swal.fire({
-    title: 'Memproses Data',
-    html: '<p style="font-size: 14px">Mohon tunggu proses ini memerlukan waktu.</p>',
+    title: 'Processing data',
+    html: '<p style="font-size: 14px">Please Wait . . .</p>',
     allowOutsideClick: false,
     onBeforeOpen: () => {
       Swal.showLoading()
@@ -284,7 +284,7 @@ function grafik(){
         if(data.status == true){
 
           $('<div>')
-          .html('<div class="box box-success"><div class="box-header with-border"><h3 class="box-title" id="titlegrafik"><span style="color: #aaa;">-Set Options Terlebih Dahulu-</span></h3><div class="box-tools pull-right"><button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button></div></div><div class="box-body"><div id="inicanvas"></div></div></div>')
+          .html('<div class="box box-success"><div class="box-header with-border"><h3 class="box-title" id="titlegrafik"><span style="color: #aaa;">-Set Options-</span></h3><div class="box-tools pull-right"><button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button></div></div><div class="box-body"><div id="inicanvas"></div></div></div>')
           .appendTo('#inihtml');
 
           $('#inicanvas').empty();
@@ -366,8 +366,8 @@ function grafik(){
           });
 
           swal.fire({
-            title: "Selesai!",
-            html : '<p style="font-size: 14px">Grafik telah dibuat</p>',
+            title: "Finish!",
+            html : '<p style="font-size: 14px">Chart has been created</p>',
             type : "success",
           });
 
@@ -377,10 +377,10 @@ function grafik(){
           $('#boxtabel').removeAttr('style');
           $('#mytable').DataTable().ajax.url("<?php echo base_url('report/datatabel_dyaxish');?>").load();
          }else{
-          $('#inicanvas').html('-Data Tidak Ditemukan-');
+          $('#inicanvas').html('-Data not found-');
           $('#tglresponse').empty();
           swal.fire({
-            title: "Gagal!",
+            title: "Error!",
             html : data.message,
             type : "warning",
           });
@@ -394,7 +394,7 @@ function selectdata(nomor){
   $('#optionselect'+nomor)
   .select2({
     allowClear : true,
-    placeholder : 'Sedang memproses . . .',
+    placeholder : 'Processing . . .',
   });
   var inidata = $.ajax({
     type: "POST",
@@ -418,7 +418,7 @@ function isiselect(inidata,nomor){
   .val('')
   .select2({
     allowClear : true,
-    placeholder : '-Pilih Data-',
+    placeholder : '-Select Data-',
     data : inidata,
   }).on("change", function () {
     $('[name="hourdari"]').val('-1');

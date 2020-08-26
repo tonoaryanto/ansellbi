@@ -81,7 +81,7 @@ class History_alarm extends CI_Controller {
                             <tr>
                                 <td>Alarm 1</td>
                                 <td>&nbsp;:&nbsp;</td>
-                                <td><?php if($value2->alarm1 == '-9999'){echo 'Tidak digunakan';}else{
+                                <td><?php if($value2->alarm1 == '-9999'){echo 'Not used';}else{
                                     $data = str_split($value2->alarm1);
                                     for ($i=0; $i < count($data); $i++) { 
                                         if ($data[$i] != 0) {
@@ -93,7 +93,7 @@ class History_alarm extends CI_Controller {
                             <tr>
                                 <td>Disable 1</td>
                                 <td>&nbsp;:&nbsp;</td>
-                                <td><?php if($value2->disable1 == '-9999'){echo 'Tidak digunakan';}else{
+                                <td><?php if($value2->disable1 == '-9999'){echo 'Not used';}else{
                                     $data = str_split($value2->disable1);
                                     for ($i=0; $i < count($data); $i++) { 
                                         if ($data[$i] != 0) {
@@ -105,7 +105,7 @@ class History_alarm extends CI_Controller {
                             <tr>
                                 <td>Alarm 2</td>
                                 <td>&nbsp;:&nbsp;</td>
-                                <td><?php if($value2->alarm2 == '-9999'){echo 'Tidak digunakan';}else{
+                                <td><?php if($value2->alarm2 == '-9999'){echo 'Not used';}else{
                                     $data = str_split($value2->alarm2);
                                     for ($i=0; $i < count($data); $i++) { 
                                         if ($data[$i] != 0) {
@@ -117,7 +117,7 @@ class History_alarm extends CI_Controller {
                             <tr>
                                 <td>Disable 2</td>
                                 <td>&nbsp;:&nbsp;</td>
-                                <td><?php if($value2->disable2 == '-9999'){echo 'Tidak digunakan';}else{
+                                <td><?php if($value2->disable2 == '-9999'){echo 'Not used';}else{
                                     $data = str_split($value2->disable2);
                                     for ($i=0; $i < count($data); $i++) { 
                                         if ($data[$i] != 0) {
@@ -129,7 +129,7 @@ class History_alarm extends CI_Controller {
                             <tr>
                                 <td>Alarm 3</td>
                                 <td>&nbsp;:&nbsp;</td>
-                                <td><?php if($value2->alarm3 == '-9999'){echo 'Tidak digunakan';}else{
+                                <td><?php if($value2->alarm3 == '-9999'){echo 'Not used';}else{
                                     $data = str_split($value2->alarm3);
                                     for ($i=0; $i < count($data); $i++) { 
                                         if ($data[$i] != 0) {
@@ -141,7 +141,7 @@ class History_alarm extends CI_Controller {
                             <tr>
                                 <td>Disable 3</td>
                                 <td>&nbsp;:&nbsp;</td>
-                                <td><?php if($value2->disable3 == '-9999'){echo 'Tidak digunakan';}else{
+                                <td><?php if($value2->disable3 == '-9999'){echo 'Not used';}else{
                                     $data = str_split($value2->disable3);
                                     for ($i=0; $i < count($data); $i++) {
                                         if ($data[$i] != 0) {
@@ -153,9 +153,9 @@ class History_alarm extends CI_Controller {
                             <tr>
                                 <td>Require Temperature</td>
                                 <td>&nbsp;:&nbsp;</td>
-                                <td><?php if($value2->req_temp == '-999.9'){echo 'Tidak digunakan';
+                                <td><?php if($value2->req_temp == '-999.9'){echo 'Not used';
                                 }else if($value2->req_temp == '777.7'){
-                                    echo 'Tidak Terhubung';
+                                    echo 'Not connected';
                                 }else{
                                     echo $value2->req_temp.' <span>&#8451;</span>';
                                 } ?></td>
@@ -163,9 +163,9 @@ class History_alarm extends CI_Controller {
                             <tr>
                                 <td>In Temperature</td>
                                 <td>&nbsp;:&nbsp;</td>
-                                <td><?php if($value2->in_temp == '-999.9'){echo 'Tidak digunakan';
+                                <td><?php if($value2->in_temp == '-999.9'){echo 'Not connected';
                                 }else if($value2->req_temp == '777.7'){
-                                    echo 'Tidak Terhubung';
+                                    echo 'Not connected';
                                 }else{
                                     echo $value2->in_temp.' <span>&#8451;</span>';
                                 } ?></td>
@@ -173,21 +173,21 @@ class History_alarm extends CI_Controller {
                             <tr>
                                 <td>Humidity</td>
                                 <td>&nbsp;:&nbsp;</td>
-                                <td><?php if($value2->humidity == '-9999'){echo 'Tidak digunakan';}else{
+                                <td><?php if($value2->humidity == '-9999'){echo 'Not connected';}else{
                                     echo $value2->humidity;
                                 } ?></td>
                             </tr>
                             <tr>
                                 <td>Weight</td>
                                 <td>&nbsp;:&nbsp;</td>
-                                <td><?php if($value2->weight == '-9999'){echo 'Tidak digunakan';}else{
+                                <td><?php if($value2->weight == '-9999'){echo 'Not connected';}else{
                                     echo $value2->weight.' gr';
                                 } ?></td>
                             </tr>
                             <tr>
                                 <td>State</td>
                                 <td>&nbsp;:&nbsp;</td>
-                                <td><?php if($value2->state == '-9999'){echo 'Tidak digunakan';}else{
+                                <td><?php if($value2->state == '-9999'){echo 'Not connected';}else{
                                     echo $value2->state;
                                 } ?></td>
                             </tr>
@@ -211,7 +211,7 @@ class History_alarm extends CI_Controller {
             <?php
         }else{
             ?>
-            <p style="text-align: center;color:#888;">- Data tidak tersedia -</p>
+            <p style="text-align: center;color:#888;">- Data not available -</p>
             <?php 
         }
 

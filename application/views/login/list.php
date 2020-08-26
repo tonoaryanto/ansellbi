@@ -39,7 +39,7 @@
   <!-- /.login-logo -->
   <div id="cnotif"></div>
   <div class="login-box-body">
-    <p class="login-box-msg">Silahkan log in terlebih dahulu untuk masuk ke dalam sistem.</p>
+    <p class="login-box-msg">Please fill in the username and password to enter the system.</p>
 
     <form id="form-login">
       <div class="form-group has-feedback">
@@ -54,7 +54,7 @@
       <div class="row">
         <!-- /.col -->
         <div class="col-xs-12 text-center">
-          <button type="submit" class="btn btn-primary btn-block btn-flat" onclick="masuk();">Masuk</button>
+          <button type="submit" class="btn btn-primary btn-block btn-flat" onclick="masuk();">Enter</button>
         </div>
         <!-- /.col -->
       </div>

@@ -40,7 +40,7 @@ class Login extends CI_Controller {
 			$this->session->set_userdata($dat_sess);
 			echo json_encode(['status'=>true,'nama_user'=>$data_pegawai['nama_user'],'url'=>$url]);
 		}else{
-			echo json_encode(['status'=>false,'message'=>'<b>Username</b> atau <b>Password</b> yang anda masukan salah! mohon periksa kembali.']);
+			echo json_encode(['status'=>false,'message'=>'<b>Username</b> or <b>Password</b> you entered is incorrect! please check again.']);
 		}
 	}
 
