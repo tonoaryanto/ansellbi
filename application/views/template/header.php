@@ -42,7 +42,7 @@
 <!-- ADD THE CLASS sidebar-collapse TO HIDE THE SIDEBAR PRIOR TO LOADING THE SITE -->
 <body onresize="rsize();" class="skin-blue sidebar-collapse sidebar-mini no-right">
 <!-- Site wrapper -->
-<div class="wrapper">
+<div class="wrapper" style="background-color:#ecf0f5;">
 
   <header class="main-header">
     <!-- Logo -->

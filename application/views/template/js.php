@@ -91,3 +91,24 @@
 	$('.modal').on('hidden.bs.modal', function () {
 	    $(body).css("padding-right","0px");
 	});
+
+	function myFunction(x) {
+		if (x.matches) { // If media query matches
+			var prevScrollpos = window.pageYOffset;
+			window.onscroll = function() {
+			var currentScrollPos = window.pageYOffset;
+			if (prevScrollpos < currentScrollPos) {
+				$('.main-header').attr('style','top:-50px;transition: top 0.5s;');
+				$('.navbar').attr('style','top:-50px;transition: top 0.5s;');
+			} else {
+				$('.main-header').attr('style','top:0;transition: top 0.5s;');
+				$('.navbar').attr('style','top:0;transition: top 0.5s;');
+			}
+			prevScrollpos = currentScrollPos;
+			}
+		}
+	}
+
+	var x = window.matchMedia("(max-width: 768px)")
+	myFunction(x) // Call listener function at run time
+	x.addListener(myFunction) // Attach listener function on state	
