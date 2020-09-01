@@ -98,10 +98,8 @@
 			window.onscroll = function() {
 			var currentScrollPos = window.pageYOffset;
 			if (prevScrollpos < currentScrollPos) {
-				$('.main-header').attr('style','top:-50px;transition: top 0.5s;');
 				$('.navbar').attr('style','top:-50px;transition: top 0.5s;');
 			} else {
-				$('.main-header').attr('style','top:0;transition: top 0.5s;');
 				$('.navbar').attr('style','top:0;transition: top 0.5s;');
 			}
 			prevScrollpos = currentScrollPos;
