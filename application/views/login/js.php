@@ -10,7 +10,7 @@ function masuk(){
             success: function(data)
             {
                 if( data.status == true){
-                  notifikasi('Login Success!','Welcome back<b>'+data.nama_user+'</b>!','success');
+                  notifikasi('Login Success!','Welcome back <b>'+data.nama_user+'</b>!','success');
                   location.replace(data.url);
                 }else{
                   notifikasi('Warning!',data.message,'danger');                
@@ -64,3 +64,6 @@ function notifikasi(texthead,textisi,notif=null) {
     .appendTo('#cnotif').fadeIn( "slow" );
   }
 }
+window.addEventListener("beforeunload", function () {
+  document.body.classList.add("animate-out");
+});

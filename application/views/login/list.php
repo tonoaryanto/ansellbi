@@ -30,7 +30,7 @@
   <!-- Google Font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body class="hold-transition login-page" style="background: #ded2d20d;height: 0px;">
+<body class="animate-in" style="background: #ded2d20d;height: 0px;">
 <div id="particles-js" style="position: absolute;z-index: -1;width: 100%;height: 95%"></div>
 <div class="login-box" style="padding-top: 70px">
   <div class="login-logo">

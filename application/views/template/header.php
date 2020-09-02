@@ -40,7 +40,7 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 <!-- ADD THE CLASS sidebar-collapse TO HIDE THE SIDEBAR PRIOR TO LOADING THE SITE -->
-<body onresize="rsize();" class="skin-blue sidebar-collapse sidebar-mini no-right">
+<body onresize="rsize();" class="skin-blue sidebar-collapse sidebar-mini no-right animate-in">
 <!-- Site wrapper -->
 <div class="wrapper" style="background-color:#ecf0f5;">
 
