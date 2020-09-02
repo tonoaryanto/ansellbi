@@ -4,5 +4,8 @@
     color: #fff !important;
 }
 .form-control::placeholder {
-  color: #f0f0f;
+  color: #f0f0f0;
+}
+.btn.focus, .btn:focus, .btn:hover {
+    color: #a0a0a0 !important;
 }
