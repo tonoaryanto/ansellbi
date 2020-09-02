@@ -79,6 +79,16 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
     }
       data_json['inidata'] = inidata;
 
+      var rangegd =  $('[name="growval2"]').val() - parseInt($('[name="growval"]').val());
+      var tinggigk = 500;
+      var lebargk = 800;
+      var tottinggi = (tinggigk + rangegd);
+      if (parseInt($('[name="growval"]').val()) == parseInt($('[name="growval2"]').val())) {
+      var totlebar = (lebargk + rangegd);
+      }else{
+        var totlebar = (lebargk + rangegd)*2;
+      }
+
     $.ajax({
       type: "POST",
       url : "<?php echo base_url('history_house/grafik/'); ?>",
@@ -101,7 +111,7 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
             .attr({
               'class' : 'col-sm-'+lebar
             })
-            .html('<div class="box box-success" id="gf'+ul+'"><div class="box-header with-border"><h3 class="box-title" id="titlegrafik'+id+'"><span style="color: #aaa;">-Set Options-</span></h3><div class="box-tools pull-right"><button type="button" class="btn btn-box-tool" onclick="swipegf('+id+')"><i class="fa fa-clone"></i></button></div></div><div class="box-body"><div id="inicanvas'+id+'"></div></div></div>')
+            .html('<div class="box box-success" id="gf'+ul+'" style="padding: 10px;"><div class="box-header with-border"><h3 class="box-title" id="titlegrafik'+id+'"><span style="color: #aaa;">-Set Options-</span></h3><div class="box-tools pull-right"><button type="button" class="btn btn-box-tool" onclick="swipegf('+id+')"><i class="fa fa-clone"></i></button></div></div><div class="box-body" style="overflow-x: auto;"><div id="inicanvas'+id+'" style="min-height: '+tottinggi+'px;min-width: '+totlebar+'px;"></div></div></div>')
             .appendTo('#inihtmlbfr'+dtrow);
 
             $('#inicanvas'+id).empty();
@@ -143,6 +153,7 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
             data: lineChartData,
             options: {
               responsive: true,
+              maintainAspectRatio: false,
               title: {
                 display: true,
                 text: data.glabel
