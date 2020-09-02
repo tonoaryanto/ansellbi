@@ -16,8 +16,9 @@
 }
 
 .animate-out {
-	-webkit-animation: fadeOut .5s ease-out;
-    animation: fadeOut .5s ease-out;
+    -webkit-transition: opacity .5s;
+    transition: opacity .5s;
+    opacity: 0;
 }
 
 @-webkit-keyframes fadeIn {
@@ -28,14 +29,4 @@
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
-}
-
-@-webkit-keyframes fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
-}
-
-@keyframes fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
 }
