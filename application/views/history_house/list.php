@@ -8,7 +8,7 @@
           '4' => 'bg-green',
           '5' => 'bg-aqua',
         ];
-        $id_user = $this->session->userdata('status_user');
+        $id_user = $this->session->userdata('id_user');
         $nomor = 0;
         foreach ($farm as $value) { 
           $data_farm = $this->umum_model->get("(SELECT * FROM (SELECT periode, grow_value,tanggal_value as settgl,jam_value as settime,DATE_FORMAT(tanggal_value,'%d-%m-%Y') AS tanggal_value,CONCAT(LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0'),':',LPAD(SUBSTRING_INDEX(SUBSTRING_INDEX(jam_value, '-', 2), '-', -1), 2, '0'),':',LPAD(SUBSTRING_INDEX(jam_value, '-', -1), 2, '0')) AS jam_value FROM image2 WHERE kategori = 'HOUR_1' AND kode_kandang = '".$value->id."' AND kode_perusahaan = '".$id_user."' ORDER BY periode DESC, grow_value DESC LIMIT 1) as data GROUP BY settgl DESC, LPAD(SUBSTRING_INDEX(settime, '-', 1), 2, '0') DESC LIMIT 1) as data2")->row_array();
