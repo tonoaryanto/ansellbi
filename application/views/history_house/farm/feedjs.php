@@ -56,7 +56,7 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
    }
       data_json['inidata'] = inidata;
 
-      var rangegd =  $('[name="growval2"]').val() - parseInt($('[name="growval"]').val());
+      var rangegd =  parseInt($('[name="growval2"]').val()) - parseInt($('[name="growval"]').val());
       var tinggigk = 500;
       var lebargk = 800;
       var tottinggi = (tinggigk + rangegd);
@@ -205,11 +205,11 @@ function loadtabel() {
                     orderable: false
                 },
                 {
-                    title: "TANGGAL",
+                    title: "DATE",
                     orderable: false
                 },
                 {
-                    title: "JAM",
+                    title: "TIME",
                     orderable: false
                 },
                 {

@@ -279,9 +279,19 @@ function loopgrafik(dataini,awal,loop) {
         get_sess(data.sess);
         if(data.status == true){
 
+      var rangegd =  parseInt($('[name="hourdari2"]').val()) - parseInt($('[name="hourdari1"]').val());
+      var tinggigk = 500;
+      var lebargk = 800;
+      var tottinggi = (tinggigk + rangegd);
+      if (parseInt($('[name="hourdari1"]').val()) == parseInt($('[name="hourdari2"]').val())) {
+      var totlebar = (lebargk + rangegd);
+      }else{
+        var totlebar = (lebargk + rangegd)*2;
+      }
+
           $('<div>')
           .attr('class','col-sm-6')
-          .html('<div class="box box-success"><div class="box-header with-border"><h3 class="box-title" id="titlegrafik'+awal+'"><span style="color: #aaa;">-Set Options Terlebih Dahulu-</span></h3><div class="box-tools pull-right"><button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button></div></div><div class="box-body"><div id="inicanvas'+awal+'"></div></div></div>')
+          .html('<div class="box box-success" style="padding: 10px;"><div class="box-header with-border"><h3 class="box-title" id="titlegrafik'+awal+'"><span style="color: #aaa;">-Set Options Terlebih Dahulu-</span></h3><div class="box-tools pull-right"><button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button></div></div><div class="box-body" style="overflow-x: auto;"><div id="inicanvas'+awal+'" style="min-height: '+tottinggi+'px;min-width: '+totlebar+'px;"></div></div></div>')
           .appendTo('#inihtml');
 
           $('#inicanvas'+awal).empty();
@@ -340,6 +350,7 @@ function loopgrafik(dataini,awal,loop) {
             data: lineChartData,
             options: {
               responsive: true,
+              maintainAspectRatio: false,
               hoverMode: 'index',
               stacked: true,
               title: {

@@ -2,8 +2,8 @@
 	<div class="col-sm-12">
 		<div class="nav-tabs-custom">
 			<ul class="nav nav-tabs">
-			<li class="active"><a href="#" data-toggle="tab" aria-expanded="true">Multi Data</a></li>
-			<li class=""><a href="<?php echo base_url('report/history_house_hour/myaxis') ?>">Yaxis Ganda</a></li>
+			<li class="active"><a href="#" data-toggle="tab" aria-expanded="true">Multiple Data</a></li>
+			<li class=""><a href="<?php echo base_url('report/history_house_hour/myaxis') ?>">Double Y-axis</a></li>
 			</ul>
 			<div class="tab-content">
 				<div class="tab-pane active">

@@ -169,7 +169,7 @@ class Report extends CI_Controller {
 
             if($filhour1 == $filhour2){
                 if($filhour1 == '-1'){
-                    $filhour1 = $this->db->query("SELECT grow_value FROM image2 WHERE kategori = '".$fil1."' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$fil3."' ORDER BY grow_value DESC LIMIT 1")->row_array()['grow_value'];
+                    $filhour1 = $this->db->query("SELECT grow_value FROM image2 WHERE periode = '".$filperiode."' AND kategori = '".$fil1."' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$fil3."' ORDER BY grow_value DESC LIMIT 1")->row_array()['grow_value'];
                     $filhour2 = $filhour1;
                 }
                 $esqlgrow = "AND grow_value = '".$filhour1."'";
@@ -184,9 +184,9 @@ class Report extends CI_Controller {
 
             if($fil1 == 'HOUR_1'){
                 if($filhour1 == $filhour2){
-                    $addlabel = ' : Grow Day '.$filhour1.' ';
+                    $addlabel = ' : Grow Day '.$filhour1.' ('.$filperiode.')';
                 }else{
-                    $addlabel = ' : Grow Day '.$filhour1.' - '.$filhour2.' ';
+                    $addlabel = ' : Grow Day '.$filhour1.' - '.$filhour2.' ('.$filperiode.')';
                 }
             }
 
@@ -369,7 +369,7 @@ class Report extends CI_Controller {
 
             if($filhour1 == $filhour2){
                 if($filhour1 == '-1'){
-                    $filhour1 = $this->db->query("SELECT grow_value FROM image2 WHERE kategori = 'HOUR_1' AND nama_data = '".$data1data."' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$data1kandang."' ORDER BY grow_value DESC LIMIT 1")->row_array()['grow_value'];
+                    $filhour1 = $this->db->query("SELECT grow_value FROM image2 WHERE periode = '".$data1periode."' AND kategori = 'HOUR_1' AND nama_data = '".$data1data."' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$data1kandang."' ORDER BY grow_value DESC LIMIT 1")->row_array()['grow_value'];
                     $filhour2 = $filhour1;
                 }
                 $esqlgrow = "AND grow_value = '".$filhour1."'";
@@ -474,7 +474,7 @@ class Report extends CI_Controller {
         $filsampai    = $this->input->post('value5');
         $filperiode = $this->input->post('data1periode');
         $data2kandang = $this->input->post('data2kandang');
-        $data2periode = $this->input->post('data2periode');
+        $data2periode = $this->input->post('data1periode');
         $data2data    = $this->input->post('data2data');
 
         if (($fildari == '-1' AND $filsampai == '-1') OR $fildari == '-1' OR $filsampai == '-1') {

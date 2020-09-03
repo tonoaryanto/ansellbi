@@ -2,8 +2,8 @@
 	<div class="col-sm-12">
 		<div class="nav-tabs-custom">
 			<ul class="nav nav-tabs">
-			<li class=""><a href="<?php echo base_url('report/history_house_hour') ?>">Multi Data</a></li>
-			<li class="active"><a href="#">Yaxis Ganda</a></li>
+			<li class=""><a href="<?php echo base_url('report/history_house_hour') ?>">Multiple Data</a></li>
+			<li class="active"><a href="#">Double Y-axis</a></li>
 			</ul>
 			<div class="tab-content">
 				<div class="tab-pane active">
@@ -18,10 +18,6 @@
 									<select name="val_kandang1" class="form-control optionselect_kandang" id="optionselect_kandang1" style="width: 100%">
 									<option disabled selected>-Select Data House-</option>
 									</select>
-									</div>
-									<div class="form-group">
-										<label>Period</label>
-										<input name="val_periode1" class="form-control" id="inputperiode1" style="width: 100%;border-radius: 3px;" type="number" min="1" placeholder="-Input period-" onchange="selectdata(1);">
 									</div>
 									<div class="form-group">
 										<label>Data Parameter</label>
@@ -52,10 +48,6 @@
 									</select>
 									</div>
 									<div class="form-group">
-										<label>Period</label>
-										<input name="val_periode2" class="form-control" id="inputperiode2" style="width: 100%;border-radius: 3px;" type="number" min="1" placeholder="-Input period-" onchange="selectdata(2);">
-									</div>
-									<div class="form-group">
 										<label>Data Parameter</label>
 						                <select name="val_data2" class="form-control" id="optionselect2" style="width: 100%;border-radius: 3px;">
 						                  <option disabled selected>-</option>
@@ -83,19 +75,23 @@
 								<label>Chart name</label>
 								<input style="border-radius: 5px" type="text" class="form-control" name="namagrafik" placeholder="Nama Grafik">
 							</div>
-							<div class="form-group col-sm-4">
+							<div class="form-group col-sm-3">
 								<label>Star Grow Day</label>
 								<div class="form-group">
 									<input class="form-control" type="number" min="-1" name="hourdari1" value="-1" style="border-radius:3px;">
 								</div>
 							</div>
-							<div class="form-group col-sm-4">
+							<div class="form-group col-sm-3">
 								<label>End Grow Day</label>
 								<div class="form-group">
 									<input class="form-control" type="number" min="-1" name="hourdari2" value="-1" style="border-radius:3px;">
 								</div>
 							</div>
-							<div class="form-group col-sm-4">
+							<div class="form-group col-sm-3">
+										<label>Period</label>
+										<input name="val_periode1" class="form-control" id="inputperiode1" style="width: 100%;border-radius: 3px;" type="number" min="1" placeholder="-Input period-">
+									</div>
+							<div class="form-group col-sm-3">
 								<label>Actions</label>
 								<div>
 									<button class="btn btn-default" onclick="grafik();">Apply</button>

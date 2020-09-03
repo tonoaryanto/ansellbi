@@ -1,6 +1,8 @@
 var kategrafik = 'HOUR_1';
 
 $(document).ready(function(){
+  selectdata(1);
+  selectdata(2);
   loadtabel();
   $('#btnprint').on('click',(function(e){
 
@@ -16,7 +18,7 @@ $(document).ready(function(){
       'data1data'    : $('[name="val_data1"]').val(),
       'data1posisi'  : $('[name="posisiy1"]').val(),
       'data2kandang' : $('[name="val_kandang2"]').val(),
-      'data2periode' : $('[name="val_periode2"]').val(),
+      'data2periode' : $('[name="val_periode1"]').val(),
       'data2data'    : $('[name="val_data2"]').val(),
       'data2posisi'  : $('[name="posisiy2"]').val(),
       'value61'      : $('[name="hourdari1"]').val(),
@@ -137,7 +139,7 @@ function loadtabel() {
         'data1periode' : function () {return $('[name="val_periode1"]').val();},
         'data1data'    : function () {return $('[name="val_data1"]').val();},
         'data2kandang' : function () {return $('[name="val_kandang2"]').val();},
-        'data2periode' : function () {return $('[name="val_periode2"]').val();},
+        'data2periode' : function () {return $('[name="val_periode1"]').val();},
         'data2data'    : function () {return $('[name="val_data2"]').val();},
         'value61'      : function () {return $('[name="hourdari1"]').val();},
         'value62'      : function () {return $('[name="hourdari2"]').val();},
@@ -151,12 +153,12 @@ function loadtabel() {
             orderable: false
         },
         {
-            title: "TANGGAL",
+            title: "DATE",
             data:"ttanggal_value",
             orderable: false
         },
         {
-            title: "JAM",
+            title: "TIME",
             data:"jjam_value",
             orderable: false
         },
@@ -166,12 +168,12 @@ function loadtabel() {
             orderable: false
         },
         {
-            title: "DATA SUMBU Y KIRI",
+            title: "LEFT Y-AXIS DATA",
             data:"isi_value1",
             orderable: false
         },
         {
-            title: "DATA SUMBU Y KANAN",
+            title: "RIGHT Y-AXIS DATA",
             data:"isi_value3",
             orderable: false
         },
@@ -221,7 +223,7 @@ function cekgrafik() {
   var data1data    = $('[name="val_data1"]').val();
   var data1posisi  = $('[name="posisiy1"]').val();
   var data2kandang = $('[name="val_kandang2"]').val();
-  var data2periode = $('[name="val_periode2"]').val();
+  var data2periode = $('[name="val_periode1"]').val();
   var data2data    = $('[name="val_data2"]').val();
   var data2posisi  = $('[name="posisiy2"]').val();
   
@@ -266,7 +268,7 @@ function grafik(){
     'data1data'    : $('[name="val_data1"]').val(),
     'data1posisi'  : $('[name="posisiy1"]').val(),
     'data2kandang' : $('[name="val_kandang2"]').val(),
-    'data2periode' : $('[name="val_periode2"]').val(),
+    'data2periode' : $('[name="val_periode1"]').val(),
     'data2data'    : $('[name="val_data2"]').val(),
     'data2posisi'  : $('[name="posisiy2"]').val(),
     'value61'      : $('[name="hourdari1"]').val(),
@@ -283,8 +285,18 @@ function grafik(){
         get_sess(data.sess);
         if(data.status == true){
 
+          var rangegd =  parseInt($('[name="hourdari2"]').val()) - parseInt($('[name="hourdari1"]').val());
+          var tinggigk = 500;
+          var lebargk = 800;
+          var tottinggi = (tinggigk + rangegd);
+          if (parseInt($('[name="hourdari1"]').val()) == parseInt($('[name="hourdari2"]').val())) {
+          var totlebar = (lebargk + rangegd);
+          }else{
+            var totlebar = (lebargk + rangegd)*2;
+          }
+
           $('<div>')
-          .html('<div class="box box-success"><div class="box-header with-border"><h3 class="box-title" id="titlegrafik"><span style="color: #aaa;">-Set Options-</span></h3><div class="box-tools pull-right"><button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button></div></div><div class="box-body"><div id="inicanvas"></div></div></div>')
+          .html('<div class="box box-success" style="padding: 10px;"><div class="box-header with-border"><h3 class="box-title" id="titlegrafik"><span style="color: #aaa;">-Set Options-</span></h3><div class="box-tools pull-right"><button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button></div></div><div class="box-body" style="overflow-x: auto;"><div id="inicanvas" style="min-height: '+tottinggi+'px;min-width: '+totlebar+'px;"></div></div></div>')
           .appendTo('#inihtml');
 
           $('#inicanvas').empty();
@@ -349,6 +361,7 @@ function grafik(){
             data: lineChartData,
             options: {
               responsive: true,
+              maintainAspectRatio: false,              
               title: {
                 display: true,
                 text: data.glabel
