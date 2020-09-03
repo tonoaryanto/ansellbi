@@ -64,6 +64,15 @@ function notifikasi(texthead,textisi,notif=null) {
     .appendTo('#cnotif').fadeIn( "slow" );
   }
 }
+
 window.addEventListener("beforeunload", function () {
   document.body.classList.add("animate-out");
 });
+
+function enter(ini){
+    document.getElementById(ini).onkeypress = function(event){
+        if (event.keyCode == 13 || event.which == 13){
+          masuk();
+        }
+    };
+}

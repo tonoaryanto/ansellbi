@@ -1,10 +1,5 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
   <!-- /.content-wrapper -->
-
-  <footer class="main-footer foot-cent-xs" style="background: #ecf0f5;border: none;">
-	    <strong>Copyright &copy; 2008-<?php echo date('Y');?> <a href="<?php echo $this->konfigurasi->set('link_footer'); ?>"><?php echo $this->konfigurasi->set('judul_footer'); ?></a>.</strong> All rights
-	    reserved.
-  </footer>
 <?php $this->load->view('template/modalreset'); ?>
 </div>
 <!-- ./wrapper -->

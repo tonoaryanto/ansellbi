@@ -43,11 +43,11 @@
 
     <form id="form-login">
       <div class="form-group has-feedback">
-        <input type="text" class="form-control" placeholder="Username" name="username">
+        <input type="text" class="form-control" placeholder="Username" name="username" id="username" onkeyup="enter('username');">
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
-        <input type="password" class="form-control" placeholder="Password" name="password">
+        <input type="password" class="form-control" placeholder="Password" name="password" id="password" onkeyup="enter('password');">
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
     </form>
@@ -59,12 +59,6 @@
         <!-- /.col -->
       </div>
     <br>
-
-  </div>
-    <div class="social-auth-links text-center" style="color: #101010;margin-top: 25px">
-      <strong>Copyright &copy; 2008-<?php echo date('Y');?> <a href="<?php echo $this->konfigurasi->set('link_footer'); ?>"><?php echo $this->konfigurasi->set('judul_footer'); ?></a>.</strong> All rights
-      reserved.
-    </div>
   <!-- /.login-box-body -->
 </div>
 <!-- /.login-box -->
