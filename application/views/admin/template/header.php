@@ -42,7 +42,7 @@
 <!-- ADD THE CLASS sidebar-collapse TO HIDE THE SIDEBAR PRIOR TO LOADING THE SITE -->
 <body onresize="rsize();" class="skin-blue sidebar-collapse sidebar-mini no-right">
 <!-- Site wrapper -->
-<div class="wrapper">
+<div class="wrapper" style="background-color:#ecf0f5;">
 
   <header class="main-header">
     <!-- Logo -->
@@ -55,6 +55,7 @@
     </a>
     <!-- Header Navbar: style can be found in header.less -->
     <nav class="navbar navbar-static-top">
+    <label class="hidden-sm hidden-md hidden-lg" style="padding: 14px;margin: 0px;color: whitesmoke;font-size: 16px;"><?php echo $this->konfigurasi->set('nama_web');?></label>
       <!-- Sidebar toggle button-->
 		<a href="#" class="hidden-sm hidden-md hidden-lg sidebar-toggle" id="menu-push" data-menu="close">
 		<span class="sr-only">Toggle navigation</span>
