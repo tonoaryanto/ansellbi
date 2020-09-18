@@ -22,24 +22,3 @@
 	.teks-upper{text-transform: uppercase;}
 	.select2-container .select2-selection--single{height:34px !important;}
 	.no-right{padding-right:0px !important;}
-
-.animate-in {
-    -webkit-animation: fadeIn .5s ease-in;
-    animation: fadeIn .5s ease-in;
-}
-
-.animate-out {
-    -webkit-transition: opacity .5s;
-    transition: opacity .5s;
-    opacity: 0;
-}
-
-@-webkit-keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}

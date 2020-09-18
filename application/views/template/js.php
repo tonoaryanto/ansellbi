@@ -111,6 +111,3 @@
 	myFunction(x) // Call listener function at run time
 	x.addListener(myFunction) // Attach listener function on state	
 
-window.addEventListener("beforeunload", function () {
-  document.body.classList.add("animate-out");
-});
