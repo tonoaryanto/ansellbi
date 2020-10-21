@@ -10,26 +10,15 @@
         ];
         $id_user = $this->session->userdata('id_user');
         $nomor = 0;
+        $wrnomor = 0;
         foreach ($farm as $value) { 
-          $data_farm = $this->umum_model->get("(SELECT * FROM (SELECT periode, grow_value,tanggal_value as settgl,jam_value as settime,DATE_FORMAT(tanggal_value,'%d-%m-%Y') AS tanggal_value,CONCAT(LPAD(SUBSTRING_INDEX(jam_value, '-', 1), 2, '0'),':',LPAD(SUBSTRING_INDEX(SUBSTRING_INDEX(jam_value, '-', 2), '-', -1), 2, '0'),':',LPAD(SUBSTRING_INDEX(jam_value, '-', -1), 2, '0')) AS jam_value FROM image2 WHERE kategori = 'HOUR_1' AND kode_kandang = '".$value->id."' AND kode_perusahaan = '".$id_user."' ORDER BY periode DESC, grow_value DESC) as data GROUP BY settgl DESC, LPAD(SUBSTRING_INDEX(settime, '-', 1), 2, '0') DESC LIMIT 1) as data2")->row_array();
-
-          $beginesql = "(SELECT isi_value FROM image2 WHERE kategori = 'HOUR_1' AND nama_data = '";
-          $endesql = "' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$value->id."' AND tanggal_value = '".$data_farm['settgl']."' AND jam_value = '".$data_farm['settime']."' LIMIT 1) as data";
-
-          $data_farm1 = $this->umum_model->get($beginesql."4096".$endesql)->row_array();
-          $data_farm2 = $this->umum_model->get($beginesql.'7218'.$endesql)->row_array();
-          $data_farm3 = $this->umum_model->get($beginesql.'3142'.$endesql)->row_array();
-          $data_farm4 = $this->umum_model->get($beginesql.'64760'.$endesql)->row_array();
-          $data_farm5 = $this->umum_model->get($beginesql.'1301'.$endesql)->row_array();
-          $data_farm6 = $this->umum_model->get($beginesql.'1302'.$endesql)->row_array();
-          $data_farm7 = $this->umum_model->get($beginesql.'3259'.$endesql)->row_array();
-          $data_farm8 = $this->umum_model->get($beginesql.'3190'.$endesql)->row_array();
+          $data_farm = $this->umum_model->get("data_realtime",['kode_perusahaan' => $id_user,'kode_kandang' => $value->id])->row_array();
         ?>
         <div class="col-md-3">
           <!-- Widget: user widget style 1 -->
           <div class="box box-widget widget-user-2">
             <!-- Add the bg color to the header using any of the bg-* classes -->
-            <div class="widget-user-header <?php echo $bg[$nomor]; ?>">
+            <div class="widget-user-header <?php echo $bg[$wrnomor]; ?>">
               <div class="widget-user-image">
                 <span class="img-circle" style="padding: 10px 10px;position: absolute;"><a href="<?php echo base_url('history_house/farm/').$value->id; ?>" class="btn btn-block btn-success btn-lg" title="Open Farm"><i class="fa fa-university"></i></a></span>
               </div>
@@ -37,29 +26,30 @@
               <h3 class="widget-user-username"><?php echo $value->nama_kandang; ?></h3>
               <h5 class="widget-user-desc">
               <table border="0">
-                <tr><td>Periode</td><td>&nbsp;&nbsp;:&nbsp;&nbsp;</td><td><b><?php if($data_farm['periode'] == ''){echo '0';}else{echo $data_farm['periode'];} ?></b></td></tr>
-                <tr><td>Growday</td><td>&nbsp;&nbsp;:&nbsp;&nbsp;</td><td><b><?php if($data_farm['grow_value'] == ''){echo '0';}else{echo $data_farm['grow_value'];} ?></b></td></tr>
-                <tr><td>Date</td><td>&nbsp;&nbsp;:&nbsp;&nbsp;</td><td><b><?php if($data_farm['tanggal_value'] == ''){echo '0';}else{echo $data_farm['tanggal_value'];} ?></b></td></tr>
-                <tr><td>Time</td><td>&nbsp;&nbsp;:&nbsp;&nbsp;</td><td><b><?php if($data_farm['jam_value'] == ''){echo '0';}else{echo $data_farm['jam_value'];} ?></b></td></tr>
-              </table>  
+                <tr><td>Periode</td><td>&nbsp;&nbsp;:&nbsp;&nbsp;</td><td style="font-weight: bold;" id="shperiode<?php echo $nomor;?>"><?php if($data_farm['periode'] == ''){echo '0';}else{echo $data_farm['periode'];} ?></td></tr>
+                <tr><td>Growday</td><td>&nbsp;&nbsp;:&nbsp;&nbsp;</td><td style="font-weight: bold;" id="shgrow<?php echo $nomor;?>"><?php if($data_farm['growday'] == ''){echo '0';}else{echo $data_farm['growday'];} ?></td></tr>
+                <tr><td>Date</td><td>&nbsp;&nbsp;:&nbsp;&nbsp;</td><td style="font-weight: bold;" id="shtgl<?php echo $nomor;?>"><?php if($data_farm['date_create'] == ''){echo '-';}else{echo date_format(date_create($data_farm['date_create']), "d-m-Y");} ?></td></tr>
+                <tr><td>Time</td><td>&nbsp;&nbsp;:&nbsp;&nbsp;</td><td style="font-weight: bold;" id="shjam<?php echo $nomor;?>"><?php if($data_farm['date_create'] == ''){echo '-';}else{echo date_format(date_create($data_farm['date_create']), "H:i:s");} ?></td></tr>
+              </table>
             </div>
             <div class="box-footer no-padding">
               <ul class="nav nav-stacked">
-                <li><a href="javascript:void(0);">Required Temperature<span class="pull-right"><?php if($data_farm1['isi_value'] != ''){echo $data_farm1['isi_value'];}else{echo '0';} ?> °C</span></a></li>
-                <li><a href="javascript:void(0);">Average Temperature<span class="pull-right"><?php if($data_farm2['isi_value'] != ''){echo $data_farm2['isi_value'];}else{echo '0';} ?> °C</span></a></li>
-                <li><a href="javascript:void(0);">Humidity<span class="pull-right"><?php if($data_farm3['isi_value'] != ''){echo $data_farm3['isi_value'];}else{echo '0';} ?> %</span></a></li>
-                <li><a href="javascript:void(0);">Wind Speed<span class="pull-right"><?php if($data_farm4['isi_value'] != ''){echo $data_farm4['isi_value'];}else{echo '0';} ?> M/s</span></a></li>
-                <li><a href="javascript:void(0);">Feed Consumtion<span class="pull-right"><?php if($data_farm5['isi_value'] != ''){echo $data_farm5['isi_value'];}else{echo '0';} ?> Kg</span></a></li>
-                <li><a href="javascript:void(0);">Water Consumption <span class="pull-right"><?php if($data_farm6['isi_value'] != ''){echo $data_farm6['isi_value'];}else{echo '0';} ?> Liter</span></a></li>
-                <li><a href="javascript:void(0);">Static Pressure <span class="pull-right"><?php if($data_farm7['isi_value'] != ''){echo $data_farm7['isi_value'];}else{echo '0';} ?></span></a></li>
-                <li><a href="javascript:void(0);">Fan Speed <span class="pull-right"><?php if($data_farm8['isi_value'] != ''){echo $data_farm8['isi_value'];}else{echo '0';} ?> %</span></a></li>
+                <li><a href="javascript:void(0);">Required Temperature<span class="pull-right"><span id="shreqtemp<?php echo $nomor;?>"><?php if($data_farm['req_temp'] != ''){echo $data_farm['req_temp'];}else{echo '0';} ?></span> °C</span></a></li>
+                <li><a href="javascript:void(0);">Average Temperature<span class="pull-right"><span id="shavgtemp<?php echo $nomor;?>"><?php if($data_farm['avg_temp'] != ''){echo $data_farm['avg_temp'];}else{echo '0';} ?></span> °C</span></a></li>
+                <li><a href="javascript:void(0);">Humidity<span class="pull-right"><span id="shhum<?php echo $nomor;?>"><?php if($data_farm['humidity'] != ''){echo $data_farm['humidity'];}else{echo '0';} ?></span> %</span></a></li>
+                <li><a href="javascript:void(0);">Wind Speed<span class="pull-right"><span id="shwind<?php echo $nomor;?>"><?php if($data_farm['windspeed'] != ''){echo $data_farm['windspeed'];}else{echo '0';} ?></span> M/s</span></a></li>
+                <li><a href="javascript:void(0);">Feed Consumtion<span class="pull-right"><span id="shfeed<?php echo $nomor;?>"><?php if($data_farm['feed'] != ''){echo $data_farm['feed'];}else{echo '0';} ?></span> Kg</span></a></li>
+                <li><a href="javascript:void(0);">Water Consumption <span class="pull-right"><span id="shwater<?php echo $nomor;?>"><?php if($data_farm['water'] != ''){echo $data_farm['water'];}else{echo '0';} ?></span> Liter</span></a></li>
+                <li><a href="javascript:void(0);">Static Pressure <span class="pull-right"><span id="shpress<?php echo $nomor;?>"><?php if($data_farm['static_pressure'] != ''){echo $data_farm['static_pressure'];}else{echo '0';} ?></span></span></a></li>
+                <li><a href="javascript:void(0);">Fan Speed <span class="pull-right"><span id="shfan<?php echo $nomor;?>"><?php if($data_farm['fan'] != ''){echo $data_farm['fan'];}else{echo '0';} ?></span> %</span></a></li>
               </ul>
             </div>
           </div>
           <!-- /.widget-user -->
         </div>
         <?php 
-        if($nomor == 5){$nomor = 0;}else{$nomor = $nomor + 1;}
+        if($wrnomor == 5){$wrnomor = 0;}else{$wrnomor = $wrnomor + 1;}
+        $nomor = $nomor + 1;
         }
         ?>
 </div>

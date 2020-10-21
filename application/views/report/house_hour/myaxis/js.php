@@ -17,7 +17,7 @@ $(document).ready(function(){
       'data1periode' : $('[name="val_periode1"]').val(),
       'data1data'    : $('[name="val_data1"]').val(),
       'data1posisi'  : $('[name="posisiy1"]').val(),
-      'data2kandang' : $('[name="val_kandang2"]').val(),
+      'data2kandang' : $('[name="val_kandang1"]').val(),
       'data2periode' : $('[name="val_periode1"]').val(),
       'data2data'    : $('[name="val_data2"]').val(),
       'data2posisi'  : $('[name="posisiy2"]').val(),
@@ -138,7 +138,7 @@ function loadtabel() {
         'data1kandang' : function () {return $('[name="val_kandang1"]').val();},
         'data1periode' : function () {return $('[name="val_periode1"]').val();},
         'data1data'    : function () {return $('[name="val_data1"]').val();},
-        'data2kandang' : function () {return $('[name="val_kandang2"]').val();},
+        'data2kandang' : function () {return $('[name="val_kandang1"]').val();},
         'data2periode' : function () {return $('[name="val_periode1"]').val();},
         'data2data'    : function () {return $('[name="val_data2"]').val();},
         'value61'      : function () {return $('[name="hourdari1"]').val();},
@@ -222,11 +222,11 @@ function cekgrafik() {
   var data1periode = $('[name="val_periode1"]').val();
   var data1data    = $('[name="val_data1"]').val();
   var data1posisi  = $('[name="posisiy1"]').val();
-  var data2kandang = $('[name="val_kandang2"]').val();
+  var data2kandang = $('[name="val_kandang1"]').val();
   var data2periode = $('[name="val_periode1"]').val();
   var data2data    = $('[name="val_data2"]').val();
   var data2posisi  = $('[name="posisiy2"]').val();
-  
+
   if (data2posisi == '' || data2posisi == null || data2posisi == undefined) {title = 'Data 2 input position is empty!';cek = 1;}
   if (data2data == '' || data2data == null || data2data == undefined) {title = 'Data 2 input data parameter is empty!';cek = 1;}
   if (data2periode == '' || data2periode < 1) {title = 'Data 2 input period is empty!';cek = 1;}
@@ -267,7 +267,7 @@ function grafik(){
     'data1periode' : $('[name="val_periode1"]').val(),
     'data1data'    : $('[name="val_data1"]').val(),
     'data1posisi'  : $('[name="posisiy1"]').val(),
-    'data2kandang' : $('[name="val_kandang2"]').val(),
+    'data2kandang' : $('[name="val_kandang1"]').val(),
     'data2periode' : $('[name="val_periode1"]').val(),
     'data2data'    : $('[name="val_data2"]').val(),
     'data2posisi'  : $('[name="posisiy2"]').val(),

@@ -2,9 +2,9 @@
 
 var dataini = {
   0 : [{
-    0 :'64760',
-    1 :'62001',
-    2 :'62002'
+    0 :'windspeed',
+    1 :'max_windspeed',
+    2 :'min_windspeed'
   }],
   1 : ['4'],
   2 : ['12'],

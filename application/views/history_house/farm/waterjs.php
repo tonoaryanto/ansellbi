@@ -1,10 +1,10 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');?>
 
 var dataini = {
-  0 : ['1302','3567'],
-  1 : ['1','2'],
-  2 : ['12','12'],
-  3 : ['1','1']
+  0 : ['water'],
+  1 : ['1'],
+  2 : ['12'],
+  3 : ['1']
 };
 
 $(document).ready(function(){
@@ -68,7 +68,7 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
 
     $.ajax({
       type: "POST",
-      url : "<?php echo base_url('history_house/grafik/'); ?>",
+      url : "<?php echo base_url('history_house/grafik_one/'); ?>",
       data : data_json,
       dataType : "JSON",
       success : function(data){
@@ -213,10 +213,6 @@ function loadtabel() {
                 },
                 {
                     title: "WATER CONSUMTION (Liter)",
-                    orderable: false
-                },
-                {
-                    title: "WATER CONSUMTION (mL)",
                     orderable: false
                 }
               ]

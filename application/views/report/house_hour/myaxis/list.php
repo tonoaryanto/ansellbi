@@ -10,15 +10,18 @@
 					<div class="box" style="border-style: none;">
 						<div class="box-body">
 							<div class="row">
+								<div class="col-sm-12" style="padding: 0px 30px 0px;">
+									<div class="form-group">
+										<label>Data House</label>
+										<select name="val_kandang1" class="form-control optionselect_kandang" id="optionselect_kandang1" style="width: 100%">
+										<option disabled selected>-Select Data House-</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-sm-12" style="padding: 0px 30px 0px;">
 								<div class="col-sm-6" style="border-style: solid;border-radius:5px;border-width: thin;border-color: #ddd;padding-top:5px;">
 									<label style="color: #3c8dbc;text-align: center;width: 100%;font-size: 15px;padding: 10px 5px;background: aliceblue;border-radius: 5px;">Data 1</label>
 									<hr style="margin: 0px 0px 10px 0px">
-									<div class="form-group">
-									<label>Data House</label>
-									<select name="val_kandang1" class="form-control optionselect_kandang" id="optionselect_kandang1" style="width: 100%">
-									<option disabled selected>-Select Data House-</option>
-									</select>
-									</div>
 									<div class="form-group">
 										<label>Data Parameter</label>
 						                <select name="val_data1" class="form-control" id="optionselect1" style="width: 100%;border-radius: 3px;">
@@ -42,12 +45,6 @@
 									<label style="color: #3c8dbc;text-align: center;width: 100%;font-size: 15px;padding: 10px 5px;background: aliceblue;border-radius: 5px;">Data 2</label>
 									<hr style="margin: 0px 0px 10px 0px">
 									<div class="form-group">
-									<label>Data House</label>
-									<select name="val_kandang2" class="form-control optionselect_kandang" id="optionselect_kandang2" style="width: 100%">
-									<option disabled selected>-select Data house-</option>
-									</select>
-									</div>
-									<div class="form-group">
 										<label>Data Parameter</label>
 						                <select name="val_data2" class="form-control" id="optionselect2" style="width: 100%;border-radius: 3px;">
 						                  <option disabled selected>-</option>
@@ -66,6 +63,7 @@
 						                </div>
 									</div>
 								</div>
+							</div>
 							</div>
 							<div class="row">
 							</div>

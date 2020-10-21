@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');?>
 
 var dataini = {
-  0 : ['1301'],
+  0 : ['feed'],
   1 : ['4'],
   2 : ['12'],
   3 : ['1']
@@ -69,7 +69,7 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
 
     $.ajax({
       type: "POST",
-      url : "<?php echo base_url('history_house/grafik/'); ?>",
+      url : "<?php echo base_url('history_house/grafik_one/'); ?>",
       data : data_json,
       dataType : "JSON",
       success : function(data){

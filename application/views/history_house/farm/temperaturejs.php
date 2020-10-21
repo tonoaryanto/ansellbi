@@ -3,15 +3,15 @@
 var dataini = {
   0: function(ini=null){
     if(ini == null){
-      if($('[name="order"]').val() == 1){return ['7218','7197','7198','7199','7200','7203'];}
-      if($('[name="order"]').val() == 2){return ['7197','7198','7199','7200','7218','7203'];}
-      if($('[name="order"]').val() == 3){return ['7198','7197','7199','7200','7218','7203'];}
-      if($('[name="order"]').val() == 4){return ['7199','7197','7198','7200','7218','7203'];}
-      if($('[name="order"]').val() == 5){return ['7200','7197','7198','7199','7218','7203'];}
-      if($('[name="order"]').val() == 6){return ['7203','7197','7198','7199','7200','7218'];}
+      if($('[name="order"]').val() == 1){return ['avg_temp','temp_1','temp_2','temp_3','temp_4','temp_out'];}
+      if($('[name="order"]').val() == 2){return ['temp_1','temp_2','temp_3','temp_4','avg_temp','temp_out'];}
+      if($('[name="order"]').val() == 3){return ['temp_2','temp_1','temp_3','temp_4','avg_temp','temp_out'];}
+      if($('[name="order"]').val() == 4){return ['temp_3','temp_1','temp_2','temp_4','avg_temp','temp_out'];}
+      if($('[name="order"]').val() == 5){return ['temp_4','temp_1','temp_2','temp_3','avg_temp','temp_out'];}
+      if($('[name="order"]').val() == 6){return ['temp_out','temp_1','temp_2','temp_3','temp_4','avg_temp'];}
     }
     if(ini == 'table'){
-      return ['7218','7197','7198','7199','7200','7203'];
+      return ['avg_temp','temp_1','temp_2','temp_3','temp_4','temp_out'];
     }
   },
   1 : function(){
@@ -91,7 +91,7 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
 
     $.ajax({
       type: "POST",
-      url : "<?php echo base_url('history_house/grafik/'); ?>",
+      url : "<?php echo base_url('history_house/grafik_temperature/'); ?>",
       data : data_json,
       dataType : "JSON",
       success : function(data){
