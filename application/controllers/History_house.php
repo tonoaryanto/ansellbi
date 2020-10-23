@@ -298,39 +298,9 @@ class History_house extends CI_Controller {
             //     $dataini1[] = $dataini;
             // }
 
-            $idlabel = [
-                'avg_temp',
-                'temp_1',
-                'temp_2',
-                'temp_3',
-                'temp_4',
-                'temp_out',
-                'humidity',
-                'feed',
-                'water',
-                'static_pressure',
-                'fan',
-                'windspeed',
-                'min_windspeed',
-                'max_windspeed'
-            ];  
+            $idlabel = $this->grafik_model->list_data('idselect');
 
-            $textlabel = [
-                'Average Temperature',
-                'Temperature 1',
-                'Temperature 2',
-                'Temperature 3',
-                'Temperature 4',
-                'Out Temperature',
-                'Humidity',
-                'Feed Consumtion Kg',
-                'Water Consumtion Liter',
-                'Static Pressure',
-                'Fan Speed',
-                'Wind Speed',
-                'Min Wind Speed',
-                'Max Wind Speed'    
-            ];  
+            $textlabel = $this->grafik_model->list_data('textselect');
 
             for ($i=0; $i < count($idlabel); $i++) { 
                 $dataini = [

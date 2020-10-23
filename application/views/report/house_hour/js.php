@@ -431,7 +431,7 @@ function selectdata(){
 
   var inidata = $.ajax({
     type: "POST",
-    url : "<?php echo base_url('history_house/data_select'); ?>",
+    url : "<?php echo base_url('report/data_select'); ?>",
     data : {
       'value1' : 'HOUR_1',
       'value2' : $('#optionselect_kandang').val(),

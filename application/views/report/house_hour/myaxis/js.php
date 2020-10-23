@@ -411,7 +411,7 @@ function selectdata(nomor){
   });
   var inidata = $.ajax({
     type: "POST",
-    url : "<?php echo base_url('history_house/data_select'); ?>",
+    url : "<?php echo base_url('report/data_selectdy'); ?>",
     data : {
       'value1' : kategrafik,
       'value2' : $('#optionselect_kandang'+nomor).val(),

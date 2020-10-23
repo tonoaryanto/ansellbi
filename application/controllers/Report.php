@@ -95,23 +95,7 @@ class Report extends CI_Controller {
                 }
             }
 
-            $xlabel = [
-                'req_temp' => 'Required Temperature',
-                'avg_temp' => 'Average Temperature',
-                'temp_1' => 'Temperature 1',
-                'temp_2' => 'Temperature 2',
-                'temp_3' => 'Temperature 3',
-                'temp_4' => 'Temperature 4',
-                'temp_out' => 'Out Temperature',
-                'humidity' => 'Humidity',
-                'feed' => 'Feed Consumtion Kg',
-                'water' => 'Water Consumtion Liter',
-                'static_pressure' => 'Static Pressure',
-                'fan' => 'Fan Speed',
-                'windspeed' => 'Wind Speed',
-                'min_windspeed' => 'Minimum Wind Speed',
-                'max_windspeed' => 'Maximum Wind Speed'
-            ];
+            $xlabel = $this->grafik_model->list_data('all');
 
             $glabel = $xlabel[$fil2].$addlabel;
             $linelabel[0] = $stringkd[$fil3].' ('.$filperiode.')';
@@ -207,23 +191,7 @@ class Report extends CI_Controller {
         $esqlgen .= "WHERE kode_perusahaan = '".$id_user."' AND kode_kandang = '".$data1kandang."' ";
         $esqlorder = "ORDER BY date_record ASC";
 
-        $xlabel = [
-            'req_temp' => 'Required Temperature',
-            'avg_temp' => 'Average Temperature',
-            'temp_1' => 'Temperature 1',
-            'temp_2' => 'Temperature 2',
-            'temp_3' => 'Temperature 3',
-            'temp_4' => 'Temperature 4',
-            'temp_out' => 'Out Temperature',
-            'humidity' => 'Humidity',
-            'feed' => 'Feed Consumtion Kg',
-            'water' => 'Water Consumtion Liter',
-            'static_pressure' => 'Static Pressure',
-            'fan' => 'Fan Speed',
-            'windspeed' => 'Wind Speed',
-            'min_windspeed' => 'Minimum Wind Speed',
-            'max_windspeed' => 'Maximum Wind Speed'
-        ];
+        $xlabel = $this->grafik_model->list_data('all');
 
             $glabel = $this->input->post('namagrafik');
             $linelabel[0] = $xlabel[$data1data];
@@ -279,4 +247,45 @@ class Report extends CI_Controller {
         }
     }
 
+    public function data_select(){
+        $cek_sess = $this->konfigurasi->cek_js();
+        if ($cek_sess == 0) {
+            echo json_encode(['sess' => $cek_sess]);
+        }else{
+            $idlabel = $this->grafik_model->list_data('idselect');
+
+            $textlabel = $this->grafik_model->list_data('textselect');
+
+            for ($i=0; $i < count($idlabel); $i++) { 
+                $dataini = [
+                    'id'   => $idlabel[$i],
+                    'text' => $textlabel[$i],
+                ];
+                $dataini1[] = $dataini;
+            }
+
+            echo json_encode($dataini1);
+        }
+    }    
+
+    public function data_selectdy(){
+        $cek_sess = $this->konfigurasi->cek_js();
+        if ($cek_sess == 0) {
+            echo json_encode(['sess' => $cek_sess]);
+        }else{
+            $idlabel = $this->grafik_model->list_data('idselectdy');
+
+            $textlabel = $this->grafik_model->list_data('textselectdy');
+
+            for ($i=0; $i < count($idlabel); $i++) { 
+                $dataini = [
+                    'id'   => $idlabel[$i],
+                    'text' => $textlabel[$i],
+                ];
+                $dataini1[] = $dataini;
+            }
+
+            echo json_encode($dataini1);
+        }
+    }    
 }

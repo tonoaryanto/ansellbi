@@ -7,6 +7,127 @@ class Grafik_model extends CI_Model {
         parent::__construct();
     }
 
+    function list_data($cek)
+    {
+        $idxlabel = [
+            '0' => 'avg_temp',
+            '1' => 'temp_1',
+            '2' => 'temp_2',
+            '3' => 'temp_3',
+            '4' => 'temp_4',
+            '5' => 'temp_out',
+            '6' => 'humidity',
+            '7' => 'feed',
+            '8' => 'water',
+            '9' => 'static_pressure',
+            '10' => 'fan',
+            '11' => 'windspeed',
+            '12' => 'min_windspeed',
+            '13' => 'max_windspeed'
+        ];
+        
+        $textxlabel = [
+            '0' => 'Average Temperature',
+            '1' => 'Temperature 1',
+            '2' => 'Temperature 2',
+            '3' => 'Temperature 3',
+            '4' => 'Temperature 4',
+            '5' => 'Out Temperature',
+            '6' => 'Humidity',
+            '7' => 'Feed Consumtion Kg',
+            '8' => 'Water Consumtion Liter',
+            '9' => 'Static Pressure',
+            '10' => 'Fan Speed',
+            '11' => 'Wind Speed',
+            '12' => 'Min Wind Speed',
+            '13' => 'Max Wind Speed'    
+        ];
+
+        switch ($cek) {
+            case "idselect":
+                $xlabel = [
+                    $idxlabel[0],
+                    $idxlabel[1],
+                    $idxlabel[2],
+                    $idxlabel[3],
+                    $idxlabel[4],
+                    $idxlabel[5],
+                    $idxlabel[6],
+                    $idxlabel[7],
+                    $idxlabel[8],
+                    $idxlabel[9],
+                    $idxlabel[10],
+                    $idxlabel[11],
+                    $idxlabel[12],
+                    $idxlabel[13]
+                ];      
+                break;
+            case "textselect":
+                $xlabel = [
+                    $textxlabel[0],
+                    $textxlabel[1],
+                    $textxlabel[2],
+                    $textxlabel[3],
+                    $textxlabel[4],
+                    $textxlabel[5],
+                    $textxlabel[6],
+                    $textxlabel[7],
+                    $textxlabel[8],
+                    $textxlabel[9],
+                    $textxlabel[10],
+                    $textxlabel[11],
+                    $textxlabel[12],
+                    $textxlabel[13]    
+                ];
+                break;
+                case "idselectdy":
+                    $xlabel = [
+                        $idxlabel[0],
+                        $idxlabel[5],
+                        $idxlabel[6],
+                        $idxlabel[7],
+                        $idxlabel[8],
+                        $idxlabel[9],
+                        $idxlabel[10],
+                        $idxlabel[11],
+                        $idxlabel[12],
+                        $idxlabel[13]
+                    ];
+                    break;
+                case "textselectdy":
+                    $xlabel = [
+                        $textxlabel[0],
+                        $textxlabel[5],
+                        $textxlabel[6],
+                        $textxlabel[7],
+                        $textxlabel[8],
+                        $textxlabel[9],
+                        $textxlabel[10],
+                        $textxlabel[11],
+                        $textxlabel[12],
+                        $textxlabel[13]
+                    ];      
+                    break;
+                case "all":
+                    $xlabel[$idxlabel[0]]  = $textxlabel[0];
+                    $xlabel[$idxlabel[1]]  = $textxlabel[1];
+                    $xlabel[$idxlabel[2]]  = $textxlabel[2];
+                    $xlabel[$idxlabel[3]]  = $textxlabel[3];
+                    $xlabel[$idxlabel[4]]  = $textxlabel[4];
+                    $xlabel[$idxlabel[5]]  = $textxlabel[5];
+                    $xlabel[$idxlabel[6]]  = $textxlabel[6];
+                    $xlabel[$idxlabel[7]]  = $textxlabel[7];
+                    $xlabel[$idxlabel[8]]  = $textxlabel[8];
+                    $xlabel[$idxlabel[9]]  = $textxlabel[9];
+                    $xlabel[$idxlabel[10]] = $textxlabel[10];
+                    $xlabel[$idxlabel[11]] = $textxlabel[11];
+                    $xlabel[$idxlabel[12]] = $textxlabel[12];
+                    $xlabel[$idxlabel[13]] = $textxlabel[13];
+                break;
+        }
+        return $xlabel;
+    }
+
     function json_hour2($val2,$val3,$val4,$val5,$val7,$val27){
         $this->datatables->select("id, DATE_FORMAT(date_record,'%d-%m-%Y') AS ttanggal_value, DATE_FORMAT(date_record,'%H-%i-%s') AS jjam_value, ".$val2." as isi_value1, ".$val27." as isi_value3, growday AS grow_value");
         $this->datatables->from("data_record");
