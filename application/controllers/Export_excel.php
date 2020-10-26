@@ -306,7 +306,7 @@ class Export_excel extends CI_Controller {
             $countsecond = $countsecond + 1;
             $linelabel[$i+1] = $stringkd[$valpem['valkandang'.$urutan]].' ('.$valpem['valperiode'.$urutan].')';
         }
-
+            
         $datacolum = ['F','G','H','I','J','K','L','M','N'];
 
         $helper = new Sample();
@@ -469,15 +469,16 @@ class Export_excel extends CI_Controller {
             }
         }
 
+        // Build the dataseries
         $series = new DataSeries(
             DataSeries::TYPE_LINECHART, // plotType
-            DataSeries::GROUPING_CLUSTERED, // plotGrouping
+            DataSeries::GROUPING_STACKED, // plotGrouping
             range(0, count($dataSeriesValues) - 1), // plotOrder
             $dataSeriesLabels, // plotLabel
             $xAxisTickValues, // plotCategory
             $dataSeriesValues        // plotValues
         );
-
+        
         // Set additional dataseries parameters
         //     Make it a vertical column rather than a horizontal bar graph
         $series->setPlotDirection(DataSeries::DIRECTION_COL);
@@ -491,7 +492,7 @@ class Export_excel extends CI_Controller {
         $title = new Title('Grafik '.$filename);
         $yAxisLabel = new Title('Value');
         $xAxisLabel = new Title('Growday');
-
+        
         // Create the chart
         $chart = new Chart(
             'chart1', // name
@@ -500,25 +501,26 @@ class Export_excel extends CI_Controller {
             $plotArea, // plotArea
             true, // plotVisibleOnly
             0, // displayBlanksAs
-            null, // xAxisLabel
-            null  // yAxisLabel
+            $xAxisLabel, // xAxisLabel
+            $yAxisLabel  // yAxisLabel
         );
 
         // Set the position where the chart should appear in the worksheet
         $chart->setTopLeftPosition('A3');
         $chart->setBottomRightPosition($datacolum[4].'20');
-
+        
         // Add the chart to the worksheet
         $getsheet1->addChart($chart);
 
         $spreadsheet->getActiveSheet()->getPageSetup()->setPrintArea('A1:'.$datacolum[4].$endrow);
-
+        
         // Save Excel 2007 file
         $filename = 'download/print_'.$xlabel.'.xlsx';//$helper->getFilename(__FILE__);
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
         $writer->setIncludeCharts(true);
         $callStartTime = microtime(true);
         $writer->save($filename);
+
 
         echo json_encode(['status'=>true,'url'=>base_url($filename)]);
     }
