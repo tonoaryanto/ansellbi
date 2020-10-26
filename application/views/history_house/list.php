@@ -13,6 +13,7 @@
         $wrnomor = 0;
         foreach ($farm as $value) { 
           $data_farm = $this->umum_model->get("data_realtime",['kode_perusahaan' => $id_user,'kode_kandang' => $value->id])->row_array();
+          $menit = str_split(date_format(date_create($data_farm['date_create']), "i"))[0]."0";
         ?>
         <div class="col-md-3">
           <!-- Widget: user widget style 1 -->
@@ -29,7 +30,7 @@
                 <tr><td>Periode</td><td>&nbsp;&nbsp;:&nbsp;&nbsp;</td><td style="font-weight: bold;" id="shperiode<?php echo $nomor;?>"><?php if($data_farm['periode'] == ''){echo '0';}else{echo $data_farm['periode'];} ?></td></tr>
                 <tr><td>Growday</td><td>&nbsp;&nbsp;:&nbsp;&nbsp;</td><td style="font-weight: bold;" id="shgrow<?php echo $nomor;?>"><?php if($data_farm['growday'] == ''){echo '0';}else{echo $data_farm['growday'];} ?></td></tr>
                 <tr><td>Date</td><td>&nbsp;&nbsp;:&nbsp;&nbsp;</td><td style="font-weight: bold;" id="shtgl<?php echo $nomor;?>"><?php if($data_farm['date_create'] == ''){echo '-';}else{echo date_format(date_create($data_farm['date_create']), "d-m-Y");} ?></td></tr>
-                <tr><td>Time</td><td>&nbsp;&nbsp;:&nbsp;&nbsp;</td><td style="font-weight: bold;" id="shjam<?php echo $nomor;?>"><?php if($data_farm['date_create'] == ''){echo '-';}else{echo date_format(date_create($data_farm['date_create']), "H:i:s");} ?></td></tr>
+                <tr><td>Time</td><td>&nbsp;&nbsp;:&nbsp;&nbsp;</td><td style="font-weight: bold;" id="shjam<?php echo $nomor;?>"><?php if($data_farm['date_create'] == ''){echo '-';}else{echo date_format(date_create($data_farm['date_create']), "H").":".$menit.":00";} ?></td></tr>
               </table>
             </div>
             <div class="box-footer no-padding">

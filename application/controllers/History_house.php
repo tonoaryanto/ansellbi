@@ -42,7 +42,8 @@ class History_house extends CI_Controller {
                 $isi = $this->umum_model->get('data_realtime',['kode_perusahaan' => $id_user,'kode_kandang' => $value->id])->row_array();
                 if($isi['id'] != ''){
                     $tanggal = date_format(date_create($isi['date_create']), "d-m-Y");
-                    $jam = date_format(date_create($isi['date_create']), "H:i:s");    
+                    $menit = str_split(date_format(date_create($isi['date_create']), "i"))[0]."0";
+                    $jam = date_format(date_create($isi['date_create']), "H").":".$menit.":00";    
                     $data2[$nomor] = [
                         'id' => $isi['id'],
                         'periode' => $isi['periode'],
