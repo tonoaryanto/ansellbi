@@ -2,7 +2,7 @@
 
 var dataini = {
   0 : [{
-    0 :'windspeed',
+    0 :'req_windspeed',
     1 :'max_windspeed',
     2 :'min_windspeed'
   }],

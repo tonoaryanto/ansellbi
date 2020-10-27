@@ -233,7 +233,7 @@ class Export_excel extends CI_Controller {
             $esqlgrow = "AND growday BETWEEN '".$filhour1."' AND '".$filhour2."'";
         }
 
-        $esqlgen  = "SELECT growday, date_record, DATE_FORMAT(date_record,'%d-%m-%Y') AS ttanggal_value,DATE_FORMAT(date_record,'%H:%i:%s') AS jjam_value,".$fil2." AS isi_value FROM `data_record` ";
+        $esqlgen  = "SELECT growday, date_record, DATE_FORMAT(date_record,'%d-%m-%Y') AS ttanggal_value,DATE_FORMAT(date_record,'%H') AS jjam_value,".$fil2." AS isi_value FROM `data_record` ";
         $esqlgen .= "WHERE kode_perusahaan = '".$id_user."' ";
         $esqlorder = "ORDER BY date_record ASC";
 
@@ -426,7 +426,7 @@ class Export_excel extends CI_Controller {
             $endrow = (int)$anomor+22;
             $sheet1->setCellValue('A'.$endrow, $anomor);
             $sheet1->setCellValue('B'.$endrow, tgl_indo_terbalik($dataisi->ttanggal_value));
-            $sheet1->setCellValue('C'.$endrow, $dataisi->jjam_value);
+            $sheet1->setCellValue('C'.$endrow, $dataisi->jjam_value.":00");
             $sheet1->setCellValue('D'.$endrow, $dataisi->growday);
             $sheet1->setCellValue('E'.$endrow, floatval($dataisi->isi_value));
             $rowlast = 0;
@@ -502,7 +502,7 @@ class Export_excel extends CI_Controller {
             true, // plotVisibleOnly
             0, // displayBlanksAs
             $xAxisLabel, // xAxisLabel
-            $yAxisLabel  // yAxisLabel
+            null  // yAxisLabel
         );
 
         // Set the position where the chart should appear in the worksheet
@@ -553,7 +553,7 @@ class Export_excel extends CI_Controller {
             $esqlgrow = "AND growday BETWEEN '".$filhour1."' AND '".$filhour2."'";
         }
 
-        $esqlgen  = "SELECT growday AS grow, date_record, DATE_FORMAT(date_record,'%d-%m-%Y') AS ttanggal_value,DATE_FORMAT(date_record,'%H:%i:%s') AS jjam_value,".$data1data." AS isi_value,".$data2data." AS isi_value2 FROM `data_record` ";
+        $esqlgen  = "SELECT growday AS grow, date_record, DATE_FORMAT(date_record,'%d-%m-%Y') AS ttanggal_value,DATE_FORMAT(date_record,'%H') AS jjam_value,".$data1data." AS isi_value,".$data2data." AS isi_value2 FROM `data_record` ";
         $esqlgen .= "WHERE kode_perusahaan = '".$id_user."' ";
         $esqlorder = "ORDER BY date_record ASC";
 

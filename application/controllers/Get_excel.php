@@ -127,62 +127,45 @@ class Get_excel extends CI_Controller {
                 $data1 = [];
                 
                 //Menggabungkan Data dan isi
-                $isiiddata = [];
-                $cekiddata = $this->umum_model->get('kode_data',"aktif = 'y'")->result();
-                $nm = 0;
-                foreach ($cekiddata as $valueid) {
-                    $isiiddata[] = $valueid->kode_data;
-                    $nm = $nm +1;
-                }
                 $data3 = [];
                 $message = "";
                 for ($i=0; $i < count($data2); $i++) {
                     for ($j=$data2[$i]['nomor']; $j < $data2[$i]['nomor_max']; $j++) {
                         if(str_replace(" ","",$sheetData[$j][0]) != 'EOF'){
                             if(str_replace(" ","",$sheetData[$j][0]) == 'H'){
-                                for ($ids=0; $ids < count($isiiddata); $ids++) { 
-                                    if($data2[$i]['nama'] != $isiiddata[$ids]){
-                                    }else{
-                                        if(str_replace(" ","",$sheetData[$j][3]) > $isigrowlast){
-                                            if($data2[$i]['nama'] == '4096' OR $data2[$i]['nama'] == '1826' OR $data2[$i]['nama'] == '7098' OR $data2[$i]['nama'] == '7099' OR $data2[$i]['nama'] == '7100' OR $data2[$i]['nama'] == '7101' OR $data2[$i]['nama'] == '7197' OR $data2[$i]['nama'] == '7198' OR $data2[$i]['nama'] == '7199' OR $data2[$i]['nama'] == '7200' OR $data2[$i]['nama'] == '7201' OR $data2[$i]['nama'] == '7202' OR $data2[$i]['nama'] == '7203' OR $data2[$i]['nama'] == '7218' OR $data2[$i]['nama'] == '3002' OR $data2[$i]['nama'] == '3003' OR $data2[$i]['nama'] == '3004' OR $data2[$i]['nama'] == '3005' OR $data2[$i]['nama'] == '64760' OR $data2[$i]['nama'] == '62001' OR $data2[$i]['nama'] == '62002'){
-                                                $isivalue = number_format(((int)str_replace(" ","",$sheetData[$j][4]) / 10), 1, '.', '');
-                                            }else{
-                                                $isivalue = str_replace(" ","",$sheetData[$j][4]);
-                                            }
-            
-                                            $value['kategori']  = $data2[$i]['kategori'];
-                                            $value['nama_data']  = $data2[$i]['nama'];
-                                            $value['kode_data']  = $data2[$i]['kode_data'];
-                                            $value['tanggal_data']  = $data2[$i]['tanggal_dibuat'];
-                                            $value['jam_data']  = $data2[$i]['jam_dibuat'];
-                                            $value['isi_data']  = $data2[$i]['value_data'];
-                                            $value['ket_value']  = str_replace(" ","",$sheetData[$j][0]);
-                                            $value['tanggal_value']  = str_replace(" ","",$sheetData[$j][1]);
-                                            $value['jam_value']  = str_replace(" ","",$sheetData[$j][2]);
-                                            $value['grow_value'] = str_replace(" ","",$sheetData[$j][3]);
-                                            $value['isi_value'] = $isivalue;
-                                            $value['kode_perusahaan'] = $kode_perusahaan;
-                                            $value['kode_kandang'] = $id_kandang;
-                                            $value['periode'] = $value_periode;
-                                            $data3[] = $value;
-                                            if($data2[$i]['kategori'] != 'DAY_1'){
-                                            $message .= "&#10;- Data (" . $data2[$i]['kategori'];
-                                            $message .= ", " . $data2[$i]['nama'];
-                                            $message .= ", " . str_replace(" ","",$sheetData[$j][0]);
-                                            $message .= ", " . str_replace(" ","",$sheetData[$j][1]);
-                                            $message .= ", " . str_replace(" ","",$sheetData[$j][2]);
-                                            $message .= ") - Berhasil";
-                                            }
-                                        }else{
-                                            if($data2[$i]['kategori'] != 'DAY_1'){
-                                            $message .= "&#10;- Data (" . $data2[$i]['kategori'];
-                                            $message .= ", " . $data2[$i]['nama'];
-                                            $message .= ", " . str_replace(" ","",$sheetData[$j][0]);
-                                            $message .= ", " . str_replace(" ","",$sheetData[$j][1]);
-                                            $message .= ", " . str_replace(" ","",$sheetData[$j][2]);
-                                            $message .= ") - Sudah ada";                
-                                            }
-                                        }
+                                if(str_replace(" ","",$sheetData[$j][3]) > $isigrowlast){
+                                    $isivalue = str_replace(" ","",$sheetData[$j][4]);
+                                    $value['kategori']  = $data2[$i]['kategori'];
+                                    $value['nama_data']  = $data2[$i]['nama'];
+                                    $value['kode_data']  = $data2[$i]['kode_data'];
+                                    $value['tanggal_data']  = $data2[$i]['tanggal_dibuat'];
+                                    $value['jam_data']  = $data2[$i]['jam_dibuat'];
+                                    $value['isi_data']  = $data2[$i]['value_data'];
+                                    $value['ket_value']  = str_replace(" ","",$sheetData[$j][0]);
+                                    $value['tanggal_value']  = str_replace(" ","",$sheetData[$j][1]);
+                                    $value['jam_value']  = str_replace(" ","",$sheetData[$j][2]);
+                                    $value['grow_value'] = str_replace(" ","",$sheetData[$j][3]);
+                                    $value['isi_value'] = $isivalue;
+                                    $value['kode_perusahaan'] = $kode_perusahaan;
+                                    $value['kode_kandang'] = $id_kandang;
+                                    $value['periode'] = $value_periode;
+                                    $data3[] = $value;
+                                    if($data2[$i]['kategori'] != 'DAY_1'){
+                                    $message .= "&#10;- Data (" . $data2[$i]['kategori'];
+                                    $message .= ", " . $data2[$i]['nama'];
+                                    $message .= ", " . str_replace(" ","",$sheetData[$j][0]);
+                                    $message .= ", " . str_replace(" ","",$sheetData[$j][1]);
+                                    $message .= ", " . str_replace(" ","",$sheetData[$j][2]);
+                                    $message .= ") - Berhasil";
+                                    }
+                                }else{
+                                    if($data2[$i]['kategori'] != 'DAY_1'){
+                                    $message .= "&#10;- Data (" . $data2[$i]['kategori'];
+                                    $message .= ", " . $data2[$i]['nama'];
+                                    $message .= ", " . str_replace(" ","",$sheetData[$j][0]);
+                                    $message .= ", " . str_replace(" ","",$sheetData[$j][1]);
+                                    $message .= ", " . str_replace(" ","",$sheetData[$j][2]);
+                                    $message .= ") - Sudah ada";                
                                     }
                                 }
                             }

@@ -298,6 +298,7 @@ class Grafik_model extends CI_Model {
 
         $label = [
             'windspeed' => 'Wind Speed',
+            'req_windspeed' => 'Wind Speed',
             'min_windspeed' => 'Minimum Wind Speed',
             'max_windspeed' => 'Maximum Wind Speed'
         ];
