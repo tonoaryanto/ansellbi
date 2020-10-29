@@ -14,9 +14,9 @@
         foreach ($farm as $value) { 
           $data_farm = $this->umum_model->get("data_realtime",['kode_perusahaan' => $id_user,'kode_kandang' => $value->id])->row_array();
           $xmenit = (int)str_split(date_format(date_create($data_farm['date_create']), "i"))[1] - 5;
-          if($xmenit <= 0){
+          if($xmenit < 0){
             $xmenit = 0;
-          }else if($xmenit < 5 and $xmenit > 0){
+          }else if($xmenit >= 0){
             $xmenit = 5;
           }
           $menit = str_split(date_format(date_create($data_farm['date_create']), "i"))[0].$xmenit;
