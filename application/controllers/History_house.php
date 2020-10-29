@@ -153,7 +153,7 @@ class History_house extends CI_Controller {
         $growval2 = $this->input->post('growval2');
         $periode = $this->input->post('periode');
 
-        if ($radio = 'grow') {
+        if ($radio == 'grow') {
             if($growval == $growval2){
                 $esqlgrow = "AND growday= '".$growval."' ";
             }else{
@@ -179,8 +179,9 @@ class History_house extends CI_Controller {
         $glabel = $hasildata['glabel'];
         $growval = $hasildata['growval'];
         $linelabel = $hasildata['linelabel'];
+        $difgrow = $growval2 - $growval;
 
-        echo json_encode(['status'=>true,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari'=>$growval,'linelabel'=>$linelabel]);
+        echo json_encode(['status'=>true,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari'=>$growval,'linelabel'=>$linelabel,'difgrow'=>$difgrow]);
     }
 
     public function grafik_one(){
@@ -224,8 +225,9 @@ class History_house extends CI_Controller {
         $glabel = $hasildata['glabel'];
         $growval = $hasildata['growval'];
         $linelabel = $hasildata['linelabel'];
+        $difgrow = $growval2 - $growval;
 
-        echo json_encode(['status'=>true,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari'=>$growval,'linelabel'=>$linelabel]);
+        echo json_encode(['status'=>true,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari'=>$growval,'linelabel'=>$linelabel,'difgrow'=>$difgrow]);
     }
 
     public function grafikwp(){
@@ -269,8 +271,9 @@ class History_house extends CI_Controller {
         $glabel = $hasildata['glabel'];
         $growval = $hasildata['growval'];
         $linelabel = $hasildata['linelabel'];
-
-        echo json_encode(['status'=>true,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari'=>$growval,'linelabel'=>$linelabel]);
+        $difgrow = $growval2 - $growval;
+        
+        echo json_encode(['status'=>true,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari'=>$growval,'linelabel'=>$linelabel,'difgrow'=>$difgrow]);
     }
 
     public function data_select(){
