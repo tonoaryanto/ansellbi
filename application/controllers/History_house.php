@@ -42,7 +42,13 @@ class History_house extends CI_Controller {
                 $isi = $this->umum_model->get('data_realtime',['kode_perusahaan' => $id_user,'kode_kandang' => $value->id])->row_array();
                 if($isi['id'] != ''){
                     $tanggal = date_format(date_create($isi['date_create']), "d-m-Y");
-                    $menit = str_split(date_format(date_create($isi['date_create']), "i"))[0]."0";
+                    $xmenit = (int)str_split(date_format(date_create($data_farm['date_create']), "i"))[1] - 5;
+                    if($xmenit < 0){
+                      $xmenit = 0;
+                    }else if($xmenit >= 0){
+                      $xmenit = 5;
+                    }
+                    $menit = str_split(date_format(date_create($data_farm['date_create']), "i"))[0].$xmenit;
                     $jam = date_format(date_create($isi['date_create']), "H").":".$menit.":00";    
                     $data2[$nomor] = [
                         'id' => $isi['id'],
@@ -272,7 +278,7 @@ class History_house extends CI_Controller {
         $growval = $hasildata['growval'];
         $linelabel = $hasildata['linelabel'];
         $difgrow = $growval2 - $growval;
-        
+
         echo json_encode(['status'=>true,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari'=>$growval,'linelabel'=>$linelabel,'difgrow'=>$difgrow]);
     }
 
