@@ -49,7 +49,7 @@ class History_house extends CI_Controller {
                       $xmenit = 5;
                     }
                     $menit = str_split(date_format(date_create($isi['date_create']), "i"))[0].$xmenit;
-                    $jam = date_format(date_create($isi['date_create']), "H").":".$menit.":00";    
+                    $jam = date_format(date_create($isi['date_create']), "H").":".$menit.":00";
                     $data2[$nomor] = [
                         'id' => $isi['id'],
                         'periode' => $isi['periode'],

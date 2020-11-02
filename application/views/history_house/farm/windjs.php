@@ -76,9 +76,9 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
       url : "<?php echo base_url('history_house/grafikwp/'); ?>",
       data : data_json,
       dataType : "JSON",
-      success : function(data){
-        get_sess(data.sess);
-        if(data.status == true){
+      success : function(isi){
+        get_sess(isi.sess);
+        if(isi.status == true){
 
           if($('#inihtmlbfr'+dtrow).attr('create') != 'true'){
             $('<div>')
@@ -104,32 +104,32 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
           var data_color = [window.chartColors.orange, window.chartColors.green, window.chartColors.red, window.chartColors.purple];
 
           var lineChartData = {};
-          lineChartData['labels'] = data.labelgf;
+          lineChartData['labels'] = isi.labelgf;
           lineChartData['datasets'] = [{
-                  label: data.linelabel[0],
+                  label: isi.linelabel[0],
                   borderColor: data_color[1],
                   backgroundColor: data_color[1],
                   fill: false,
-                  data: data.data[0],
+                  data: isi.data[0],
                   spanGaps: true,
                   }];
 
           var adddt = {
-              label: data.linelabel[1],
+              label: isi.linelabel[1],
               borderColor: data_color[2],
               backgroundColor: data_color[2],
               fill: false,
-              data: data.data[1],
+              data: isi.data[1],
               spanGaps: false,
               };
           lineChartData['datasets'].push(adddt);
 
           var adddta = {
-              label: data.linelabel[2],
+              label: isi.linelabel[2],
               borderColor: window.chartColors.blue,
               backgroundColor: window.chartColors.blue,
               fill: false,
-              data: data.data[2],
+              data: isi.data[2],
               spanGaps: false,
               };
           lineChartData['datasets'].push(adddta);
@@ -146,37 +146,52 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
               maintainAspectRatio: false,
               title: {
                 display: true,
-                text: data.glabel
+                text: isi.glabel
               },
               tooltips: {
-                mode: 'index',
-                intersect: false,
-              },
-              hover: {
-                mode: 'nearest',
-                intersect: true
+                position: 'nearest',
+    						mode: 'index',
+		    				intersect: false
               },
               scales: {
                 xAxes: [{
                   display: true,
                   ticks: {
                     callback: function(dataLabel, index) {
-                      return index % 2 === 0 ? dataLabel : '';
+                      switch (isi.difgrow) {
+                        case 0:
+                          return dataLabel;
+                        case 1:
+                          return index % 1 === 0 ? dataLabel : '';
+                        case 2:
+                          return index % 2 === 0 ? dataLabel : '';
+                        case 3:
+                          return index % 2 === 0 ? dataLabel : '';
+                        case 4:
+                          return index % 2 === 0 ? dataLabel : '';
+                        case 5:
+                          return index % 2 === 0 ? dataLabel : '';
+                        case 6:
+                          return index % 2 === 0 ? dataLabel : '';
+                        default:
+                          return index % 3 === 0 ? dataLabel : '';
+                      }
                     }
                   }
                 }],
                 yAxes: [{
                   display: true,
-                  scaleLabel: {
-                    display: true,
-                    labelString: 'Value'
+                  ticks: {
+                    min: 0,
+                    max: 4,
+                    stepSize: 1
                   }
                 }]
               }
             }
           });
 
-          $('#titlegrafik'+id).html(data.glabel);
+          $('#titlegrafik'+id).html(isi.glabel);
           var cr = ul;
           ul = ul + 1;
           grafik(dataini[0],dataini[1][cr],dataini[2][cr],dataini[3][cr],dataini[0].length,ul);
@@ -185,7 +200,7 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
           $('#tglresponse').empty();
           swal.fire({
             title: "Error!",
-            html : data.message,
+            html : isi.message,
             type : "warning",
           });
         }

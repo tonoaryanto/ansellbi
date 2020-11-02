@@ -107,8 +107,6 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
                   spanGaps: true,
                   }];
 
-          var datascales = {};
-
           var canvas = document.getElementById('chartcanvas'+id)
           var ctx = canvas.getContext('2d');
           ctx.clearRect(0,0,canvas.width,canvas.height);
