@@ -112,7 +112,7 @@ class Report extends CI_Controller {
             $adata = [];
             foreach ($dataprimary as $value) {
                 $jam = date_format(date_create($value->date_record),"H");
-                $adata[] = '('.$value->growday.') - '.$jam.':00';
+                $adata[] = ''.$value->growday.' - '.$jam;
             }
             $isigrowday = $adata;
 
@@ -144,12 +144,12 @@ class Report extends CI_Controller {
                         $cdata[$k] = '';
                         foreach ($datasecondary as $value3) {
                             $jam2 = date_format(date_create($value3->date_record),"H");
-                            if($isigrowday[$k] == ('('.$value->growday.') - '.$jam2.':00')){
+                            if($isigrowday[$k] == (''.$value->growday.' - '.$jam2)){
                                 $cdata[$k] = $value3->isidata;
                             }
                         }
                         if($cdata[$k] == '' OR $cdata[$k] == null){
-                            $cdata[$k] = 0; 
+                            $cdata[$k] = 0;
                         }
                     }
                 }
@@ -157,9 +157,10 @@ class Report extends CI_Controller {
                 $countsecond = $countsecond + 1;
                 $linelabel[$i+1] = $stringkd[$valpem['valkandang'.$urutan]].' ('.$valpem['valperiode'.$urutan].')';
             }
+            $difgrow = $filhour1 - $filhour2;
+            $sizeyaxis = $this->grafik_model->size_yaxis($fil2);
 
-            echo json_encode(['status'=>true,'labelgf'=>$isigrowday,'data'=>$isiprimary,'label'=>$xlabel[$fil2],'glabel'=>$glabel,'hourdari1'=>$filhour1,'hourdari2'=>$filhour2,'datasecond'=>$isisecondary,'countsecond'=>$countsecond,'linelabel'=>$linelabel]);
-
+            echo json_encode(['status'=>true,'labelgf'=>$isigrowday,'data'=>$isiprimary,'label'=>$xlabel[$fil2],'glabel'=>$glabel,'hourdari1'=>$filhour1,'hourdari2'=>$filhour2,'datasecond'=>$isisecondary,'countsecond'=>$countsecond,'linelabel'=>$linelabel,'difgrow'=>$difgrow,'sizeyaxis'=>$sizeyaxis]);
     }
 
     public function dataaxish(){
@@ -207,7 +208,7 @@ class Report extends CI_Controller {
             $adata = [];
             foreach ($dataprimary1 as $value) {
                 $jam = date_format(date_create($value->date_record),"H");
-                $adata[] = '('.$value->growday.') - '.$jam.':00';
+                $adata[] = ''.$value->growday.' - '.$jam;
             }
             $isigrowday1 = $adata;
 
@@ -221,8 +222,11 @@ class Report extends CI_Controller {
             $isidatagrafik[1] = $cdata2;
             $linelabel[1] = $xlabel[$data2data];
             //END Data 2
+            $difgrow = $filhour1 - $filhour2;
+            $sizeyaxis1 = $this->grafik_model->size_yaxis($data1data);
+            $sizeyaxis2 = $this->grafik_model->size_yaxis($data2data);
 
-            echo json_encode(['status'=>true,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari1'=>$filhour1,'hourdari2'=>$filhour2,'linelabel'=>$linelabel]);
+            echo json_encode(['status'=>true,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari1'=>$filhour1,'hourdari2'=>$filhour2,'linelabel'=>$linelabel,'difgrow'=>$difgrow,'sizeyaxis1'=>$sizeyaxis1,'sizeyaxis2'=>$sizeyaxis2]);
     }
 
     public function datatabel_dyaxish(){

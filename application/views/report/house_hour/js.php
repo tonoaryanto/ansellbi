@@ -275,9 +275,9 @@ function loopgrafik(dataini,awal,loop) {
       url : "<?php echo base_url('report/datahh/'); ?>"+url,
       data : dataini,
       dataType : "JSON",
-      success : function(data){
-        get_sess(data.sess);
-        if(data.status == true){
+      success : function(isi){
+        get_sess(isi.sess);
+        if(isi.status == true){
 
       var rangegd =  parseInt($('[name="hourdari2"]').val()) - parseInt($('[name="hourdari1"]').val());
       var tinggigk = 500;
@@ -291,7 +291,7 @@ function loopgrafik(dataini,awal,loop) {
 
           $('<div>')
           .attr('class','col-sm-12')
-          .html('<div class="box box-success" style="padding: 10px;"><div class="box-header with-border"><h3 class="box-title" id="titlegrafik'+awal+'"><span style="color: #aaa;">-Set Options Terlebih Dahulu-</span></h3><div class="box-tools pull-right"><button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button></div></div><div class="box-body" style="overflow-x: auto;"><div id="inicanvas'+awal+'" style="min-height: '+tottinggi+'px;min-width: '+totlebar+'px;"></div></div></div>')
+          .html('<div class="box box-success" style="padding: 10px;"><div class="box-header with-border"><h3 class="box-title" id="titlegrafik'+awal+'"><span style="color: #aaa;">-Set Options Terlebih Dahulu-</span></h3><div class="box-tools pull-right"><button type="button" class="btn btn-box-tool" isi-widget="collapse"><i class="fa fa-minus"></i></button></div></div><div class="box-body" style="overflow-x: auto;"><div id="inicanvas'+awal+'" style="min-height: '+tottinggi+'px;min-width: '+totlebar+'px;"></div></div></div>')
           .appendTo('#inihtml');
 
           $('#inicanvas'+awal).empty();
@@ -300,41 +300,26 @@ function loopgrafik(dataini,awal,loop) {
           .appendTo('#inicanvas'+awal);
 
           var lineChartData = {};
-          lineChartData['labels'] = data.labelgf;
+          lineChartData['labels'] = isi.labelgf;
           lineChartData['datasets'] = [{
-                  label: data.linelabel[0],
+                  label: isi.linelabel[0],
                   borderColor: window.chartColors.blue,
                   backgroundColor: window.chartColors.blue,
                   fill: false,
-                  data: data.data,
+                  data: isi.data,
                   spanGaps: true,
                   }];
 
-          var datascales = {};
-          datascales['yAxes'] = {
-              yAxes: [{
-                  ticks: {
-                      beginAtZero:true
-                  },
-                  scaleLabel: {
-                       display: true,
-                       labelString: 'Moola',
-                       fontSize: 20 
-                    }
-              }] 
-          };
-
-
           var data_color = [window.chartColors.orange, window.chartColors.green, window.chartColors.red, window.chartColors.purple];
 
-          if(data.countsecond > 0){
-            for (var i = 0; i < data.countsecond; i++) {
+          if(isi.countsecond > 0){
+            for (var i = 0; i < isi.countsecond; i++) {
               var adddt = {
-                  label: data.linelabel[i+1],
+                  label: isi.linelabel[i+1],
                   borderColor: data_color[i],
                   backgroundColor: data_color[i],
                   fill: false,
-                  data: data.datasecond[i],
+                  data: isi.datasecond[i],
                   spanGaps: false,
                   };
               lineChartData['datasets'].push(adddt);
@@ -351,18 +336,56 @@ function loopgrafik(dataini,awal,loop) {
             options: {
               responsive: true,
               maintainAspectRatio: false,
-              hoverMode: 'index',
-              stacked: true,
               title: {
                 display: true,
-                text: data.glabel
+                text: isi.glabel
               },
-            scales: datascales
+              tooltips: {
+                position: 'nearest',
+    						mode: 'index',
+		    				intersect: false
+              },
+              scales: {
+                xAxes: [{
+                  display: true,
+                  ticks: {
+                    callback: function(dataLabel, index) {
+                      switch (isi.difgrow) {
+                        case 0:
+                          return dataLabel;
+                        case 1:
+                          return index % 1 === 0 ? dataLabel : '';
+                        case 2:
+                          return index % 2 === 0 ? dataLabel : '';
+                        case 3:
+                          return index % 2 === 0 ? dataLabel : '';
+                        case 4:
+                          return index % 2 === 0 ? dataLabel : '';
+                        case 5:
+                          return index % 2 === 0 ? dataLabel : '';
+                        case 6:
+                          return index % 2 === 0 ? dataLabel : '';
+                        default:
+                          return index % 3 === 0 ? dataLabel : '';
+                      }
+                    }
+                  }
+                }],
+                yAxes: [{
+                  display: true,
+                  gridLines: { color: '#888' },
+                  ticks: {
+                    min: isi.sizeyaxis[0],
+                    max: isi.sizeyaxis[1],
+                    stepSize: isi.sizeyaxis[2]
+                  }
+                }]
+              }
             }
           });
-          $('#titlegrafik'+awal).html(data.glabel);
-          $('[name="hourdari1"]').val(data.hourdari1);
-          $('[name="hourdari2"]').val(data.hourdari2);
+          $('#titlegrafik'+awal).html(isi.glabel);
+          $('[name="hourdari1"]').val(isi.hourdari1);
+          $('[name="hourdari2"]').val(isi.hourdari2);
           $('#tglresponse').removeAttr('style');
           awal = awal + 1;
           loopgrafik(dataini,awal,loop);
@@ -371,7 +394,7 @@ function loopgrafik(dataini,awal,loop) {
           $('#tglresponse').empty();
           swal.fire({
             title: "Error!",
-            html : data.message,
+            html : isi.message,
             type : "warning",
           });
         }

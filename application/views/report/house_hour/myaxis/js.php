@@ -281,9 +281,9 @@ function grafik(){
       url : "<?php echo base_url('report/dataaxish'); ?>",
       data : inijson,
       dataType : "JSON",
-      success : function(data){
-        get_sess(data.sess);
-        if(data.status == true){
+      success : function(isi){
+        get_sess(isi.sess);
+        if(isi.status == true){
 
           var rangegd =  parseInt($('[name="hourdari2"]').val()) - parseInt($('[name="hourdari1"]').val());
           var tinggigk = 500;
@@ -307,50 +307,27 @@ function grafik(){
           var data_color = [window.chartColors.orange, window.chartColors.green, window.chartColors.red, window.chartColors.purple];
 
           var lineChartData = {};
-          lineChartData['labels'] = data.labelgf;
+          lineChartData['labels'] = isi.labelgf;
           lineChartData['datasets'] = [
                   {
-                    label: data.linelabel[0],
+                    label: isi.linelabel[0],
                     borderColor: window.chartColors.blue,
                     backgroundColor: window.chartColors.blue,
                     fill: false,
-                    data: data.data[0],
+                    data: isi.data[0],
                     spanGaps: true,
                     yAxisID: 'y1',
                   },
                   {
-                    label: data.linelabel[1],
+                    label: isi.linelabel[1],
                     borderColor: data_color[0],
                     backgroundColor: data_color[0],
                     fill: false,
-                    data: data.data[1],
+                    data: isi.data[1],
                     spanGaps: true,
                     yAxisID: 'y2',
                   }
                 ];
-
-          var datascales = {
-              y1: {
-                  ticks: {
-                      beginAtZero:true
-                  },
-                  scaleLabel: {
-                       display: true,
-                       fontSize: 20 
-                    },
-                  position: 'left',
-              },
-              y2: {
-                  ticks: {
-                      beginAtZero:true
-                  },
-                  scaleLabel: {
-                       display: true,
-                       fontSize: 20 
-                    },
-                  position: 'right',
-              },
-            };
 
           var canvas = document.getElementById('chartcanvas')
           var ctx = canvas.getContext('2d');
@@ -364,17 +341,64 @@ function grafik(){
               maintainAspectRatio: false,              
               title: {
                 display: true,
-                text: data.glabel
+                text: isi.glabel
               },
               tooltips: {
-                mode: 'index',
-                intersect: false,
+                position: 'nearest',
+    						mode: 'index',
+		    				intersect: false
               },
-              hover: {
-                mode: 'nearest',
-                intersect: true
-              },
-              scales: datascales,
+              scales: {
+                xAxes: [{
+                  display: true,
+                  ticks: {
+                    callback: function(dataLabel, index) {
+                      switch (isi.difgrow) {
+                        case 0:
+                          return dataLabel;
+                        case 1:
+                          return index % 1 === 0 ? dataLabel : '';
+                        case 2:
+                          return index % 2 === 0 ? dataLabel : '';
+                        case 3:
+                          return index % 2 === 0 ? dataLabel : '';
+                        case 4:
+                          return index % 2 === 0 ? dataLabel : '';
+                        case 5:
+                          return index % 2 === 0 ? dataLabel : '';
+                        case 6:
+                          return index % 2 === 0 ? dataLabel : '';
+                        default:
+                          return index % 3 === 0 ? dataLabel : '';
+                      }
+                    }
+                  }
+                }],
+                yAxes: [
+                  {
+                  position: "left",
+                  id: "y1",
+                  display: true,
+                  gridLines: { color: '#36a2eb66' },
+                  ticks: {
+                    min: isi.sizeyaxis1[0],
+                    max: isi.sizeyaxis1[1],
+                    stepSize: isi.sizeyaxis1[2]
+                    }
+                  },
+                  {
+                  gridLines: { color: data_color[0] },
+                  position: "right",
+                  id: "y2",
+                  display: true,
+                  ticks: {
+                    min: isi.sizeyaxis2[0],
+                    max: isi.sizeyaxis2[1],
+                    stepSize: isi.sizeyaxis2[2]
+                    }
+                  }
+                ]
+              }
             }
           });
 
@@ -384,9 +408,9 @@ function grafik(){
             type : "success",
           });
 
-          $('#titlegrafik').html(data.glabel);
-          $('[name="hourdari1"]').val(data.hourdari1);
-          $('[name="hourdari2"]').val(data.hourdari2);
+          $('#titlegrafik').html(isi.glabel);
+          $('[name="hourdari1"]').val(isi.hourdari1);
+          $('[name="hourdari2"]').val(isi.hourdari2);
           $('#boxtabel').removeAttr('style');
           $('#mytable').DataTable().ajax.url("<?php echo base_url('report/datatabel_dyaxish');?>").load();
          }else{
@@ -394,7 +418,7 @@ function grafik(){
           $('#tglresponse').empty();
           swal.fire({
             title: "Error!",
-            html : data.message,
+            html : isi.message,
             type : "warning",
           });
         }

@@ -191,9 +191,10 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
                 }],
                 yAxes: [{
                   display: true,
+                  gridLines: { color: '#888' },
                   ticks: {
                     min: 21,
-                    max: 30,
+                    max: 35,
                     stepSize: 1
                   }
                 }]

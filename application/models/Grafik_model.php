@@ -7,6 +7,29 @@ class Grafik_model extends CI_Model {
         parent::__construct();
     }
 
+    function size_yaxis($cek)
+    {
+        //[minimum,maximum,kenaikan]
+        $xlabel = [
+            'avg_temp' => [21,35,1],
+            'temp_1' => [21,35,1],
+            'temp_2' => [21,35,1],
+            'temp_3' => [21,35,1],
+            'temp_4' => [21,35,1],
+            'temp_out' => [21,35,1],
+            'humidity' => [40,90,10],
+            'feed' => [0,100,10],
+            'water' => [0,100,10],
+            'static_pressure' => [0,100,10],
+            'fan' => [0,100,10],
+            'windspeed' => [0,4,1],
+            'min_windspeed' => [0,4,1],
+            'max_windspeed' => [0,4,1]
+        ];
+
+        return $xlabel[$cek];
+    }
+
     function list_data($cek)
     {
         $idxlabel = [

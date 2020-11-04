@@ -154,6 +154,7 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
                 }],
                 yAxes: [{
                   display: true,
+                  gridLines: { color: '#888' },
                   ticks: {
                     min: 40,
                     max: 90,
