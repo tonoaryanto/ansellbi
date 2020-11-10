@@ -189,14 +189,19 @@ class Grafik_model extends CI_Model {
         $growval = $reqdata['growval'];
         $growval2 = $reqdata['growval2'];
 
-        $esql  = "SELECT id,growday, date_record,";
-        $esql .= "req_temp AS isidata2,".$inidata." AS isidata";
-        $esql .= " FROM data_record WHERE kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
-        $esql .= $esqlperiode;
-        $esql .= $esqlgrow;
-        $esql .= "ORDER BY date_record ASC";
+            $esql  = "SELECT id,growday, date_record,";
+            if($inidata == 'alltemp'){
+            $esql .= "req_temp AS isidata,temp_1 AS isidata2,temp_2 AS isidata3,temp_3 AS isidata4,temp_4 AS isidata5";
+            }else{
+            $esql .= "req_temp AS isidata,".$inidata." AS isidata2";
+            }
+            $esql .= " FROM data_record WHERE kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
+            $esql .= $esqlperiode;
+            $esql .= $esqlgrow;
+            $esql .= "ORDER BY date_record ASC";    
 
         $label = [
+            'alltemp' => 'Temperature 1 - 4',
             'req_temp' => 'Required Temperature',
             'avg_temp' => 'Average Temperature',
             'temp_1' => 'Temperature 1',
@@ -212,7 +217,18 @@ class Grafik_model extends CI_Model {
             $addlabel = ' : Grow Day '.$growval.' - '.$growval2;
         }
         $glabel = $label[$inidata].$addlabel;
-        $linelabel[0] = $label[$inidata];
+
+        $linelabel[0] = $label['req_temp'];
+        if($inidata == 'alltemp'){
+            $linelabel[0] = $label['req_temp'];
+            $linelabel[1] = $label['temp_1'];
+            $linelabel[2] = $label['temp_2'];
+            $linelabel[3] = $label['temp_3'];
+            $linelabel[4] = $label['temp_4'];
+        }else{
+            $linelabel[1] = $label[$inidata];
+            $linelabel[0] = $label['req_temp'];
+        }
 
         //Data Utama
         $dataprimary1 = $this->db->query($esql)->result();
@@ -229,10 +245,19 @@ class Grafik_model extends CI_Model {
         foreach ($dataprimary1 as $value2) {
             $bdata[] = $value2->isidata;
             $cdata2[] = $value2->isidata2;
+            if($inidata == 'alltemp'){
+            $cdata3[] = $value2->isidata3;
+            $cdata4[] = $value2->isidata4;
+            $cdata5[] = $value2->isidata5;
+            }
         }
         $isidatagrafik[0] = $bdata;
         $isidatagrafik[1] = $cdata2;
-        $linelabel[1] = $label['req_temp'];
+        if($inidata == 'alltemp'){
+        $isidatagrafik[2] = $cdata3;
+        $isidatagrafik[3] = $cdata4;
+        $isidatagrafik[4] = $cdata5;
+        }
 
         $hasildata['isigrowday1'] = $isigrowday1;
         $hasildata['isidatagrafik'] = $isidatagrafik;

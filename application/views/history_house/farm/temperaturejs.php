@@ -3,27 +3,29 @@
 var dataini = {
   0: function(ini=null){
     if(ini == null){
-      if($('[name="order"]').val() == 1){return ['avg_temp','temp_1','temp_2','temp_3','temp_4','temp_out'];}
-      if($('[name="order"]').val() == 2){return ['temp_1','temp_2','temp_3','temp_4','avg_temp','temp_out'];}
-      if($('[name="order"]').val() == 3){return ['temp_2','temp_1','temp_3','temp_4','avg_temp','temp_out'];}
-      if($('[name="order"]').val() == 4){return ['temp_3','temp_1','temp_2','temp_4','avg_temp','temp_out'];}
-      if($('[name="order"]').val() == 5){return ['temp_4','temp_1','temp_2','temp_3','avg_temp','temp_out'];}
-      if($('[name="order"]').val() == 6){return ['temp_out','temp_1','temp_2','temp_3','temp_4','avg_temp'];}
+      if($('[name="order"]').val() == 1){return ['alltemp','temp_1','temp_2','temp_3','temp_4','temp_out','avg_temp'];}
+      if($('[name="order"]').val() == 2){return ['temp_1','temp_2','temp_3','temp_4','alltemp','avg_temp','temp_out'];}
+      if($('[name="order"]').val() == 3){return ['temp_2','temp_1','temp_3','temp_4','alltemp','avg_temp','temp_out'];}
+      if($('[name="order"]').val() == 4){return ['temp_3','temp_1','temp_2','temp_4','alltemp','avg_temp','temp_out'];}
+      if($('[name="order"]').val() == 5){return ['temp_4','temp_1','temp_2','temp_3','alltemp','avg_temp','temp_out'];}
+      if($('[name="order"]').val() == 6){return ['temp_out','temp_1','temp_2','temp_3','temp_4','alltemp','avg_temp'];}
+      if($('[name="order"]').val() == 7){return ['avg_temp','temp_1','temp_2','temp_3','temp_4','temp_out','alltemp'];}
     }
     if(ini == 'table'){
       return ['avg_temp','temp_1','temp_2','temp_3','temp_4','temp_out'];
     }
   },
   1 : function(){
-    if($('[name="order"]').val() == 1){return ['1','2','3','4','5','6'];}
-    if($('[name="order"]').val() == 2){return ['2','3','4','5','1','6'];}
-    if($('[name="order"]').val() == 3){return ['3','2','4','5','1','6'];}
-    if($('[name="order"]').val() == 4){return ['4','2','3','5','1','6'];}
-    if($('[name="order"]').val() == 5){return ['5','2','3','4','1','6'];}
-    if($('[name="order"]').val() == 6){return ['6','2','3','4','5','1'];}
+    if($('[name="order"]').val() == 1){return ['1','2','3','4','5','6','7'];}
+    if($('[name="order"]').val() == 2){return ['2','3','4','5','1','7','6'];}
+    if($('[name="order"]').val() == 3){return ['3','2','4','5','1','7','6'];}
+    if($('[name="order"]').val() == 4){return ['4','2','3','5','1','7','6'];}
+    if($('[name="order"]').val() == 5){return ['5','2','3','4','1','7','6'];}
+    if($('[name="order"]').val() == 6){return ['6','2','3','4','5','1','7'];}
+    if($('[name="order"]').val() == 7){return ['7','2','3','4','5','6','1'];}
     },
-  2 : ['12','6','6','6','6','6'],
-  3 : ['1','2','2','2','2','2']
+  2 : ['12','6','6','6','6','6','6'],
+  3 : ['1','2','2','2','2','2','2']
 };
 
 $(document).ready(function(){
@@ -125,16 +127,17 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
           lineChartData['labels'] = isi.labelgf;
           lineChartData['datasets'] = [{
                   label: isi.linelabel[0],
-                  borderColor: window.chartColors.blue,
-                  backgroundColor: window.chartColors.blue,
+                  borderColor: window.chartColors.red,
+                  backgroundColor: window.chartColors.red,
                   fill: false,
                   data: isi.data[0],
                   spanGaps: true,
                   }];
 
-          var data_color = [window.chartColors.orange, window.chartColors.green, window.chartColors.red, window.chartColors.purple];
+          var data_color = [window.chartColors.blue, window.chartColors.green, window.chartColors.purple,'#32a852',window.chartColors.orange];
 
-          var adddt = {
+          if(inidata == 'alltemp'){
+            var adddt = {
               label: isi.linelabel[1],
               borderColor: data_color[1],
               backgroundColor: data_color[1],
@@ -142,7 +145,45 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
               data: isi.data[1],
               spanGaps: false,
               };
-          lineChartData['datasets'].push(adddt);
+            lineChartData['datasets'].push(adddt);
+            var adddt2 = {
+              label: isi.linelabel[2],
+              borderColor: data_color[2],
+              backgroundColor: data_color[2],
+              fill: false,
+              data: isi.data[2],
+              spanGaps: false,
+              };
+            lineChartData['datasets'].push(adddt2);
+            var adddt3 = {
+              label: isi.linelabel[3],
+              borderColor: data_color[3],
+              backgroundColor: data_color[3],
+              fill: false,
+              data: isi.data[3],
+              spanGaps: false,
+              };
+            lineChartData['datasets'].push(adddt3);
+            var adddt4 = {
+              label: isi.linelabel[4],
+              borderColor: data_color[4],
+              backgroundColor: data_color[4],
+              fill: false,
+              data: isi.data[4],
+              spanGaps: false,
+              };
+            lineChartData['datasets'].push(adddt4);
+          }else{
+            var adddt = {
+              label: isi.linelabel[1],
+              borderColor: data_color[1],
+              backgroundColor: data_color[1],
+              fill: false,
+              data: isi.data[1],
+              spanGaps: false,
+              };
+            lineChartData['datasets'].push(adddt);
+          }
 
           var canvas = document.getElementById('chartcanvas'+id)
           var ctx = canvas.getContext('2d');

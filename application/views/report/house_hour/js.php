@@ -310,7 +310,43 @@ function loopgrafik(dataini,awal,loop) {
                   spanGaps: true,
                   }];
 
-          var data_color = [window.chartColors.orange, window.chartColors.green, window.chartColors.red, window.chartColors.purple];
+          var data_color = [
+            window.chartColors.orange,
+            window.chartColors.green,
+            window.chartColors.red,
+            '#603ec7',
+            '#32a852',
+            '#6e1800',
+            '#9e7e2e',
+            '#4454bd',
+            '#c73eb2',
+            '#6e2d3e',
+            '#6e8bc4',
+            '#0048BA',
+            '#7CB9E8',
+            '#C0E8D5',
+            '#B284BE',
+            '#72A0C1',
+            '#FFBF00',
+            '#FF9966',
+            '#C46210',
+            '#DA1884',
+            '#3D2B1F',
+            '#0D98BA',
+            '#DFFF00',
+            '#58427C',
+            '#F56FA1',
+            '#666699',
+            '#DE5285',
+            '#A67B5B',
+            '#014421',
+            '#801818',
+            '#6C3082',
+            '#1034A6',
+            '#4A646C',
+            '#C95A49',
+            '#5F9EA0',
+            ];
 
           if(isi.countsecond > 0){
             for (var i = 0; i < isi.countsecond; i++) {
@@ -408,6 +444,7 @@ function loopgrafik(dataini,awal,loop) {
     });
   }
 }
+
 function hapuspembanding() {
 var isibox = $('#boxpembanding').attr('data-val');
 $('#bodypem'+isibox).remove();
@@ -417,9 +454,10 @@ $('#btnhapuspem').remove();
 }
 $('#boxpembanding').attr('data-val',isibox);
 }
+
 function addpembanding() {
   var isibox = $('#boxpembanding').attr('data-val');
-  if(isibox == 4){return;}
+  if(isibox == 16){return;}
   isibox = parseInt(isibox) + 1;
   $('#boxpembanding').attr('data-val',isibox);
 
