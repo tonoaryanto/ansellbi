@@ -1,5 +1,7 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');?>
 
+var urlimage1;
+
 var dataini = {
   0 : ['feed'],
   1 : ['4'],
@@ -217,6 +219,42 @@ function loadtabel() {
         get_sess(data.sess);
         if(data.status == true){
           $('#mytable').DataTable( {
+              dom: 'Bfrtip',
+              buttons : [
+                {
+                      title : 'Data Feed',
+                      extend: 'pdfHtml5',
+                      orientation: 'landscape',
+                      pageSize: 'A4',
+                      filename: 'Data Feed',
+                      attr:  {
+                        id: 'btnpdf'
+                      },
+                      customize: function(doc) {
+                            doc.styles.tableBodyEven.alignment = 'center';
+                            doc.styles.tableBodyOdd.alignment = 'center';
+                            doc.styles.tableHeader.alignment = 'center';
+                            doc.styles.tableHeader.fillColor = '#fff';
+                            doc.styles.tableHeader.color = '#000';
+                            doc.styles.tableHeader.width = 200;
+                            doc.styles.tableBodyEven.fillColor = '#fff';
+                            doc.styles.tableBodyOdd.fillColor = '#ddeeff';
+                            doc.content.push( 
+                              {image: urlimage1,margin: [ 10, 20, 0, 12 ],alignment: 'center',width:780,height:385}
+                              );
+                            var objLayout = {};
+                            objLayout['hLineWidth'] = function(i) { return 1; };
+                            objLayout['vLineWidth'] = function(i) { return 1; };
+                            objLayout['hLineColor'] = function(i) { return '#555'; };
+                            objLayout['vLineColor'] = function(i) { return '#555'; };
+                            objLayout['paddingLeft'] = function(i) { return 4; };
+                            objLayout['paddingRight'] = function(i) { return 4; };
+                            doc.content[1].layout = objLayout;
+                            doc.content[1].table.widths = [ '5%', '15%', '15%', '15%', '35%'];
+                            doc.content[1].margin = [ 130, 0, 50, 0 ];
+                      }
+                }
+              ],
               data: data.dataSet,
               columns: [
                 {
@@ -245,4 +283,9 @@ function loadtabel() {
         }
       }
     });
+}
+
+function allprint(){
+  urlimage1 = document.getElementById("chartcanvas4").toDataURL("image/png");
+  document.getElementById("btnpdf").click();
 }

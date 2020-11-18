@@ -292,7 +292,7 @@ function grafik(){
           if (parseInt($('[name="hourdari1"]').val()) == parseInt($('[name="hourdari2"]').val())) {
           var totlebar = (lebargk + rangegd);
           }else{
-            var totlebar = (lebargk + rangegd)*2;
+            var totlebar = (lebargk + rangegd);
           }
 
           $('<div>')

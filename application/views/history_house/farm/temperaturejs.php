@@ -1,5 +1,7 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');?>
 
+var urlimage1, urlimage2, urlimage3, urlimage4, urlimage5, urlimage6, urlimage7;
+
 var dataini = {
   0: function(ini=null){
     if(ini == null){
@@ -24,8 +26,8 @@ var dataini = {
     if($('[name="order"]').val() == 6){return ['6','2','3','4','5','1','7'];}
     if($('[name="order"]').val() == 7){return ['7','2','3','4','5','6','1'];}
     },
-  2 : ['12','6','6','6','6','6','6'],
-  3 : ['1','2','2','2','2','2','2']
+  2 : ['12','12','12','12','12','12','12'],
+  3 : ['1','1','1','1','1','1','1']
 };
 
 $(document).ready(function(){
@@ -88,7 +90,7 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
       if (parseInt($('[name="growval"]').val()) == parseInt($('[name="growval2"]').val())) {
       var totlebar = (lebargk + rangegd);
       }else{
-        var totlebar = (lebargk + rangegd)*2;
+        var totlebar = (lebargk + rangegd);
       }
 
     $.ajax({
@@ -127,8 +129,8 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
           lineChartData['labels'] = isi.labelgf;
           lineChartData['datasets'] = [{
                   label: isi.linelabel[0],
-                  borderColor: window.chartColors.red,
-                  backgroundColor: window.chartColors.red,
+                  borderColor: '#ff0000',
+                  backgroundColor: '#ff0000',
                   fill: false,
                   data: isi.data[0],
                   spanGaps: true,
@@ -232,7 +234,7 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
                 }],
                 yAxes: [{
                   display: true,
-                  gridLines: { color: '#888' },
+                  gridLines: { color: '#333' },
                   ticks: {
                     min: 21,
                     max: 35,
@@ -284,7 +286,7 @@ function loadtabel() {
     };
   }
   data_json['inidata'] = dataini[0]('table');
- 
+
     $.ajax({
       type: "POST",
       url : "<?php echo base_url('history_house/datatable'); ?>",
@@ -294,6 +296,45 @@ function loadtabel() {
         get_sess(data.sess);
         if(data.status == true){
           $('#mytable').DataTable( {
+              dom: 'Bfrtip',
+              buttons : [
+                {
+                      title : 'Data Temperature',
+                      extend: 'pdfHtml5',
+                      orientation: 'landscape',
+                      pageSize: 'A4',
+                      filename: 'Data Temperature',
+                      attr:  {
+                        id: 'btnpdf'
+                      },
+                      customize: function(doc) {
+                            doc.styles.tableBodyEven.alignment = 'center';
+                            doc.styles.tableBodyOdd.alignment = 'center';
+                            doc.styles.tableHeader.alignment = 'center';
+                            doc.styles.tableHeader.fillColor = '#fff';
+                            doc.styles.tableHeader.color = '#000';
+                            doc.styles.tableBodyEven.fillColor = '#fff';
+                            doc.styles.tableBodyOdd.fillColor = '#ddeeff';
+                            doc.content.push( 
+                              {image: urlimage1,margin: [ 10, 20, 0, 12 ],alignment: 'center',width:780,height:385},
+                              {image: urlimage2,margin: [ 10, 20, 0, 12 ],alignment: 'center',width:780,height:385},
+                              {image: urlimage3,margin: [ 10, 20, 0, 12 ],alignment: 'center',width:780,height:385},
+                              {image: urlimage4,margin: [ 10, 20, 0, 12 ],alignment: 'center',width:780,height:385},
+                              {image: urlimage5,margin: [ 10, 20, 0, 12 ],alignment: 'center',width:780,height:385},
+                              {image: urlimage6,margin: [ 10, 20, 0, 12 ],alignment: 'center',width:780,height:385},
+                              {image: urlimage7,margin: [ 10, 20, 0, 12 ],alignment: 'center',width:780,height:385}
+                              );
+                            var objLayout = {};
+                            objLayout['hLineWidth'] = function(i) { return 1; };
+                            objLayout['vLineWidth'] = function(i) { return 1; };
+                            objLayout['hLineColor'] = function(i) { return '#555'; };
+                            objLayout['vLineColor'] = function(i) { return '#555'; };
+                            objLayout['paddingLeft'] = function(i) { return 4; };
+                            objLayout['paddingRight'] = function(i) { return 4; };
+                            doc.content[1].layout = objLayout;
+                      }
+                }
+              ],
               data: data.dataSet,
               columns: [
                 {
@@ -346,5 +387,16 @@ function loadtabel() {
         }
       }
     });
+}
 
+function allprint(){
+  urlimage1 = document.getElementById("chartcanvas1").toDataURL("image/png");
+  urlimage2 = document.getElementById("chartcanvas2").toDataURL("image/png");
+  urlimage3 = document.getElementById("chartcanvas3").toDataURL("image/png");
+  urlimage4 = document.getElementById("chartcanvas4").toDataURL("image/png");
+  urlimage5 = document.getElementById("chartcanvas5").toDataURL("image/png");
+  urlimage6 = document.getElementById("chartcanvas6").toDataURL("image/png");
+  urlimage7 = document.getElementById("chartcanvas7").toDataURL("image/png");
+
+  document.getElementById("btnpdf").click();
 }
