@@ -1,3 +1,4 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
 <div class="row">
 	<div class="col-sm-12">
 		<div class="nav-tabs-custom">
@@ -93,7 +94,7 @@
 								<label>Actions</label>
 								<div>
 									<button class="btn btn-default" onclick="grafik();">Apply</button>
-									<button class="btn btn-success" id="btnprint">Print</button>
+									<button style="display: none;" id="btnprintpdf" class="btn btn-danger" onclick="allprint()">Print PDF</button>
 								</div>
 							</div>		
 						</div>

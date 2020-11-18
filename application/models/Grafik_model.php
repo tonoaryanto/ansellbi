@@ -146,8 +146,25 @@ class Grafik_model extends CI_Model {
                     $xlabel[$idxlabel[11]] = $textxlabel[11];
                     $xlabel[$idxlabel[12]] = $textxlabel[12];
                     $xlabel[$idxlabel[13]] = $textxlabel[13];
-                break;
-        }
+                    break;
+                case "allCAPITAL":
+                    $xlabel[$idxlabel[0]]  = strtoupper($textxlabel[0]);
+                    $xlabel[$idxlabel[1]]  = strtoupper($textxlabel[1]);
+                    $xlabel[$idxlabel[2]]  = strtoupper($textxlabel[2]);
+                    $xlabel[$idxlabel[3]]  = strtoupper($textxlabel[3]);
+                    $xlabel[$idxlabel[4]]  = strtoupper($textxlabel[4]);
+                    $xlabel[$idxlabel[5]]  = strtoupper($textxlabel[5]);
+                    $xlabel[$idxlabel[6]]  = strtoupper($textxlabel[6]);
+                    $xlabel[$idxlabel[7]]  = strtoupper($textxlabel[7]);
+                    $xlabel[$idxlabel[8]]  = strtoupper($textxlabel[8]);
+                    $xlabel[$idxlabel[9]]  = strtoupper($textxlabel[9]);
+                    $xlabel[$idxlabel[10]] = strtoupper($textxlabel[10]);
+                    $xlabel[$idxlabel[11]] = strtoupper($textxlabel[11]);
+                    $xlabel[$idxlabel[12]] = strtoupper($textxlabel[12]);
+                    $xlabel[$idxlabel[13]] = strtoupper($textxlabel[13]);
+                    break;
+        
+            }
         return $xlabel;
     }
 

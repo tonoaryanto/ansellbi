@@ -5,6 +5,7 @@ class Konfigurasi_model extends CI_Model {
     function __construct()
     {
         parent::__construct();
+        $this->load->model('grafik_model');
     }
 
 
@@ -47,6 +48,9 @@ class Konfigurasi_model extends CI_Model {
         }
     }
 
+    function listdata(){
+        return $this->grafik_model->list_data('allCAPITAL');
+    }
     // function optimizeafterupload()
     // {
     //     if($this->session->userdata('optimizedata') == '1'){

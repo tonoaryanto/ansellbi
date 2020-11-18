@@ -1,3 +1,4 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
 <div class="row">
   <div class="col-sm-12">
     <div class="nav-tabs-custom">
@@ -43,7 +44,7 @@
                   </div>
                   <div class="form-group col-sm-3">
                   <button class="btn btn-default" onclick="reload_grafik();">Reload</button>
-                  <button class="btn btn-default" onclick="allprint()">Print</button>
+                  <button class="btn btn-danger" onclick="allprint()">Print</button>
                     <input type="hidden" name="order" value="1" min="1">
                   </div>
                 </div>

@@ -65,7 +65,7 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
       if (parseInt($('[name="growval"]').val()) == parseInt($('[name="growval2"]').val())) {
       var totlebar = (lebargk + rangegd);
       }else{
-        var totlebar = (lebargk + rangegd)*2;
+        var totlebar = (lebargk + rangegd);
       }
 
     $.ajax({
@@ -251,8 +251,7 @@ function loadtabel() {
                             objLayout['paddingLeft'] = function(i) { return 4; };
                             objLayout['paddingRight'] = function(i) { return 4; };
                             doc.content[1].layout = objLayout;
-                            doc.content[1].table.widths = [ '5%', '15%', '15%', '15%', '35%'];
-                            doc.content[1].margin = [ 130, 0, 50, 0 ];
+                            doc.content[1].table.widths = [ '5%', '20%', '20%', '20%', '35%'];
                       }
                 }
               ],

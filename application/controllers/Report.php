@@ -234,21 +234,48 @@ class Report extends CI_Controller {
 
         $fil3 = $this->input->post('data1kandang');
         $id_user   = $this->session->userdata('id_user');
-        $filhour1      = $this->input->post('value61');
-        $filhour2      = $this->input->post('value62');
+        $growval      = $this->input->post('value61');
+        $growval2      = $this->input->post('value62');
         $filperiode = $this->input->post('data1periode');
-
+        $id_user   = $this->session->userdata('id_user');
+        $id_farm   = $this->session->userdata('idfarm');
         $data2data    = $this->input->post('data2data');
 
         if($fil2 == ''){$fil2 = "id";}
         if($data2data == ''){$data2data = "id";}
 
-        header('Content-Type: application/json');
-        if($filhour1 == $filhour2){
-            echo $this->grafik_model->json_hour2($fil2,$fil3,$id_user,$filhour1,$filperiode,$data2data);
+        if($growval == $growval2){
+            $esqlgrow = "AND growday = '".$growval."' ";
         }else{
-            echo $this->grafik_model->json_hour2_between($fil2,$fil3,$id_user,$filhour1,$filhour2,$filperiode,$data2data);
+            $esqlgrow = "AND growday BETWEEN '".$growval."' AND '".$growval2."' ";
         }
+        
+        $datsql1  = "SELECT id,growday, date_record,";
+        $datsql1 .= $fil2.",".$data2data;
+        $datsql1 .= " FROM data_record WHERE kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
+        $datsql1 .= "AND periode = '".$filperiode."' ";
+        $datsql1 .= $esqlgrow;
+        $datsql1 .= "ORDER BY date_record ASC";
+
+        //Data Utama
+        $dataprimary1 = $this->db->query($datsql1);
+
+        $adata = [];
+        for ($iz=0; $iz < $dataprimary1->num_rows(); $iz++) {
+            $isidata = $dataprimary1->row_array($iz);
+            $kolomdata = [];
+            $kolomdata[0]  = $iz + 1;
+            $kolomdata[1]  = $isidata['growday'];
+            $kolomdata[2]  = date_format(date_create($isidata['date_record']),"d-m-Y");
+            $kolomdata[3]  = date_format(date_create($isidata['date_record']),"H:i:s");
+            $kolomdata[4]  = $isidata[$fil2];
+            $kolomdata[5]  = $isidata[$data2data];
+            $adata[$iz] = $kolomdata;
+        }
+        //END Data Utama
+
+        header('Content-Type: application/json');
+        echo json_encode(['status' => true, 'dataSet' => $adata]);
     }
 
     public function data_select(){
@@ -281,12 +308,14 @@ class Report extends CI_Controller {
 
             $textlabel = $this->grafik_model->list_data('textselectdy');
 
+            $dataini1[0] = ['id' => 'null','text' => '-Select Data-'];
             for ($i=0; $i < count($idlabel); $i++) { 
+                $n = $i + 1;
                 $dataini = [
                     'id'   => $idlabel[$i],
                     'text' => $textlabel[$i],
                 ];
-                $dataini1[] = $dataini;
+                $dataini1[$n] = $dataini;
             }
 
             echo json_encode($dataini1);
