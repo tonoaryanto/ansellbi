@@ -132,6 +132,8 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
                 xAxes: [{
                   display: true,
                   ticks: {
+                    maxRotation: 120,
+                    minRotation: 60,
                     callback: function(dataLabel, index) {
                       switch (isi.difgrow) {
                         case 0:

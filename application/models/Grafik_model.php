@@ -365,7 +365,7 @@ class Grafik_model extends CI_Model {
         $adata = [];
         foreach ($dataprimary1 as $value) {
             $jam = date_format(date_create($value->date_record),"H");
-            $adata[] = '('.$value->growday.') - '.$jam.':00';
+            $adata[] = ''.$value->growday.' - '.$jam;
         }
         $isigrowday1 = $adata;
 
