@@ -237,8 +237,6 @@ class Report extends CI_Controller {
         $growval      = $this->input->post('value61');
         $growval2      = $this->input->post('value62');
         $filperiode = $this->input->post('data1periode');
-        $id_user   = $this->session->userdata('id_user');
-        $id_farm   = $this->session->userdata('idfarm');
         $data2data    = $this->input->post('data2data');
 
         if($fil2 == ''){$fil2 = "id";}
@@ -252,7 +250,7 @@ class Report extends CI_Controller {
         
         $datsql1  = "SELECT id,growday, date_record,";
         $datsql1 .= $fil2.",".$data2data;
-        $datsql1 .= " FROM data_record WHERE kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
+        $datsql1 .= " FROM data_record WHERE kode_perusahaan = '".$id_user."' AND kode_kandang = '".$fil3."' ";
         $datsql1 .= "AND periode = '".$filperiode."' ";
         $datsql1 .= $esqlgrow;
         $datsql1 .= "ORDER BY date_record ASC";
