@@ -267,6 +267,25 @@ function grafik(){
   loopgrafik(inijson,1,datgraf.length);
 }
 
+//register custome positioner
+Chart.Tooltip.positioners.custom = function(elements, position) {
+    if (!elements.length) {
+      return false;
+    }
+    var offset = 0;
+    //adjust the offset left or right depending on the event position
+    if (elements[0]._chart.width / 2 > position.x) {
+      offset = 20;
+    } else {
+      offset = -20;
+    }
+    return {
+      x: position.x,
+      y: 70
+    }
+  }
+  //Individual chart config
+
 function loopgrafik(dataini,awal,loop) {
   if(awal <= loop){
     url = awal - 1;
@@ -377,7 +396,7 @@ function loopgrafik(dataini,awal,loop) {
                 text: isi.glabel
               },
               tooltips: {
-                position: 'nearest',
+                position: 'custom',
     						mode: 'index',
 		    				intersect: false
               },
