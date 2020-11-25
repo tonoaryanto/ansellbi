@@ -27,19 +27,19 @@
                   <div class="form-group col-sm-3">
                     <div class="input-group">
                       <span class="input-group-addon" style="border-top-left-radius:4px;border-bottom-left-radius:4px;">Periode</span>
-                      <input name="val_periode" class="form-control" id="inputperiode" style="width: 100%;border-top-right-radius:4px;border-bottom-right-radius:4px;" type="number" min="1" placeholder="-Masukan periode-" onchange="reload_grafik()" value="<?php echo $iniperiode; ?>">
+                      <input name="val_periode" class="form-control" id="inputperiode" style="width: 100%;border-top-right-radius:4px;border-bottom-right-radius:4px;" type="number" min="1" placeholder="-Masukan periode-" value="<?php echo $iniperiode; ?>">
                     </div>
                   </div>
                   <div class="form-group col-sm-3">
                     <div class="input-group">
                       <span class="input-group-addon" style="border-top-left-radius:4px;border-bottom-left-radius:4px;">Start Grow Day</span>
-                      <input class="form-control" type="number" min="-1" name="growval" value="<?php echo $inigrow; ?>" style="border-top-right-radius:4px;border-bottom-right-radius:4px;" onchange="reload_grafik()">
+                      <input class="form-control" type="number" min="-1" name="growval" value="<?php echo $inigrow; ?>" style="border-top-right-radius:4px;border-bottom-right-radius:4px;">
                     </div>
                   </div>
                   <div class="form-group col-sm-3">
                     <div class="input-group">
                       <span class="input-group-addon" style="border-top-left-radius:4px;border-bottom-left-radius:4px;">End Grow Day</span>
-                      <input class="form-control" type="number" min="-1" name="growval2" value="<?php echo $inigrow; ?>" style="border-top-right-radius:4px;border-bottom-right-radius:4px;" onchange="reload_grafik()">
+                      <input class="form-control" type="number" min="-1" name="growval2" value="<?php echo $inigrow; ?>" style="border-top-right-radius:4px;border-bottom-right-radius:4px;">
                     </div>
                   </div>
                   <div class="form-group col-sm-3">
