@@ -341,7 +341,8 @@ function grafik(){
                     yAxisID: 'y2',
                   }
                 ];
-
+          var ticksy1 = isi.sizeyaxis1;
+          var ticksy2 = isi.sizeyaxis2;
           var canvas = document.getElementById('chartcanvas')
           var ctx = canvas.getContext('2d');
           ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -394,12 +395,16 @@ function grafik(){
                   position: "left",
                   id: "y1",
                   display: true,
-                  gridLines: { color: '#36a2eb66' },
+                  gridLines: { color: '#36a2eb' },
                   ticks: {
-                    min: isi.sizeyaxis1[0],
-                    max: isi.sizeyaxis1[1],
-                    stepSize: isi.sizeyaxis1[2]
-                    }
+                    autoSkip: false,
+                    min: ticksy1[ticksy1.length - 1],
+                    max: ticksy1[0]
+                  },
+                  afterBuildTicks: function(scale) {
+                    scale.ticks = ticksy1;
+                    return;
+                  }
                   },
                   {
                   gridLines: { color: data_color[0] },
@@ -407,10 +412,14 @@ function grafik(){
                   id: "y2",
                   display: true,
                   ticks: {
-                    min: isi.sizeyaxis2[0],
-                    max: isi.sizeyaxis2[1],
-                    stepSize: isi.sizeyaxis2[2]
-                    }
+                    autoSkip: false,
+                    min: ticksy2[ticksy2.length - 1],
+                    max: ticksy2[0]
+                  },
+                  afterBuildTicks: function(scale) {
+                    scale.ticks = ticksy2;
+                    return;
+                  }
                   }
                 ]
               }

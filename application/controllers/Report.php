@@ -122,6 +122,16 @@ class Report extends CI_Controller {
             }
             $isiprimary = $bdata;
 
+            $esqlmin1  = "SELECT MAX($fil2) as maxdata1,MIN($fil2) as mindata1 FROM `data_record` WHERE kode_perusahaan = '".$id_user."' AND kode_kandang = '".$fil3."' ";
+            $esqlmin1 .= "AND periode = '".$filperiode."' ";
+            $esqlmin1 .= $esqlgrow;
+            $esqlmin1 .= $esqlorder;
+
+            $datarange = $this->db->query($esqlmin1)->row_array();
+
+            if((int)$datarange['maxdata1'] == 100){$datamax1[0] = (int)$datarange['maxdata1'];}else{$datamax1[0] = (int)$datarange['maxdata1'] + 1;}
+            if((int)$datarange['mindata1'] == 0){$datamin1[0] = (int)$datarange['mindata1'];}else{$datamin1[0] = (int)$datarange['mindata1'] - 1;}
+
             //Data Pembanding
             $urutan = 7;
             $countsecond = 0;
@@ -152,15 +162,41 @@ class Report extends CI_Controller {
                             $cdata[$k] = 0;
                         }
                     }
+                    $esqlmin1c  = "SELECT MAX($fil2) as maxdata1,MIN($fil2) as mindata1 FROM `data_record` WHERE kode_perusahaan = '".$id_user."' AND kode_kandang = '".$valpem['valkandang'.$urutan]."' ";
+                    $esqlmin1c .= "AND periode = '".$valpem['valperiode'.$urutan]."' ";
+                    $esqlmin1c .= $esqlgrow;
+                    $esqlmin1c .= $esqlorder;
+        
+                    $datarangec = $this->db->query($esqlmin1)->row_array();
+
+                    if((int)$datarangec['maxdata1'] == 100){$datamax1[$i + 1] = (int)$datarange['maxdata1'];}else{$datamax1[$i + 1] = (int)$datarange['maxdata1'] + 1;}
+                    if((int)$datarangec['mindata1'] == 0){$datamin1[$i + 1] = (int)$datarange['mindata1'];}else{$datamin1[$i + 1] = (int)$datarange['mindata1'] - 1;}
                 }
                 $isisecondary[] = $cdata;
                 $countsecond = $countsecond + 1;
                 $linelabel[$i+1] = $stringkd[$valpem['valkandang'.$urutan]].' ('.$valpem['valperiode'.$urutan].')';
             }
             $difgrow = $filhour1 - $filhour2;
-            $sizeyaxis = $this->grafik_model->size_yaxis($fil2);
 
-            echo json_encode(['status'=>true,'labelgf'=>$isigrowday,'data'=>$isiprimary,'label'=>$xlabel[$fil2],'glabel'=>$glabel,'hourdari1'=>$filhour1,'hourdari2'=>$filhour2,'datasecond'=>$isisecondary,'countsecond'=>$countsecond,'linelabel'=>$linelabel,'difgrow'=>$difgrow,'sizeyaxis'=>$sizeyaxis]);
+            $realmax = max($datamax1);
+            $realmin = min($datamin1);
+
+            $countrange = 10;
+            $dif1 = $realmax - $realmin;
+            if($dif1 == $realmax){$dif1range = $dif1 / 10;}
+            else{$dif1range = round($dif1 / $countrange);}
+            $sizeyaxis1[0] = $realmax;
+
+            for ($i=0; $i < $countrange; $i++) { 
+                $realmax = $realmax - $dif1range;
+                if($realmax < 0){
+                    break;
+                }else{
+                    $sizeyaxis1[$i+1] = $realmax;
+                }
+            }
+
+            echo json_encode(['status'=>true,'labelgf'=>$isigrowday,'data'=>$isiprimary,'label'=>$xlabel[$fil2],'glabel'=>$glabel,'hourdari1'=>$filhour1,'hourdari2'=>$filhour2,'datasecond'=>$isisecondary,'countsecond'=>$countsecond,'linelabel'=>$linelabel,'difgrow'=>$difgrow,'sizeyaxis1'=>$sizeyaxis1]);
     }
 
     public function dataaxish(){
@@ -223,8 +259,35 @@ class Report extends CI_Controller {
             $linelabel[1] = $xlabel[$data2data];
             //END Data 2
             $difgrow = $filhour1 - $filhour2;
-            $sizeyaxis1 = $this->grafik_model->size_yaxis($data1data);
-            $sizeyaxis2 = $this->grafik_model->size_yaxis($data2data);
+
+            $esqlmin1  = "SELECT MAX($data1data) as maxdata1,MAX($data2data) as maxdata2, MIN($data1data) as mindata1,MIN($data2data) as mindata2 FROM `data_record` WHERE kode_perusahaan = '".$id_user."' AND kode_kandang = '".$data1kandang."' ";
+            $esqlmin1 .= "AND periode = '".$data1periode."' ";
+            $esqlmin1 .= $esqlgrow;
+            $esqlmin1 .= $esqlorder;
+
+            $datarange = $this->db->query($esqlmin1)->row_array();
+
+            if((int)$datarange['maxdata1'] == 100){$datamax1 = (int)$datarange['maxdata1'];}else{$datamax1 = (int)$datarange['maxdata1'] + 1;}
+            if((int)$datarange['maxdata2'] == 100){$datamax2 = (int)$datarange['maxdata2'];}else{$datamax2 = (int)$datarange['maxdata2'] + 1;}
+            if((int)$datarange['mindata1'] == 0){$datamin1 = (int)$datarange['mindata1'];}else{$datamin1 = (int)$datarange['mindata1'] - 1;}
+            if((int)$datarange['mindata2'] == 0){$datamin2 = (int)$datarange['mindata2'];}else{$datamin2 = (int)$datarange['mindata2'] - 1;}
+
+            $countrange = 8;
+            $dif1 = $datamax1 - $datamin1;
+            $dif1range = $dif1 / $countrange;
+
+            $dif2 = $datamax2 - $datamin2;
+            $dif2range = $dif2 / $countrange;
+
+            $sizeyaxis1[0] = $datamax1;
+            $sizeyaxis2[0] = $datamax2;
+
+            for ($i=0; $i < $countrange; $i++) { 
+                $datamax1 = $datamax1 - $dif1range;
+                $datamax2 = $datamax2 - $dif2range;
+                $sizeyaxis1[$i+1] = $datamax1;
+                $sizeyaxis2[$i+1] = $datamax2;
+            }
 
             echo json_encode(['status'=>true,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari1'=>$filhour1,'hourdari2'=>$filhour2,'linelabel'=>$linelabel,'difgrow'=>$difgrow,'sizeyaxis1'=>$sizeyaxis1,'sizeyaxis2'=>$sizeyaxis2]);
     }

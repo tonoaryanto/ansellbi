@@ -380,7 +380,8 @@ function loopgrafik(dataini,awal,loop) {
               lineChartData['datasets'].push(adddt);
             }
           }
-
+          
+          var ticksy1 = isi.sizeyaxis1;
           var canvas = document.getElementById('chartcanvas'+awal)
           var ctx = canvas.getContext('2d');
           ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -430,9 +431,13 @@ function loopgrafik(dataini,awal,loop) {
                   display: true,
                   gridLines: { color: '#888' },
                   ticks: {
-                    min: isi.sizeyaxis[0],
-                    max: isi.sizeyaxis[1],
-                    stepSize: isi.sizeyaxis[2]
+                    autoSkip: false,
+                    min: ticksy1[ticksy1.length - 1],
+                    max: ticksy1[0]
+                  },
+                  afterBuildTicks: function(scale) {
+                    scale.ticks = ticksy1;
+                    return;
                   }
                 }]
               }

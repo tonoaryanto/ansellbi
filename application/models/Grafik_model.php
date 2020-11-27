@@ -11,20 +11,20 @@ class Grafik_model extends CI_Model {
     {
         //[minimum,maximum,kenaikan]
         $xlabel = [
-            'avg_temp' => [21,35,1],
-            'temp_1' => [21,35,1],
-            'temp_2' => [21,35,1],
-            'temp_3' => [21,35,1],
-            'temp_4' => [21,35,1],
-            'temp_out' => [21,35,1],
-            'humidity' => [40,90,10],
-            'feed' => [0,100,10],
-            'water' => [0,100,10],
-            'static_pressure' => [0,100,10],
-            'fan' => [0,100,10],
-            'windspeed' => [0,4,1],
-            'min_windspeed' => [0,4,1],
-            'max_windspeed' => [0,4,1]
+            'avg_temp' => [35,28,21,14,7,0],
+            'temp_1' => [35,28,21,14,7,0],
+            'temp_2' => [35,28,21,14,7,0],
+            'temp_3' => [35,28,21,14,7,0],
+            'temp_4' => [35,28,21,14,7,0],
+            'temp_out' => [35,28,21,14,7,0],
+            'humidity' => [100,80,60,40,20,0],
+            'feed' => [100,80,60,40,20,0],
+            'water' => [100,80,60,40,20,0],
+            'static_pressure' => [100,80,60,40,20,0],
+            'fan' => [100,80,60,40,20,0],
+            'windspeed' => [5,4,3,2,1,0],
+            'min_windspeed' => [5,4,3,2,1,0],
+            'max_windspeed' => [5,4,3,2,1,0]
         ];
 
         return $xlabel[$cek];
