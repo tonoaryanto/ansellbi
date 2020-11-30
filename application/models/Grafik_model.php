@@ -215,7 +215,7 @@ class Grafik_model extends CI_Model {
             $esql .= " FROM data_record WHERE kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
             $esql .= $esqlperiode;
             $esql .= $esqlgrow;
-            $esql .= "ORDER BY date_record ASC";    
+            $esql .= "ORDER BY date_record ASC";
 
         $label = [
             'alltemp' => 'Temperature 1 - 4',
@@ -260,12 +260,12 @@ class Grafik_model extends CI_Model {
         $bdata = [];
         $cdata2 = [];
         foreach ($dataprimary1 as $value2) {
-            $bdata[] = $value2->isidata;
-            $cdata2[] = $value2->isidata2;
+            $bdata[] = floatval($value2->isidata);
+            $cdata2[] = floatval($value2->isidata2);
             if($inidata == 'alltemp'){
-            $cdata3[] = $value2->isidata3;
-            $cdata4[] = $value2->isidata4;
-            $cdata5[] = $value2->isidata5;
+            $cdata3[] = floatval($value2->isidata3);
+            $cdata4[] = floatval($value2->isidata4);
+            $cdata5[] = floatval($value2->isidata5);
             }
         }
         $isidatagrafik[0] = $bdata;
@@ -276,6 +276,43 @@ class Grafik_model extends CI_Model {
         $isidatagrafik[4] = $cdata5;
         }
 
+        $datamax1[0] = max($cdata2);
+        $datamin1[0] = min($cdata2);
+        if($inidata == 'alltemp'){
+            $datamax1[1] = max($cdata3);
+            $datamax1[2] = max($cdata4);
+            $datamax1[3] = max($cdata5);
+            $datamin1[1] = min($cdata3);
+            $datamin1[2] = min($cdata4);
+            $datamin1[3] = min($cdata5);
+        }
+
+        $realmax = max($datamax1);
+        $realmin = min($datamin1);
+
+        if($realmax < 99){$realmax = $realmax + 2;}
+        if($realmax > 1){$realmax = $realmax - 1;}
+
+        $countrange = 10;
+        $dif1 = $realmax - $realmin;
+        if($dif1 == $realmax){$dif1range = $dif1 / 10;}
+        else{$dif1range = $dif1 / $countrange;}
+        if($dif1range < 1){$dif1range = 1;}
+        if(isset(explode(".",$dif1range)[1])){
+            if(explode(".",$dif1range)[1] >= 1){$dif1range = explode(".",$dif1range)[0] + 1;}
+        };
+        $sizeyaxis1[0] = $realmax;
+        for ($i=0; $i < $countrange; $i++) { 
+            if($realmax == 0){break;}
+            $realmax = $realmax - $dif1range;
+            if($realmax < 0){
+                $sizeyaxis1[$i+1] = 0;
+            }else{
+                $sizeyaxis1[$i+1] = $realmax;
+            }
+        }
+
+        $hasildata['sizeyaxis'] = $sizeyaxis1;
         $hasildata['isigrowday1'] = $isigrowday1;
         $hasildata['isidatagrafik'] = $isidatagrafik;
         $hasildata['glabel'] = $glabel;
@@ -330,11 +367,36 @@ class Grafik_model extends CI_Model {
 
         $bdata = [];
         foreach ($dataprimary1 as $value2) {
-            $bdata[] = $value2->isidata;
+            $bdata[] = floatval($value2->isidata);
         }
         $isidatagrafik[0] = $bdata;
         //END Data Utama
+        $realmax = max($bdata);
+        $realmin = min($bdata);
 
+        if($realmax < 99){$realmax = $realmax + 2;}
+        if($realmax > 1){$realmax = $realmax - 1;}
+
+        $countrange = 10;
+        $dif1 = $realmax - $realmin;
+        if($dif1 == $realmax){$dif1range = $dif1 / 10;}
+        else{$dif1range = $dif1 / $countrange;}
+        if($dif1range < 1){$dif1range = 1;}
+        if(isset(explode(".",$dif1range)[1])){
+            if(explode(".",$dif1range)[1] >= 1){$dif1range = explode(".",$dif1range)[0] + 1;}
+        };
+        $sizeyaxis1[0] = $realmax;
+        for ($i=0; $i < $countrange; $i++) { 
+            if($realmax == 0){break;}
+            $realmax = $realmax - $dif1range;
+            if($realmax < 0){
+                $sizeyaxis1[$i+1] = 0;
+            }else{
+                $sizeyaxis1[$i+1] = $realmax;
+            }
+        }
+
+        $hasildata['sizeyaxis'] = $sizeyaxis1;
         $hasildata['isigrowday1'] = $isigrowday1;
         $hasildata['isidatagrafik'] = $isidatagrafik;
         $hasildata['glabel'] = $glabel;
@@ -390,9 +452,9 @@ class Grafik_model extends CI_Model {
         $cdata2 = [];
         $cdata3 = [];
         foreach ($dataprimary1 as $value2) {
-            $bdata[] = $value2->isidata;
-            $cdata2[] = $value2->isidata2;
-            $cdata3[] = $value2->isidata3;
+            $bdata[] = floatval($value2->isidata);
+            $cdata2[] = floatval($value2->isidata2);
+            $cdata3[] = floatval($value2->isidata3);
         }
         $isidatagrafik[0] = $bdata;
         $isidatagrafik[1] = $cdata2;
@@ -400,6 +462,39 @@ class Grafik_model extends CI_Model {
         $linelabel[1] = $label[$inidata[0][1]];
         $linelabel[2] = $label[$inidata[0][2]];
 
+        $datamax1[0] = max($bdata);
+        $datamax1[1] = max($cdata2);
+        $datamax1[2] = max($cdata3);
+        $datamin1[0] = min($bdata);
+        $datamin1[1] = min($cdata2);
+        $datamin1[2] = min($cdata3);
+
+        $realmax = max($datamax1);
+        $realmin = min($datamin1);
+
+        if($realmax < 99){$realmax = $realmax + 2;}
+        if($realmax > 1){$realmax = $realmax - 1;}
+
+        $countrange = 10;
+        $dif1 = $realmax - $realmin;
+        if($dif1 == $realmax){$dif1range = $dif1 / 10;}
+        else{$dif1range = round($dif1 / $countrange);}
+        if($dif1range < 1){$dif1range = 1;}
+        if(isset(explode(".",$dif1range)[1])){
+            if(explode(".",$dif1range)[1] >= 1){$dif1range = explode(".",$dif1range)[0] + 1;}
+        };
+        $sizeyaxis1[0] = $realmax;
+        for ($i=0; $i < $countrange; $i++) { 
+            if($realmax == 0){break;}
+            $realmax = $realmax - $dif1range;
+            if($realmax < 0){
+                $sizeyaxis1[$i+1] = 0;
+            }else{
+                $sizeyaxis1[$i+1] = $realmax;
+            }
+        }
+
+        $hasildata['sizeyaxis'] = $sizeyaxis1;
         $hasildata['isigrowday1'] = $isigrowday1;
         $hasildata['isidatagrafik'] = $isidatagrafik;
         $hasildata['glabel'] = $glabel;

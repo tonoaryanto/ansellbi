@@ -187,7 +187,18 @@ class History_house extends CI_Controller {
         $linelabel = $hasildata['linelabel'];
         $difgrow = $growval2 - $growval;
 
-        echo json_encode(['status'=>true,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari'=>$growval,'linelabel'=>$linelabel,'difgrow'=>$difgrow]);
+        $sizeyaxis1 = $hasildata['sizeyaxis'];
+
+        echo json_encode([
+            'status'    => true,
+            'labelgf'   => $isigrowday1,
+            'data'      => $isidatagrafik,
+            'glabel'    => $glabel,
+            'hourdari'  => $growval,
+            'linelabel' => $linelabel,
+            'difgrow'   => $difgrow,
+            'sizeyaxis1' => $sizeyaxis1
+            ]);
     }
 
     public function grafik_one(){
@@ -232,8 +243,9 @@ class History_house extends CI_Controller {
         $growval = $hasildata['growval'];
         $linelabel = $hasildata['linelabel'];
         $difgrow = $growval2 - $growval;
+        $sizeyaxis1 = $hasildata['sizeyaxis'];
 
-        echo json_encode(['status'=>true,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari'=>$growval,'linelabel'=>$linelabel,'difgrow'=>$difgrow]);
+        echo json_encode(['status'=>true,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari'=>$growval,'linelabel'=>$linelabel,'difgrow'=>$difgrow,'sizeyaxis1' => $sizeyaxis1]);
     }
 
     public function grafikwp(){
@@ -278,8 +290,9 @@ class History_house extends CI_Controller {
         $growval = $hasildata['growval'];
         $linelabel = $hasildata['linelabel'];
         $difgrow = $growval2 - $growval;
+        $sizeyaxis1 = $hasildata['sizeyaxis'];
 
-        echo json_encode(['status'=>true,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari'=>$growval,'linelabel'=>$linelabel,'difgrow'=>$difgrow]);
+        echo json_encode(['status'=>true,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari'=>$growval,'linelabel'=>$linelabel,'difgrow'=>$difgrow,'sizeyaxis1' => $sizeyaxis1]);
     }
 
     public function data_select(){

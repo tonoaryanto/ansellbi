@@ -184,13 +184,17 @@ class Report extends CI_Controller {
             $countrange = 10;
             $dif1 = $realmax - $realmin;
             if($dif1 == $realmax){$dif1range = $dif1 / 10;}
-            else{$dif1range = round($dif1 / $countrange);}
+            else{$dif1range = $dif1 / $countrange;}
             $sizeyaxis1[0] = $realmax;
-
+            if($dif1range < 1){$dif1range = 1;}
+            if(isset(explode(".",$dif1range)[1])){
+                if(explode(".",$dif1range)[1] >= 1){$dif1range = explode(".",$dif1range)[0] + 1;}
+            };
             for ($i=0; $i < $countrange; $i++) { 
+                if($realmax == 0){break;}
                 $realmax = $realmax - $dif1range;
                 if($realmax < 0){
-                    break;
+                    $sizeyaxis1[$i+1] = 0;
                 }else{
                     $sizeyaxis1[$i+1] = $realmax;
                 }
@@ -272,12 +276,16 @@ class Report extends CI_Controller {
             if((int)$datarange['mindata1'] == 0){$datamin1 = (int)$datarange['mindata1'];}else{$datamin1 = (int)$datarange['mindata1'] - 1;}
             if((int)$datarange['mindata2'] == 0){$datamin2 = (int)$datarange['mindata2'];}else{$datamin2 = (int)$datarange['mindata2'] - 1;}
 
-            $countrange = 8;
+            $countrange = 10;
             $dif1 = $datamax1 - $datamin1;
             $dif1range = $dif1 / $countrange;
+            if($dif1 == $datamax1){$dif1range = $dif1 / 10;}
+            else{$dif1range = $dif1 / $countrange;}
 
             $dif2 = $datamax2 - $datamin2;
             $dif2range = $dif2 / $countrange;
+            if($dif2 == $datamax2){$dif2range = $dif2 / 10;}
+            else{$dif2range = $dif2 / $countrange;}
 
             $sizeyaxis1[0] = $datamax1;
             $sizeyaxis2[0] = $datamax2;

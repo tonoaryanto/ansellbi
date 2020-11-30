@@ -187,6 +187,7 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
             lineChartData['datasets'].push(adddt);
           }
 
+          var ticksy1 = isi.sizeyaxis1;
           var canvas = document.getElementById('chartcanvas'+id)
           var ctx = canvas.getContext('2d');
           ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -238,9 +239,13 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
                   display: true,
                   gridLines: { color: '#333' },
                   ticks: {
-                    min: 21,
-                    max: 35,
-                    stepSize: 1
+                    autoSkip: false,
+                    min: ticksy1[ticksy1.length - 1],
+                    max: ticksy1[0]
+                  },
+                  afterBuildTicks: function(scale) {
+                    scale.ticks = ticksy1;
+                    return;
                   }
                 }]
               }
