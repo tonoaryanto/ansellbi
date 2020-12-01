@@ -83,7 +83,7 @@
             </a>
             <ul class="dropdown-menu dropmenu" style="width: 100px;">
             	<li class="hidden-lg"><p style="text-align: center;padding:5px 10px;border-bottom: 1px solid #ddd;"><b><?php echo $this->session->userdata('nama_user');?></b> </p></li>
-              <!--li><a href="#" id="resetbtn"><i class="fa fa-refresh"></i> Reset</a></li-->
+              <li><a href="#" id=""><i class="fa fa-signal"></i> Standar Value</a></li>
               <li><a href="#" id="logout"><i class="fa fa-power-off"></i> Log out</a></li>
             </ul>
           </li>
