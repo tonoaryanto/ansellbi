@@ -15,7 +15,7 @@
         </a>
         </div>
         <div class="col-md-2" style="padding:10px;">
-        <a class="btn btn-default" href="#" style="border-style:dashed;border-color: #555;">
+        <a class="btn btn-default" href="<?php echo base_url('setting/standard_value/set/humidity'); ?>" style="border-style:dashed;border-color: #555;">
           <div class="info-box" style="background:#0000;box-shadow:none;">
             <span class="info-box-icon" style="background:#0000;font-size:70px;"><i class="ion ion-waterdrop"></i></span>
 
@@ -29,7 +29,7 @@
         </a>
         </div>
         <div class="col-md-2" style="padding:10px;">
-        <a class="btn btn-default" href="#" style="border-style:dashed;border-color: #555;">
+        <a class="btn btn-default" href="<?php echo base_url('setting/standard_value/set/speed_fan'); ?>" style="border-style:dashed;border-color: #555;">
           <div class="info-box" style="background:#0000;box-shadow:none;">
           <span class="info-box-icon" style="background:#0000;font-size:70px;"><i class="ion ion-nuclear"></i></span>
 
@@ -43,7 +43,7 @@
         </a>
         </div>
         <div class="col-md-2" style="padding:10px;">
-        <a class="btn btn-default" href="#" style="border-style:dashed;border-color: #555;">
+        <a class="btn btn-default" href="<?php echo base_url('setting/standard_value/set/wind_speed'); ?>" style="border-style:dashed;border-color: #555;">
           <div class="info-box" style="background:#0000;box-shadow:none;">
             <span class="info-box-icon" style="background:#0000;font-size:70px;"><i class="ion ion-load-a"></i></span>
 
@@ -57,7 +57,7 @@
         </a>
         </div>
         <div class="col-md-2" style="padding:10px;">
-        <a class="btn btn-default" href="#" style="border-style:dashed;border-color: #555;">
+        <a class="btn btn-default" href="<?php echo base_url('setting/standard_value/set/body_weight'); ?>" style="border-style:dashed;border-color: #555;">
           <div class="info-box" style="background:#0000;box-shadow:none;">
             <span class="info-box-icon" style="background:#0000;font-size:70px;"><i class="fa fa-balance-scale"></i></span>
 
@@ -71,7 +71,7 @@
         </a>
         </div>
         <div class="col-md-2" style="padding:10px;">
-        <a class="btn btn-default" href="#" style="border-style:dashed;border-color: #555;">
+        <a class="btn btn-default" href="<?php echo base_url('setting/standard_value/set/egg_weight'); ?>" style="border-style:dashed;border-color: #555;">
           <div class="info-box" style="background:#0000;box-shadow:none;">
             <span class="info-box-icon" style="background:#0000;font-size:70px;"><i class="fa fa-cubes"></i></span>
 
@@ -85,7 +85,7 @@
         </a>
         </div>
         <div class="col-md-2" style="padding:10px;">
-        <a class="btn btn-default" href="#" style="border-style:dashed;border-color: #555;">
+        <a class="btn btn-default" href="<?php echo base_url('setting/standard_value/set/egg_counter'); ?>" style="border-style:dashed;border-color: #555;">
           <div class="info-box" style="background:#0000;box-shadow:none;">
             <span class="info-box-icon" style="background:#0000;font-size:70px;"><i class="fa fa-cubes"></i></span>
 
@@ -99,7 +99,7 @@
         </a>
         </div>
         <div class="col-md-2" style="padding:10px;">
-        <a class="btn btn-default" href="#" style="border-style:dashed;border-color: #555;">
+        <a class="btn btn-default" href="<?php echo base_url('setting/standard_value/set/water'); ?>" style="border-style:dashed;border-color: #555;">
           <div class="info-box" style="background:#0000;box-shadow:none;">
             <span class="info-box-icon" style="background:#0000;font-size:70px;"><i class="ion ion-ios-analytics"></i></span>
 
@@ -113,7 +113,7 @@
         </a>
         </div>
         <div class="col-md-2" style="padding:10px;">
-        <a class="btn btn-default" href="#" style="border-style:dashed;border-color: #555;">
+        <a class="btn btn-default" href="<?php echo base_url('setting/standard_value/set/feed'); ?>" style="border-style:dashed;border-color: #555;">
           <div class="info-box" style="background:#0000;box-shadow:none;">
             <span class="info-box-icon" style="background:#0000;font-size:70px;"><i class="ion ion-soup-can-outline"></i></span>
 
@@ -127,7 +127,7 @@
         </a>
         </div>
         <div class="col-md-2" style="padding:10px;">
-        <a class="btn btn-default" href="#" style="border-style:dashed;border-color: #555;">
+        <a class="btn btn-default" href="<?php echo base_url('setting/standard_value/set/static_pressure'); ?>" style="border-style:dashed;border-color: #555;">
           <div class="info-box" style="background:#0000;box-shadow:none;">
             <span class="info-box-icon" style="background:#0000;font-size:70px;"><i class="ion ion-speedometer"></i></span>
 

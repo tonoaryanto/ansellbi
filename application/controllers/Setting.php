@@ -15,9 +15,12 @@ class Setting extends CI_Controller {
 
     public function standard_value($form=null,$dataform=null){
         $this->konfigurasi->cek_url();
+        $dtitle = explode('_',$dataform);
+        $datatitle = ucfirst($dtitle[0]);
+        if(isset($dtitle[1])){$datatitle .= ' '.ucfirst($dtitle[1]);}
         if($form == 'set'){
             $data = [
-                'txthead1'     => 'Input Standard Value ( ' . ucfirst($dataform) . ' )',
+                'txthead1'  => 'Input Standard Value',
                 'head1'     => 'Setting',
                 'link1'     => '#',
                 'head2'     => 'Standard Value',
@@ -27,11 +30,12 @@ class Setting extends CI_Controller {
                 'isi'       => 'setting/form',
                 'cssadd'    => 'setting/cssadd',
                 'jsadd'     => 'setting/jsadd',
+                'texttitle' => $datatitle,
             ];
             $this->load->view('template/wrapper',$data);
         }else{
             $data = [
-                'txthead1'     => 'Standard Value',
+                'txthead1'  => 'Standard Value',
                 'head1'     => 'Setting',
                 'link1'     => '#',
                 'head2'     => 'Standard Value',
