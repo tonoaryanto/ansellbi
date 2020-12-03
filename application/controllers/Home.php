@@ -7,7 +7,6 @@ class Home extends CI_Controller {
     }
 
 	public function index(){
-//        $this->load->view('home_page/list');
         $data_akses = $this->session->userdata('status_user');
         if ($data_akses == '1') {
             redirect('history_house');
