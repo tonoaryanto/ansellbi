@@ -16,27 +16,13 @@
 									<select name="kandang" class="form-control" id="optionselect_kandang" style="width: 100%">
 									<option disabled selected>-Select data house-</option>
 									</select>
-								</div>
-                <div class="form-group col-md-12">
-                   <label>Set Activation</label>
-                    <select name="stdaktif" class="form-control select2" onchange="std_aktif();">
-                      <option disabled selected>- On / Off -</option>
-                      <option value="y">On</option>
-                      <option value="n">Off</option>
-                    </select>
-                  </div>
                 </div>
-                <?php $countweek = 12; ?>
-                <div class="col-md-12" style="display: none;" id="inputweek" data-week="<?php echo $countweek; ?>">
-                    <?php for ($i=0; $i < $countweek; $i++) { $a=$i+1;?>
-                      <div class="form-group col-md-2" id="week<?php echo $a; ?>">
-                        <label>Week <?php echo $a; ?></label>
-                        <input name="week<?php echo $a; ?>" type="text" class="form-control" >
-                      </div>
-                    <?php } ?>
-                  </div>
                 </div>
-              <!-- /.box-body -->
+                <div class="col-md-12" id="inputweek" data-week="0">
+                </div>
+                </div>
+                <input name="tpval" type="hidden" value="<?php echo $tpval ?>">
+                <!-- /.box-body -->
               <div class="box-footer">
               <a href="<?php echo base_url('setting/standard_value'); ?>" class="btn btn-default">Back</a>
               <button class="btn btn-primary" onclick="save();">Submit</button>
