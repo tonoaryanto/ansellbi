@@ -140,5 +140,33 @@
           <!-- /.info-box -->
         </a>
         </div>
+        <div class="col-md-2" style="padding:10px;">
+        <a class="btn btn-default" href="<?php echo base_url('setting/standard_value/set/mortality'); ?>" style="width:100%;border-style:dashed;border-color: #555;">
+          <div class="info-box" style="background:#0000;box-shadow:none;">
+            <span class="info-box-icon" style="background:#0000;font-size:70px;"><i class="ion ion-heart-broken"></i></span>
+
+            <div class="info-box-content boxcontent" style="">
+              <span class="info-box-text" style="font-weight: bolder;">Mortality</span>
+              <span class="info-box-number">23</span>
+            </div>
+            <!-- /.info-box-content boxcontent -->
+          </div>
+          <!-- /.info-box -->
+        </a>
+        </div>
+        <div class="col-md-2" style="padding:10px;">
+        <a class="btn btn-default" href="<?php echo base_url('setting/standard_value/set/selections'); ?>" style="width:100%;border-style:dashed;border-color: #555;">
+          <div class="info-box" style="background:#0000;box-shadow:none;">
+            <span class="info-box-icon" style="background:#0000;font-size:70px;"><i class="ion ion-heart"></i></span>
+
+            <div class="info-box-content boxcontent" style="">
+              <span class="info-box-text" style="font-weight: bolder;">selections</span>
+              <span class="info-box-number">18</span>
+            </div>
+            <!-- /.info-box-content boxcontent -->
+          </div>
+          <!-- /.info-box -->
+        </a>
+        </div>
     </div>
 </div>
