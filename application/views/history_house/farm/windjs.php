@@ -5,8 +5,7 @@ var urlimage1;
 var dataini = {
   0 : [{
     0 :'req_windspeed',
-    1 :'max_windspeed',
-    2 :'min_windspeed'
+    1 :'windspeed'
   }],
   1 : ['4'],
   2 : ['12'],
@@ -126,15 +125,15 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
               };
           lineChartData['datasets'].push(adddt);
 
-          var adddta = {
+          var adddt2 = {
               label: isi.linelabel[2],
-              borderColor: window.chartColors.blue,
-              backgroundColor: window.chartColors.blue,
+              borderColor: data_color[3],
+              backgroundColor: data_color[3],
               fill: false,
               data: isi.data[2],
               spanGaps: false,
               };
-          lineChartData['datasets'].push(adddta);
+          lineChartData['datasets'].push(adddt2);
 
           var ticksy1 = isi.sizeyaxis1;
           var canvas = document.getElementById('chartcanvas'+id)
@@ -311,13 +310,13 @@ function loadtabel() {
                     orderable: false
                 },
                 {
-                    title: "MAX WIND SPEED (ms)",
+                    title: "WIND SPEED (ms)",
                     orderable: false
                 },
                 {
-                    title: "MIN WIND SPEED (ms)",
+                    title: "STANDARD VALUE",
                     orderable: false
-                },
+                }
               ]
           });
         }

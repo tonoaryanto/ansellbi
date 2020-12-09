@@ -109,6 +109,16 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
                   spanGaps: true,
                   }];
 
+          var adddt1 = {
+            label: isi.linelabel[1],
+            borderColor: window.chartColors.red,
+            backgroundColor: window.chartColors.red,
+            fill: false,
+            data: isi.data[1],
+            spanGaps: false,
+            };
+          lineChartData['datasets'].push(adddt1);
+                  
           var ticksy1 = isi.sizeyaxis1;
           var canvas = document.getElementById('chartcanvas'+id)
           var ctx = canvas.getContext('2d');
@@ -281,6 +291,10 @@ function loadtabel() {
                 },
                 {
                     title: "HUMIDITY (%)",
+                    orderable: false
+                },
+                {
+                    title: "STANDARD VALUE",
                     orderable: false
                 }
               ]

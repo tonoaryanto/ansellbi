@@ -300,26 +300,6 @@ class History_house extends CI_Controller {
         if ($cek_sess == 0) {
             echo json_encode(['sess' => $cek_sess]);
         }else{
-            // $id_user = $this->session->userdata('id_user');
-            // $fil1 = $this->input->post('value1');
-            // $fil2 = $this->input->post('value2');
-            // $fil3 = $this->input->post('value3');
-
-            // $this->db->select('kode_data AS id,nama_data AS text');
-            // $this->db->from('kode_data');
-            // $this->db->where(['aktif'=>'y']);
-            // $this->db->where("kategori_waktu IN ('2','3')");
-            // $this->db->order_by('urutan','ASC');
-            // $data1 = $this->db->get()->result();
-
-            // $dataini1 = [array('id'   => '','text' => '',)];
-            // foreach ($data1 as $data1) {
-            //     $dataini = [
-            //         'id'   => $data1->id,
-            //         'text' => $data1->text,
-            //     ];
-            //     $dataini1[] = $dataini;
-            // }
 
             $idlabel = $this->grafik_model->list_data('idselect');
 
@@ -418,7 +398,7 @@ class History_house extends CI_Controller {
         $adata = [];
         if($this->input->post('kateg') == 'temp'){$adata = $this->tabeltemperature($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
         if($this->input->post('kateg') == 'hum'){$adata = $this->tabelsatukolom($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
-        if($this->input->post('kateg') == 'wind'){$adata = $this->tabelwind($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata[0][0],$inidata[0][1],$inidata[0][2]);}
+        if($this->input->post('kateg') == 'wind'){$adata = $this->tabelwind($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata[0][0],$inidata[0][1]);}
         if($this->input->post('kateg') == 'feed'){$adata = $this->tabelsatukolom($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
         if($this->input->post('kateg') == 'water'){$adata = $this->tabelsatukolom($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
         if($this->input->post('kateg') == 'press'){$adata = $this->tabelsatukolom($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
@@ -440,9 +420,35 @@ class History_house extends CI_Controller {
         //Data Utama
         $dataprimary1 = $this->db->query($datsql1);
 
+        $sqlstd = "SELECT std_temp_min,std_temp_max FROM standar_value WHERE kode_farm = '".$id_user."' AND kode_kandang = '".$id_farm."'";
+
+        $dbstd = $this->db->query($sqlstd);
+
+        if($dbstd->num_rows() > 0  and $dbstd->row_array()['std_temp_min'] != ''){
+            $dtmin = $dbstd->row_array()['std_temp_min'];
+            $dtmax = $dbstd->row_array()['std_temp_max'];
+            $minex = explode(',',$dtmin);
+            $maxex = explode(',',$dtmax);
+        }else{
+            $minex = [];
+            $maxex = [];
+        }
+
         $adata = [];
         for ($iz=0; $iz < $dataprimary1->num_rows(); $iz++) {
             $isidata = $dataprimary1->row_array($iz);
+
+            $noarray = (int)$isidata['growday'] - 1;
+            if($noarray <= count($minex)){
+                $vstdmin = $minex[((int)$isidata['growday'] - 1)];
+                $vstdmax = $maxex[((int)$isidata['growday'] - 1)];
+            }else{
+                $vstdmin = end($minex);
+                $vstdmax = end($maxex);
+            }
+            if(isset($vstdmin)){$fvstdmin = $vstdmin;}else{$fvstdmin = 0;}
+            if(isset($vstdmax)){$fvstdmax = $vstdmax;}else{$fvstdmax = 0;}
+
             $kolomdata = [];
             $kolomdata[0]  = $iz + 1;
             $kolomdata[1]  = $isidata['growday'];
@@ -455,6 +461,8 @@ class History_house extends CI_Controller {
             $kolomdata[8]  = $isidata[$inidata[4]];
             $kolomdata[9]  = $isidata[$inidata[0]];
             $kolomdata[10] = $isidata[$inidata[5]];
+            $kolomdata[11] = (int)$fvstdmin;
+            $kolomdata[12] = (int)$fvstdmax;
             $adata[$iz] = $kolomdata;
         }
         //END Data Utama
@@ -473,15 +481,71 @@ class History_house extends CI_Controller {
 
         //Data Utama
         $dataprimary1 = $this->db->query($datsql1);
+
+        $isistdlabel = [
+            'humidity' => ['std_humidity'],
+            'feed' => ['std_feed_min','std_feed_max'],
+            'water' => ['std_water_min','std_water_max'],
+            'static_pressure' => ['std_static_press'],
+            'fan' => ['std_fanspeed']
+        ];
+
+        $stdlabel = $isistdlabel[$inidata[0]];
+        $dtsql = $stdlabel[0];
+
+        if(isset($stdlabel[1])){
+            $dtsql .= ",".$stdlabel[1];
+        }
+
+        $sqlstd = "SELECT ".$dtsql." FROM standar_value WHERE kode_farm = '".$id_user."' AND kode_kandang = '".$id_farm."'";
+        $dbstd = $this->db->query($sqlstd);
+
+        if($dbstd->num_rows() > 0  and $dbstd->row_array()[$stdlabel[0]] != ''){
+            $dtmin = $dbstd->row_array()[$stdlabel[0]];
+            $minex = explode(',',$dtmin);
+
+            if(isset($stdlabel[1])){
+                $dtmax = $dbstd->row_array()[$stdlabel[1]];
+                $maxex = explode(',',$dtmax);
+            }
+        }else{
+            $minex = [];
+
+            if(isset($stdlabel[1])){
+                $maxex = [];
+            }
+        }
+
         $adata = [];
         for ($iz=0; $iz < $dataprimary1->num_rows(); $iz++) {
             $isidata = $dataprimary1->row_array($iz);
+
+            $noarray = (int)$isidata['growday'] - 1;
+            if($noarray <= count($minex)){
+                $vstdmin = $minex[((int)$isidata['growday'] - 1)];
+            }else{
+                $vstdmin = end($minex);;
+            }
+            if(isset($vstdmin)){$fvstdmin = $vstdmin;}else{$fvstdmin = 0;}
+
             $kolomdata = [];
             $kolomdata[0]  = $iz + 1;
             $kolomdata[1]  = $isidata['growday'];
             $kolomdata[2]  = date_format(date_create($isidata['date_record']),"d-m-Y");
             $kolomdata[3]  = date_format(date_create($isidata['date_record']),"H:i:s");
             $kolomdata[4]  = $isidata[$inidata[0]];
+            $kolomdata[5]  = (int)$fvstdmin;;
+
+            if(isset($stdlabel[1])){
+                if($noarray <= count($minex)){
+                    $vstdmax = $maxex[((int)$isidata['growday'] - 1)];
+                }else{
+                    $vstdmax = end($maxex);
+                }
+                if(isset($vstdmax)){$fvstdmax = $vstdmax;}else{$fvstdmax = 0;}
+                $kolomdata[6]  = (int)$fvstdmax;
+            }
+
             $adata[$iz] = $kolomdata;
         }
         //END Data Utama
@@ -489,11 +553,11 @@ class History_house extends CI_Controller {
         return $adata;
     }
 
-    private function tabelwind($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata1,$inidata2,$inidata3)
+    private function tabelwind($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata1,$inidata2)
     {
 
         $datsql1  = "SELECT id,growday, date_record,";
-        $datsql1 .= $inidata1.",".$inidata2.",".$inidata3;
+        $datsql1 .= $inidata1.",".$inidata2;
         $datsql1 .= " FROM data_record WHERE kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
         $datsql1 .= $esqlperiode;
         $datsql1 .= $esqlgrow;
@@ -502,9 +566,29 @@ class History_house extends CI_Controller {
         //Data Utama
         $dataprimary1 = $this->db->query($datsql1);
 
+        $sqlstd = "SELECT std_wind_speed FROM standar_value WHERE kode_farm = '".$id_user."' AND kode_kandang = '".$id_farm."'";
+
+        $dbstd = $this->db->query($sqlstd);
+
+        if($dbstd->num_rows() > 0  and $dbstd->row_array()['std_wind_speed'] != ''){
+            $dtmin = $dbstd->row_array()['std_wind_speed'];
+            $minex = explode(',',$dtmin);
+        }else{
+            $minex = [];
+        }
+
         $adata = [];
         for ($iz=0; $iz < $dataprimary1->num_rows(); $iz++) {
             $isidata = $dataprimary1->row_array($iz);
+
+            $noarray = (int)$isidata['growday'] - 1;
+            if($noarray <= count($minex)){
+                $vstdmin = $minex[((int)$isidata['growday'] - 1)];
+            }else{
+                $vstdmin = end($minex);
+            }
+            if(isset($vstdmin)){$fvstdmin = $vstdmin;}else{$fvstdmin = 0;}
+
             $kolomdata = [];
             $kolomdata[0]  = $iz + 1;
             $kolomdata[1]  = $isidata['growday'];
@@ -512,7 +596,7 @@ class History_house extends CI_Controller {
             $kolomdata[3]  = date_format(date_create($isidata['date_record']),"H:i:s");
             $kolomdata[4]  = $isidata[$inidata1];
             $kolomdata[5]  = $isidata[$inidata2];
-            $kolomdata[6]  = $isidata[$inidata3];
+            $kolomdata[6]  = (int)$fvstdmin;
             $adata[$iz] = $kolomdata;
         }
         //END Data Utama

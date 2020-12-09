@@ -419,8 +419,6 @@ function save(){
 
     isidata['week'] = isiweek;
 
-    console.log(isiweek);
-
     if(cek != 1){
         $.ajax({
             url : ling,
@@ -493,7 +491,7 @@ function validasi(){
         if(xdt7 == '' && dt7 != ''){cek = 1;}
  
     }
-    if($('[name="mxweek1"]').val() == ''){cek = 1;}
+    if($('[name="week1"]').val() == ''){cek = 1;}
     if($('#inputweek').html() == ''){cek = 1;}
     
     return cek;

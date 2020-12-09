@@ -45,8 +45,6 @@ class Grafik_model extends CI_Model {
             '9' => 'static_pressure',
             '10' => 'fan',
             '11' => 'windspeed',
-            '12' => 'min_windspeed',
-            '13' => 'max_windspeed'
         ];
         
         $textxlabel = [
@@ -62,8 +60,6 @@ class Grafik_model extends CI_Model {
             '9' => 'Static Pressure',
             '10' => 'Fan Speed',
             '11' => 'Wind Speed',
-            '12' => 'Min Wind Speed',
-            '13' => 'Max Wind Speed'    
         ];
 
         switch ($cek) {
@@ -80,9 +76,7 @@ class Grafik_model extends CI_Model {
                     $idxlabel[8],
                     $idxlabel[9],
                     $idxlabel[10],
-                    $idxlabel[11],
-                    $idxlabel[12],
-                    $idxlabel[13]
+                    $idxlabel[11]
                 ];      
                 break;
             case "textselect":
@@ -98,9 +92,7 @@ class Grafik_model extends CI_Model {
                     $textxlabel[8],
                     $textxlabel[9],
                     $textxlabel[10],
-                    $textxlabel[11],
-                    $textxlabel[12],
-                    $textxlabel[13]    
+                    $textxlabel[11]    
                 ];
                 break;
                 case "idselectdy":
@@ -112,9 +104,7 @@ class Grafik_model extends CI_Model {
                         $idxlabel[8],
                         $idxlabel[9],
                         $idxlabel[10],
-                        $idxlabel[11],
-                        $idxlabel[12],
-                        $idxlabel[13]
+                        $idxlabel[11]
                     ];
                     break;
                 case "textselectdy":
@@ -126,9 +116,7 @@ class Grafik_model extends CI_Model {
                         $textxlabel[8],
                         $textxlabel[9],
                         $textxlabel[10],
-                        $textxlabel[11],
-                        $textxlabel[12],
-                        $textxlabel[13]
+                        $textxlabel[11]
                     ];      
                     break;
                 case "all":
@@ -144,8 +132,6 @@ class Grafik_model extends CI_Model {
                     $xlabel[$idxlabel[9]]  = $textxlabel[9];
                     $xlabel[$idxlabel[10]] = $textxlabel[10];
                     $xlabel[$idxlabel[11]] = $textxlabel[11];
-                    $xlabel[$idxlabel[12]] = $textxlabel[12];
-                    $xlabel[$idxlabel[13]] = $textxlabel[13];
                     break;
                 case "allCAPITAL":
                     $xlabel[$idxlabel[0]]  = strtoupper($textxlabel[0]);
@@ -160,8 +146,6 @@ class Grafik_model extends CI_Model {
                     $xlabel[$idxlabel[9]]  = strtoupper($textxlabel[9]);
                     $xlabel[$idxlabel[10]] = strtoupper($textxlabel[10]);
                     $xlabel[$idxlabel[11]] = strtoupper($textxlabel[11]);
-                    $xlabel[$idxlabel[12]] = strtoupper($textxlabel[12]);
-                    $xlabel[$idxlabel[13]] = strtoupper($textxlabel[13]);
                     break;
         
             }
@@ -238,22 +222,52 @@ class Grafik_model extends CI_Model {
         $linelabel[0] = $label['req_temp'];
         if($inidata == 'alltemp'){
             $linelabel[0] = $label['req_temp'];
-            $linelabel[1] = $label['temp_1'];
-            $linelabel[2] = $label['temp_2'];
-            $linelabel[3] = $label['temp_3'];
-            $linelabel[4] = $label['temp_4'];
+            $linelabel[1] = 'Min Standard Value';
+            $linelabel[2] = 'Max Standard Value';
+            $linelabel[3] = $label['temp_1'];
+            $linelabel[4] = $label['temp_2'];
+            $linelabel[5] = $label['temp_3'];
+            $linelabel[6] = $label['temp_4'];
         }else{
-            $linelabel[1] = $label[$inidata];
             $linelabel[0] = $label['req_temp'];
+            $linelabel[1] = 'Min Standard Value';
+            $linelabel[2] = 'Max Standard Value';
+            $linelabel[3] = $label[$inidata];
         }
 
         //Data Utama
         $dataprimary1 = $this->db->query($esql)->result();
 
+        $sqlstd = "SELECT std_temp_min,std_temp_max FROM standar_value WHERE kode_farm = '".$id_user."' AND kode_kandang = '".$id_farm."'";
+
+        $dbstd = $this->db->query($sqlstd);
+
+        if($dbstd->num_rows() > 0  and $dbstd->row_array()['std_temp_min'] != ''){
+            $dtmin = $dbstd->row_array()['std_temp_min'];
+            $dtmax = $dbstd->row_array()['std_temp_max'];
+            $minex = explode(',',$dtmin);
+            $maxex = explode(',',$dtmax);
+        }else{
+            $minex = [];
+            $maxex = [];
+        }
+
         $adata = [];
         foreach ($dataprimary1 as $value) {
             $jam = date_format(date_create($value->date_record),"H");
             $adata[] = ''.$value->growday.' - '.$jam;
+            $noarray = (int)$value->growday - 1;
+            if($noarray <= count($minex)){
+                $vstdmin = $minex[((int)$value->growday - 1)];
+                $vstdmax = $maxex[((int)$value->growday - 1)];
+            }else{
+                $vstdmin = end($minex);
+                $vstdmax = end($maxex);
+            }
+            if(isset($vstdmin)){$fvstdmin = $vstdmin;}else{$fvstdmin = 0;}
+            if(isset($vstdmax)){$fvstdmax = $vstdmax;}else{$fvstdmax = 0;}
+            $stdmin[] = (int)$fvstdmin;
+            $stdmax[] = (int)$fvstdmax;
         }
         $isigrowday1 = $adata;
 
@@ -268,30 +282,35 @@ class Grafik_model extends CI_Model {
             $cdata5[] = floatval($value2->isidata5);
             }
         }
+
         $isidatagrafik[0] = $bdata;
-        $isidatagrafik[1] = $cdata2;
+        $isidatagrafik[1] = $stdmin;
+        $isidatagrafik[2] = $stdmax;
+        $isidatagrafik[3] = $cdata2;
         if($inidata == 'alltemp'){
-        $isidatagrafik[2] = $cdata3;
-        $isidatagrafik[3] = $cdata4;
-        $isidatagrafik[4] = $cdata5;
+        $isidatagrafik[4] = $cdata3;
+        $isidatagrafik[5] = $cdata4;
+        $isidatagrafik[6] = $cdata5;
         }
 
         $datamax1[0] = max($cdata2);
         $datamin1[0] = min($cdata2);
+        $datamin1[1] = min($stdmin);
+        $datamax1[1] = max($stdmax);
         if($inidata == 'alltemp'){
-            $datamax1[1] = max($cdata3);
-            $datamax1[2] = max($cdata4);
-            $datamax1[3] = max($cdata5);
-            $datamin1[1] = min($cdata3);
-            $datamin1[2] = min($cdata4);
-            $datamin1[3] = min($cdata5);
+            $datamax1[2] = max($cdata3);
+            $datamax1[3] = max($cdata4);
+            $datamax1[4] = max($cdata5);
+            $datamin1[2] = min($cdata3);
+            $datamin1[3] = min($cdata4);
+            $datamin1[4] = min($cdata5);
         }
 
         $realmax = max($datamax1);
         $realmin = min($datamin1);
 
         if($realmax < 99){$realmax = $realmax + 2;}
-        if($realmax > 1){$realmax = $realmax - 1;}
+        if($realmin > 1){$realmin = $realmin - 1;}
 
         $countrange = 10;
         $dif1 = $realmax - $realmin;
@@ -301,15 +320,10 @@ class Grafik_model extends CI_Model {
         if(isset(explode(".",$dif1range)[1])){
             if(explode(".",$dif1range)[1] >= 1){$dif1range = explode(".",$dif1range)[0] + 1;}
         };
-        $sizeyaxis1[0] = $realmax;
+        $sizeyaxis1[0] = $realmin;
         for ($i=0; $i < $countrange; $i++) { 
-            if($realmax == 0){break;}
-            $realmax = $realmax - $dif1range;
-            if($realmax < 0){
-                $sizeyaxis1[$i+1] = 0;
-            }else{
-                $sizeyaxis1[$i+1] = $realmax;
-            }
+            $realmin = $realmin + $dif1range;
+            $sizeyaxis1[$i+1] = $realmin;
         }
 
         $hasildata['sizeyaxis'] = $sizeyaxis1;
@@ -347,6 +361,14 @@ class Grafik_model extends CI_Model {
             'fan' => 'Fan Speed'
         ];
 
+        $stdlabel = [
+            'humidity' => ['std_humidity'],
+            'feed' => ['std_feed_min','std_feed_max'],
+            'water' => ['std_water_min','std_water_max'],
+            'static_pressure' => ['std_static_press'],
+            'fan' => ['std_fanspeed']
+        ];
+
         if($growval == $growval2){
             $addlabel = ' : Grow Day '.$growval.' ';
         }else{
@@ -354,14 +376,65 @@ class Grafik_model extends CI_Model {
         }
         $glabel = $label[$inidata].$addlabel;
         $linelabel[0] = $label[$inidata];
+        if(isset($stdlabel[$inidata][1])){
+            $linelabel[1] = 'Min Standard Value';
+            $linelabel[2] = 'Max Standard Value';
+        }else{
+            $linelabel[1] = 'Standard Value';
+        }
 
         //Data Utama
         $dataprimary1 = $this->db->query($esql)->result();
+
+        $dtsql = $stdlabel[$inidata][0];
+
+        if(isset($stdlabel[$inidata][1])){
+            $dtsql .= ",".$stdlabel[$inidata][1];
+        }
+
+        $sqlstd = "SELECT ".$dtsql." FROM standar_value WHERE kode_farm = '".$id_user."' AND kode_kandang = '".$id_farm."'";
+
+        $dbstd = $this->db->query($sqlstd);
+
+        if($dbstd->num_rows() > 0  and $dbstd->row_array()[$stdlabel[$inidata][0]] != ''){
+            $dtmin = $dbstd->row_array()[$stdlabel[$inidata][0]];
+            $minex = explode(',',$dtmin);
+
+            if(isset($stdlabel[$inidata][1])){
+                $dtmax = $dbstd->row_array()[$stdlabel[$inidata][1]];
+                $maxex = explode(',',$dtmax);
+            }
+        }else{
+            $minex = [];
+
+            if(isset($stdlabel[$inidata][1])){
+                $maxex = [];
+            }
+        }
 
         $adata = [];
         foreach ($dataprimary1 as $value) {
             $jam = date_format(date_create($value->date_record),"H");
             $adata[] = ''.$value->growday.' - '.$jam;
+
+            $noarray = (int)$value->growday - 1;
+            if($noarray <= count($minex)){
+                $vstdmin = $minex[((int)$value->growday - 1)];
+            }else{
+                $vstdmin = end($minex);;
+            }
+            if(isset($vstdmin)){$fvstdmin = $vstdmin;}else{$fvstdmin = 0;}
+            $stdmin[] = (int)$fvstdmin;
+
+            if(isset($stdlabel[$inidata][1])){
+                if($noarray <= count($minex)){
+                    $vstdmax = $maxex[((int)$value->growday - 1)];
+                }else{
+                    $vstdmax = end($maxex);
+                }
+                if(isset($vstdmax)){$fvstdmax = $vstdmax;}else{$fvstdmax = 0;}
+                $stdmax[] = (int)$fvstdmax;
+            }
         }
         $isigrowday1 = $adata;
 
@@ -369,13 +442,31 @@ class Grafik_model extends CI_Model {
         foreach ($dataprimary1 as $value2) {
             $bdata[] = floatval($value2->isidata);
         }
+
         $isidatagrafik[0] = $bdata;
+        $isidatagrafik[1] = $stdmin;
+
+        if(isset($stdlabel[$inidata][1])){
+            $isidatagrafik[2] = $stdmax;
+        }
+
         //END Data Utama
-        $realmax = max($bdata);
-        $realmin = min($bdata);
+        $datamin1[0] = min($bdata);
+        $datamax1[0] = max($bdata);
+
+        $datamin1[1] = min($stdmin);
+
+        if(isset($stdlabel[$inidata][1])){
+            $datamax1[1] = max($stdmax);
+        }else{
+            $datamax1[1] = max($stdmin);
+        }
+
+        $realmax = max($datamax1);
+        $realmin = min($datamin1);
 
         if($realmax < 99){$realmax = $realmax + 2;}
-        if($realmax > 1){$realmax = $realmax - 1;}
+        if($realmin > 1){$realmin = $realmin - 1;}
 
         $countrange = 10;
         $dif1 = $realmax - $realmin;
@@ -385,15 +476,10 @@ class Grafik_model extends CI_Model {
         if(isset(explode(".",$dif1range)[1])){
             if(explode(".",$dif1range)[1] >= 1){$dif1range = explode(".",$dif1range)[0] + 1;}
         };
-        $sizeyaxis1[0] = $realmax;
+        $sizeyaxis1[0] = $realmin;
         for ($i=0; $i < $countrange; $i++) { 
-            if($realmax == 0){break;}
-            $realmax = $realmax - $dif1range;
-            if($realmax < 0){
-                $sizeyaxis1[$i+1] = 0;
-            }else{
-                $sizeyaxis1[$i+1] = $realmax;
-            }
+            $realmin = $realmin + $dif1range;
+            $sizeyaxis1[$i+1] = $realmin;
         }
 
         $hasildata['sizeyaxis'] = $sizeyaxis1;
@@ -417,7 +503,7 @@ class Grafik_model extends CI_Model {
         $growval2 = $reqdata['growval2'];
 
         $esql  = "SELECT id,growday, date_record,";
-        $esql .= $inidata[0][0]." AS isidata, ".$inidata[0][1]." AS isidata2, ".$inidata[0][2]." AS isidata3";
+        $esql .= $inidata[0][0]." AS isidata, ".$inidata[0][1]." AS isidata2";
         $esql .= " FROM data_record WHERE kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
         $esql .= $esqlperiode;
         $esql .= $esqlgrow;
@@ -425,7 +511,7 @@ class Grafik_model extends CI_Model {
 
         $label = [
             'windspeed' => 'Wind Speed',
-            'req_windspeed' => 'Wind Speed',
+            'req_windspeed' => 'Require Wind Speed',
             'min_windspeed' => 'Minimum Wind Speed',
             'max_windspeed' => 'Maximum Wind Speed'
         ];
@@ -437,43 +523,61 @@ class Grafik_model extends CI_Model {
         }
         $glabel = 'Wind Speed'.$addlabel;
         $linelabel[0] = $label[$inidata[0][0]];
-
+        
         //Data Utama
         $dataprimary1 = $this->db->query($esql)->result();
+
+        $sqlstd = "SELECT std_wind_speed FROM standar_value WHERE kode_farm = '".$id_user."' AND kode_kandang = '".$id_farm."'";
+
+        $dbstd = $this->db->query($sqlstd);
+
+        if($dbstd->num_rows() > 0  and $dbstd->row_array()['std_wind_speed'] != ''){
+            $dtmin = $dbstd->row_array()['std_wind_speed'];
+            $minex = explode(',',$dtmin);
+        }else{
+            $minex = [];
+        }
 
         $adata = [];
         foreach ($dataprimary1 as $value) {
             $jam = date_format(date_create($value->date_record),"H");
             $adata[] = ''.$value->growday.' - '.$jam;
+            $noarray = (int)$value->growday - 1;
+            if($noarray <= count($minex)){
+                $vstdmin = $minex[((int)$value->growday - 1)];
+            }else{
+                $vstdmin = end($minex);
+            }
+            if(isset($vstdmin)){$fvstdmin = $vstdmin;}else{$fvstdmin = 0;}
+            $stdmin[] = (int)$fvstdmin;
         }
         $isigrowday1 = $adata;
 
         $bdata = [];
         $cdata2 = [];
-        $cdata3 = [];
         foreach ($dataprimary1 as $value2) {
             $bdata[] = floatval($value2->isidata);
             $cdata2[] = floatval($value2->isidata2);
-            $cdata3[] = floatval($value2->isidata3);
         }
         $isidatagrafik[0] = $bdata;
         $isidatagrafik[1] = $cdata2;
-        $isidatagrafik[2] = $cdata3;
+        $isidatagrafik[2] = $stdmin;
         $linelabel[1] = $label[$inidata[0][1]];
-        $linelabel[2] = $label[$inidata[0][2]];
+        $linelabel[2] = 'Standard Value';
 
         $datamax1[0] = max($bdata);
         $datamax1[1] = max($cdata2);
-        $datamax1[2] = max($cdata3);
         $datamin1[0] = min($bdata);
         $datamin1[1] = min($cdata2);
-        $datamin1[2] = min($cdata3);
+
+        $datamin1[2] = min($stdmin);
+        $datamax1[2] = max($stdmin);
 
         $realmax = max($datamax1);
         $realmin = min($datamin1);
 
         if($realmax < 99){$realmax = $realmax + 2;}
-        if($realmax > 1){$realmax = $realmax - 1;}
+        if($realmin > 1){$realmin = $realmin - 1;}
 
         $countrange = 10;
         $dif1 = $realmax - $realmin;
@@ -483,15 +587,10 @@ class Grafik_model extends CI_Model {
         if(isset(explode(".",$dif1range)[1])){
             if(explode(".",$dif1range)[1] >= 1){$dif1range = explode(".",$dif1range)[0] + 1;}
         };
-        $sizeyaxis1[0] = $realmax;
+        $sizeyaxis1[0] = $realmin;
         for ($i=0; $i < $countrange; $i++) { 
-            if($realmax == 0){break;}
-            $realmax = $realmax - $dif1range;
-            if($realmax < 0){
-                $sizeyaxis1[$i+1] = 0;
-            }else{
-                $sizeyaxis1[$i+1] = $realmax;
-            }
+            $realmin = $realmin + $dif1range;
+            $sizeyaxis1[$i+1] = $realmin;
         }
 
         $hasildata['sizeyaxis'] = $sizeyaxis1;

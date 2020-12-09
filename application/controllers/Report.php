@@ -185,19 +185,14 @@ class Report extends CI_Controller {
             $dif1 = $realmax - $realmin;
             if($dif1 == $realmax){$dif1range = $dif1 / 10;}
             else{$dif1range = $dif1 / $countrange;}
-            $sizeyaxis1[0] = $realmax;
+            $sizeyaxis1[0] = $realmin;
             if($dif1range < 1){$dif1range = 1;}
             if(isset(explode(".",$dif1range)[1])){
                 if(explode(".",$dif1range)[1] >= 1){$dif1range = explode(".",$dif1range)[0] + 1;}
             };
             for ($i=0; $i < $countrange; $i++) { 
-                if($realmax == 0){break;}
-                $realmax = $realmax - $dif1range;
-                if($realmax < 0){
-                    $sizeyaxis1[$i+1] = 0;
-                }else{
-                    $sizeyaxis1[$i+1] = $realmax;
-                }
+                $realmin = $realmin + $dif1range;
+                $sizeyaxis1[$i+1] = $realmin;
             }
 
             echo json_encode(['status'=>true,'labelgf'=>$isigrowday,'data'=>$isiprimary,'label'=>$xlabel[$fil2],'glabel'=>$glabel,'hourdari1'=>$filhour1,'hourdari2'=>$filhour2,'datasecond'=>$isisecondary,'countsecond'=>$countsecond,'linelabel'=>$linelabel,'difgrow'=>$difgrow,'sizeyaxis1'=>$sizeyaxis1]);
@@ -287,14 +282,14 @@ class Report extends CI_Controller {
             if($dif2 == $datamax2){$dif2range = $dif2 / 10;}
             else{$dif2range = $dif2 / $countrange;}
 
-            $sizeyaxis1[0] = $datamax1;
-            $sizeyaxis2[0] = $datamax2;
+            $sizeyaxis1[0] = $datamin1;
+            $sizeyaxis2[0] = $datamin2;
 
             for ($i=0; $i < $countrange; $i++) { 
-                $datamax1 = $datamax1 - $dif1range;
-                $datamax2 = $datamax2 - $dif2range;
-                $sizeyaxis1[$i+1] = $datamax1;
-                $sizeyaxis2[$i+1] = $datamax2;
+                $datamin1 = $datamin1 + $dif1range;
+                $datamin2 = $datamin2 + $dif2range;
+                $sizeyaxis1[$i+1] = $datamin1;
+                $sizeyaxis2[$i+1] = $datamin2;
             }
 
             echo json_encode(['status'=>true,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari1'=>$filhour1,'hourdari2'=>$filhour2,'linelabel'=>$linelabel,'difgrow'=>$difgrow,'sizeyaxis1'=>$sizeyaxis1,'sizeyaxis2'=>$sizeyaxis2]);

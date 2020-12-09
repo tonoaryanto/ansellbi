@@ -82,7 +82,7 @@ class Setting extends CI_Controller {
 
                 echo json_encode(['status' => true, 'dataSet' => $dataini]);
             }else{
-                echo json_encode(['status' => false,'cek' => $this->db->last_query()]);
+                echo json_encode(['status' => false]);
             }
         }
     }
@@ -164,7 +164,7 @@ class Setting extends CI_Controller {
                             $nop2 .= '.'.$opweek2[$a2];
                         }
                     }
-                    $hasilweek[1] .= ','.$nop;
+                    $hasilweek[1] .= ','.$nop2;
                 }
             } 
         }

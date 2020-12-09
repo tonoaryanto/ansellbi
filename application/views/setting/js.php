@@ -116,7 +116,6 @@ function loaddata(){
 
 function save(){
     var ling = '<?php echo base_url('setting/save_standard_val'); ?>';
-    var cek = validasi();
 
     var isidata = {
             'nama_kandang' : $('[name="kandang"]').val(),
@@ -149,7 +148,7 @@ function save(){
 
     isidata['week'] = isiweek;
 
-    console.log(isiweek);
+    var cek = validasi();
 
     if(cek != 1){
         $.ajax({
@@ -185,13 +184,9 @@ function save(){
 
 function validasi(){
     var cek = 0;
-    var count_week = parseInt($('#inputweek').attr('data-week'));
-
     if($('[name="kandang"]').val() == ''){cek = 1;}
-
-    for (i = 0; i < count_week; i++) {
-        if($('[name="week'+(count_week - i)+'"]').val() == ''){cek = 1;}
-    }
-
+    if($('[name="week1"]').val() == ''){cek = 1;}
+    if($('#inputweek').html() == ''){cek = 1;}
+    
     return cek;
 }

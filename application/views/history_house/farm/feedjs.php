@@ -110,6 +110,26 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
                   spanGaps: true,
                   }];
 
+          var adddt1 = {
+            label: isi.linelabel[1],
+            borderColor: window.chartColors.red,
+            backgroundColor: window.chartColors.red,
+            fill: false,
+            data: isi.data[1],
+            spanGaps: false,
+            };
+          lineChartData['datasets'].push(adddt1);
+                  
+          var adddt2 = {
+            label: isi.linelabel[2],
+            borderColor: window.chartColors.orange,
+            backgroundColor: window.chartColors.orange,
+            fill: false,
+            data: isi.data[2],
+            spanGaps: false,
+            };
+          lineChartData['datasets'].push(adddt2);
+                  
           var ticksy1 = isi.sizeyaxis1;
           var canvas = document.getElementById('chartcanvas'+id)
           var ctx = canvas.getContext('2d');
@@ -282,6 +302,14 @@ function loadtabel() {
                 },
                 {
                     title: "FEED (Kg)",
+                    orderable: false
+                },
+                {
+                    title: "MIN STD VALUE",
+                    orderable: false
+                },
+                {
+                    title: "MAX STD VALUE",
                     orderable: false
                 }
               ]
