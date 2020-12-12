@@ -1,10 +1,8 @@
 <div class="col-md-12" style="margin: auto;">
           <div class="box box-default">
             <div class="box-header with-border">
-              <h3 class="box-title">Form Standard <?php echo $texttitle; ?> </h3>
+              <h3 class="box-title">Form Standard Value ( <?php echo $texttitle; ?> )</h3>
               <div class="box-tools pull-right">
-              <a href="#" class="btn btn-sm btn-danger" onclick="removeweek()" title="Remove Week"><i class="fa fa-minus"></i><span class="hidden-xs">&nbsp;&nbsp;Remove Week</span></a>
-              <a href="#" class="btn btn-sm btn-success" onclick="addweek()" title="Add Week"><i class="fa fa-plus"></i><span class="hidden-xs">&nbsp;&nbsp;Add Week</span></a>
               </div>
             </div>
             <!-- /.box-header -->

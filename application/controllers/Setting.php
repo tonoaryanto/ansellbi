@@ -20,7 +20,7 @@ class Setting extends CI_Controller {
         if(isset($dtitle[1])){$datatitle .= ' '.ucfirst($dtitle[1]);}
         if($form == 'set'){
             $data = [
-                'txthead1'  => 'Input Standard Value',
+                'txthead1'  => 'Input Standard '.$datatitle,
                 'head1'     => 'Setting',
                 'link1'     => '#',
                 'head2'     => 'Standard Value',

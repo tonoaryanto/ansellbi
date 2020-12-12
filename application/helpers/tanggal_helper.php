@@ -52,6 +52,50 @@ function tgl_indo($day){
  return $day_indo;
 }
 
+function tgl_eng($day){
+	$day = explode ("-",$day);
+	switch ($day[1]){
+	case 1:
+	$day[1] = "January";
+	break;
+	case 2:
+	$day[1] = "February";
+	break;
+	case 3:
+	$day[1] = "March";
+	break;
+	case 4:
+	$day[1] = "April";
+	break;
+	case 5:
+	$day[1] = "May";
+	break;
+	case 6:
+	$day[1] = "June";
+	break;
+	case 7:
+	$day[1] = "July";
+	break;
+	case 8:
+	$day[1] = "August";
+	break;
+	case 9:
+	$day[1] = "September";
+	break;
+	case 10:
+	$day[1] = "October";
+	break;
+	case 11:
+	$day[1] = "November";
+	break;
+	case 12:
+	$day[1] = "December";
+	break; 
+	}
+	$day_indo = $day[2]." ".$day[1]." ".$day[0];
+	return $day_indo;
+   }   
+
 function tgl_indo_terbalik($day){
  $day = explode ("-",$day);
  switch ($day[1]){

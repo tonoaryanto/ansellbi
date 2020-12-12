@@ -18,6 +18,34 @@
             <span>History House</span>
           </a>
         </li>
+        <li class="treeview <?php if(isset($head1) and $head1 == 'Egg Weight'){echo 'active menu-open';}?>">
+          <a href="#">
+            <i class="fa fa-cubes"></i>
+            <span>Egg Weight</span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="<?php if(isset($head1) AND $head1 == 'Egg Weight' AND isset($head2) AND $head2 == 'History Egg Weight'){echo 'active';}?>">
+              <a href="<?php echo base_url('egg_weight');?>"><i class="fa fa-circle-o"></i> <span>History Egg Weight</span></a>
+            </li>
+            <li class="<?php if(isset($head1) AND $head1 == 'Report' AND isset($head2) AND $head2 == 'Input Egg Weight'){echo 'active';}?>">
+              <a href="<?php echo base_url('egg_weight/input_data');?>"><i class="fa fa-circle-o"></i> <span>Input Egg Weight</span></a>
+            </li>
+          </ul>
+        </li>
+        <li class="treeview <?php if(isset($head1) and $head1 == 'Body Weight'){echo 'active menu-open';}?>">
+          <a href="#">
+            <i class="fa fa-balance-scale"></i>
+            <span>Body Weight</span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="<?php if(isset($head1) AND $head1 == 'Body Weight' AND isset($head2) AND $head2 == 'History Body Weight'){echo 'active';}?>">
+              <a href="<?php echo base_url('body_weight');?>"><i class="fa fa-circle-o"></i> <span>History Body Weight</span></a>
+            </li>
+            <li class="<?php if(isset($head1) AND $head1 == 'Body Weight' AND isset($head2) AND $head2 == 'Input Body Weight'){echo 'active';}?>">
+              <a href="<?php echo base_url('body_weight/input_data');?>"><i class="fa fa-circle-o"></i> <span>Input Egg weight</span></a>
+            </li>
+          </ul>
+        </li>
         <li class="<?php if(isset($head1) and $head1 == 'History Alarm'){echo 'active';}?>">
           <a href="<?php echo base_url('history_alarm')?>"><i class="fa fa-clock-o"></i> <span>History Alarm</span></a>
         </li>

@@ -261,8 +261,10 @@ class Grafik_model extends CI_Model {
                 $vstdmin = $minex[((int)$value->growday - 1)];
                 $vstdmax = $maxex[((int)$value->growday - 1)];
             }else{
-                $vstdmin = end($minex);
-                $vstdmax = end($maxex);
+                $vstdmin = 0;
+                $vstdmax = 0;
+                // $vstdmin = end($minex);
+                // $vstdmax = end($maxex);
             }
             if(isset($vstdmin)){$fvstdmin = $vstdmin;}else{$fvstdmin = 0;}
             if(isset($vstdmax)){$fvstdmax = $vstdmax;}else{$fvstdmax = 0;}
@@ -421,7 +423,8 @@ class Grafik_model extends CI_Model {
             if($noarray <= count($minex)){
                 $vstdmin = $minex[((int)$value->growday - 1)];
             }else{
-                $vstdmin = end($minex);;
+                $vstdmin = 0;
+                // $vstdmin = end($minex);
             }
             if(isset($vstdmin)){$fvstdmin = $vstdmin;}else{$fvstdmin = 0;}
             $stdmin[] = (int)$fvstdmin;
@@ -430,7 +433,8 @@ class Grafik_model extends CI_Model {
                 if($noarray <= count($minex)){
                     $vstdmax = $maxex[((int)$value->growday - 1)];
                 }else{
-                    $vstdmax = end($maxex);
+                    $vstdmax = 0;
+                    // $vstdmax = end($maxex);
                 }
                 if(isset($vstdmax)){$fvstdmax = $vstdmax;}else{$fvstdmax = 0;}
                 $stdmax[] = (int)$fvstdmax;
@@ -546,7 +550,8 @@ class Grafik_model extends CI_Model {
             if($noarray <= count($minex)){
                 $vstdmin = $minex[((int)$value->growday - 1)];
             }else{
-                $vstdmin = end($minex);
+                $vstdmin = 0;
+                // $vstdmin = end($minex);
             }
             if(isset($vstdmin)){$fvstdmin = $vstdmin;}else{$fvstdmin = 0;}
             $stdmin[] = (int)$fvstdmin;
