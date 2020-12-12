@@ -91,14 +91,14 @@ class Egg_weight extends CI_Controller {
 
         $cekdb = $this->db->query("SELECT * FROM eggweight WHERE id_farm = '".$id_user."' AND kode_kandang = '".$id_farm."' ORDER BY periode DESC, growday DESC LIMIT 1")->row_array();
 
-        if($growval == ''){
+        if($growval == '' and isset($cekdb['growday'])){
             $growval = (int)$cekdb['growday'] - 30;
         }
-        if($growval2 == ''){
+        if($growval2 == '' and isset($cekdb['growday'])){
             $growval2 = (int)$cekdb['growday'] + 1;
         }
 
-        if($periode == ''){
+        if($periode == '' and isset($cekdb['periode'])){
             $periode = (int)$cekdb['periode'];
         }
 
@@ -169,6 +169,12 @@ class Egg_weight extends CI_Controller {
         }
 
         $adata = [];
+        $stdmin = [];
+
+        if(isset($stdlabel[$inidata][1])){
+            $stdmax = [];
+        }
+
         foreach ($dataprimary1 as $value) {
             $adata[] = ''.$value->growday.' - '.$value->periode;
 
@@ -195,15 +201,20 @@ class Egg_weight extends CI_Controller {
         }
         $isigrowday1 = $adata;
 
+        if(empty($isigrowday1[0])){$isigrowday1[0] = 0;}
+
         $bdata = [];
         foreach ($dataprimary1 as $value2) {
             $bdata[] = floatval($value2->isidata);
         }
 
+        if(empty($bdata[0])){$bdata[0] = 0;}
+        if(empty($stdmin[0])){$stdmin[0] = 0;}
         $isidatagrafik[0] = $bdata;
         $isidatagrafik[1] = $stdmin;
 
         if(isset($stdlabel[$inidata][1])){
+            if(empty($stdmax[0])){$stdmax[0] = 0;}
             $isidatagrafik[2] = $stdmax;
         }
 
@@ -234,12 +245,17 @@ class Egg_weight extends CI_Controller {
             if(explode(".",$dif1range)[1] >= 1){$dif1range = explode(".",$dif1range)[0] + 1;}
         };
         $sizeyaxis1[0] = $realmin;
+        if($sizeyaxis1[0] == false){$sizeyaxis1[0] = 0;}
         for ($i=0; $i < $countrange; $i++) { 
             $realmin = $realmin + $dif1range;
             $sizeyaxis1[$i+1] = $realmin;
         }
 
-        $difgrow = $growval2 - $growval;
+        if($growval == ''){
+            $difgrow = 1;
+        }else{
+            $difgrow = $growval2 - $growval;
+        }
 
         echo json_encode(['status'=>true,'periode'=>$periode,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari'=>$growval,'hoursampai'=>$growval2,'linelabel'=>$linelabel,'difgrow'=>$difgrow,'sizeyaxis1' => $sizeyaxis1]);
     }
