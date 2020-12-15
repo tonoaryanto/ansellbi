@@ -174,7 +174,7 @@ class Egg_counter extends CI_Controller {
 
         $label = [
             'allcounter' => 'Egg Counter 1 - 8',
-            'sumegg' => 'Total Egg Counter'
+            'sumegg' => 'Total Egg'
         ];
 
         if($growval == $growval2){
