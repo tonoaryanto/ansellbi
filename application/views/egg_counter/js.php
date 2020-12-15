@@ -19,7 +19,7 @@ function reload_data(){
 
 function getdat(){
     $.ajax({
-        url : '<?php echo base_url('history_house/rdata')?>',
+        url : '<?php echo base_url('egg_counter/rdata')?>',
         type : "GET",
         dataType : "JSON",
         success : function(data)
@@ -34,14 +34,14 @@ function getdat(){
                     $('#shgrow' + i).text(isidata.growday);
                     $('#shtgl' + i).text(isidata.tanggal);
                     $('#shjam' + i).text(isidata.jam);
-                    $('#shreqtemp' + i).text(isidata.req_temp);
-                    $('#shavgtemp' + i).text(isidata.avg_temp);
-                    $('#shhum' + i).text(isidata.humidity);
-                    $('#shwind' + i).text(isidata.wind);
-                    $('#shfeed' + i).text(isidata.feed);
-                    $('#shwater' + i).text(isidata.water);
-                    $('#shpress' + i).text(isidata.static_pressure);
-                    $('#shfan' + i).text(isidata.fan);
+                    $('#shegg1' + i).text(isidata.eggcounter1);
+                    $('#shegg2' + i).text(isidata.eggcounter2);
+                    $('#shegg3' + i).text(isidata.eggcounter3);
+                    $('#shegg4' + i).text(isidata.eggcounter4);
+                    $('#shegg5' + i).text(isidata.eggcounter5);
+                    $('#shegg6' + i).text(isidata.eggcounter6);
+                    $('#shegg7' + i).text(isidata.eggcounter7);
+                    $('#shegg8' + i).text(isidata.eggcounter8);
                 }
             }
         },

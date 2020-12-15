@@ -18,6 +18,12 @@
             <span>History House</span>
           </a>
         </li>
+        <li class="<?php if(isset($head1) and $head1 == 'Egg Counter'){echo 'active menu-open';}?>">
+          <a href="<?php echo base_url('egg_counter');?>">
+            <i class="ion ion-egg"></i>
+            <span>Egg Counter</span>
+          </a>
+        </li>
         <li class="treeview <?php if(isset($head1) and $head1 == 'Egg Weight'){echo 'active menu-open';}?>">
           <a href="#">
             <i class="fa fa-cubes"></i>

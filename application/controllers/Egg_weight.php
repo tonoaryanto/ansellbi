@@ -385,10 +385,9 @@ class Egg_weight extends CI_Controller {
             $kolomdata = [];
             $kolomdata[0]  = $iz + 1;
             $kolomdata[1]  = date_format(date_create($isidata['tanggal']),"d-m-Y");
-            $kolomdata[2]  = $isidata['periode'];
-            $kolomdata[3]  = $isidata['growday'];
-            $kolomdata[4]  = $isidata[$inidata[0]];
-            $kolomdata[5]  = (int)$fvstdmin;;
+            $kolomdata[2]  = $isidata['growday'];
+            $kolomdata[3]  = $isidata[$inidata[0]];
+            $kolomdata[4]  = (int)$fvstdmin;;
 
             if(isset($stdlabel[1])){
                 if($noarray <= count($minex)){
@@ -398,7 +397,7 @@ class Egg_weight extends CI_Controller {
                     // $vstdmax = end($maxex);
                 }
                 if(isset($vstdmax)){$fvstdmax = $vstdmax;}else{$fvstdmax = 0;}
-                $kolomdata[6]  = (int)$fvstdmax;
+                $kolomdata[5]  = (int)$fvstdmax;
             }
 
             $adata[$iz] = $kolomdata;

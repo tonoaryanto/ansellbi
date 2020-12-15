@@ -293,10 +293,6 @@ function loadtabel() {
                     orderable: false
                 },
                 {
-                    title: "PERIOD",
-                    orderable: false
-                },
-                {
                     title: "GROW DAY",
                     orderable: false
                 },
