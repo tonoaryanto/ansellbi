@@ -1,7 +1,7 @@
 <div class="col-md-12" style="margin: auto;">
           <div class="box box-default">
             <div class="box-header with-border">
-              <h3 class="box-title">Form input Egg Weight</h3>
+              <h3 class="box-title">Form input Population</h3>
               <div class="box-tools pull-right">
               </div>
             </div>

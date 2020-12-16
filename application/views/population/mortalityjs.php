@@ -70,7 +70,7 @@ function grafik(){
         'periode' : $('[name="periode"]').val(),
         'growval' : $('[name="tanggal_dari"]').val(),
         'growval2' : $('[name="tanggal_sampai"]').val(),
-        'inidata' : {'0':'afterpopulation','1':'mortality','2':'selection'}
+        'inidata' : {'0':'mortality'}
       };
 
       var tottinggi = 500;
@@ -127,16 +127,6 @@ function grafik(){
             };
           lineChartData['datasets'].push(adddt1);
 
-          var adddt2 = {
-            label: isi.linelabel[2],
-            borderColor: window.chartColors.red,
-            backgroundColor: window.chartColors.red,
-            fill: false,
-            data: isi.data[2],
-            spanGaps: false,
-            };
-          lineChartData['datasets'].push(adddt2);
-                  
           var ticksy1 = isi.sizeyaxis1;
           var canvas = document.getElementById('chartcanvas'+id)
           var ctx = canvas.getContext('2d');
@@ -236,7 +226,7 @@ function loadtabel() {
       'periode' : $('[name="periode"]').val(),
       'growval' : $('[name="tanggal_dari"]').val(),
       'growval2' : $('[name="tanggal_sampai"]').val(),
-      'inidata' : {'0':'afterpopulation','1':'mortality','2':'selection'}
+      'inidata' : {'0':'mortality'}
   };
  
     $.ajax({
@@ -251,11 +241,11 @@ function loadtabel() {
               dom: 'Bfrtip',
               buttons : [
                 {
-                      title : 'Data Population',
+                      title : 'Data Mortality',
                       extend: 'pdfHtml5',
                       orientation: 'landscape',
                       pageSize: 'A4',
-                      filename: 'Data Population',
+                      filename: 'Data Mortality',
                       attr:  {
                         id: 'btnpdf'
                       },
@@ -279,7 +269,7 @@ function loadtabel() {
                             objLayout['paddingLeft'] = function(i) { return 4; };
                             objLayout['paddingRight'] = function(i) { return 4; };
                             doc.content[1].layout = objLayout;
-                            doc.content[1].table.widths = [ '5%', '20%', '15%', '20%', '20%', '20%'];
+                            doc.content[1].table.widths = [ '5%', '20%', '15%', '15%', '15%', '15%', '15%'];
                       }
                 }
               ],
@@ -299,7 +289,7 @@ function loadtabel() {
                     orderable: false
                 },
                 {
-                    title: "POPULATION",
+                    title: "BIRD IN",
                     orderable: false
                 },
                 {
@@ -307,7 +297,11 @@ function loadtabel() {
                     orderable: false
                 },
                 {
-                    title: "SELECTION",
+                    title: "CUMULATIVE MORTALITY (%)",
+                    orderable: false
+                },
+                {
+                    title: "STANDARD VALUE (%)",
                     orderable: false
                 }
               ]

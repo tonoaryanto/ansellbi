@@ -19,6 +19,37 @@ class Population extends CI_Controller {
             'isi'       => 'population/list',
             'cssadd'    => 'population/cssadd',
             'jsadd'     => 'population/jsadd',
+            'isijs'     => 'js'
+        ];
+        $this->load->view('template/wrapper',$data);
+    }
+
+    public function mortality(){
+        $this->konfigurasi->cek_url();
+        $id_user   = $this->session->userdata('id_user');
+        $data = [
+            'txthead1'     => 'Population',
+            'head1'     => 'Population',
+            'link1'     => 'population',
+            'isi'       => 'population/list',
+            'cssadd'    => 'population/cssadd',
+            'jsadd'     => 'population/jsadd',
+            'isijs'     => 'mortalityjs'
+        ];
+        $this->load->view('template/wrapper',$data);
+    }
+
+    public function selection(){
+        $this->konfigurasi->cek_url();
+        $id_user   = $this->session->userdata('id_user');
+        $data = [
+            'txthead1'     => 'Population',
+            'head1'     => 'Population',
+            'link1'     => 'population',
+            'isi'       => 'population/list',
+            'cssadd'    => 'population/cssadd',
+            'jsadd'     => 'population/jsadd',
+            'isijs'     => 'selectionjs'
         ];
         $this->load->view('template/wrapper',$data);
     }
@@ -182,14 +213,14 @@ class Population extends CI_Controller {
 
         $id_user   = $this->session->userdata('id_user');
         $id_farm   = $this->input->post('kandang');
-        $inidata = 'data_body_weight';
+        $inidata = $this->input->post('inidata');
 
         $periode = $this->input->post('periode');
         $growval = $this->input->post('growval');
         $growval2 = $this->input->post('growval2');
 
 
-        $cekdb = $this->db->query("SELECT * FROM bodyweight WHERE id_farm = '".$id_user."' AND kode_kandang = '".$id_farm."' ORDER BY periode DESC, growday DESC LIMIT 1")->row_array();
+        $cekdb = $this->db->query("SELECT * FROM population WHERE id_farm = '".$id_user."' AND kode_kandang = '".$id_farm."' ORDER BY periode DESC, growday DESC LIMIT 1")->row_array();
 
         if($growval == '' and isset($cekdb['growday'])){
             $growval = (int)$cekdb['growday'] - 30;
@@ -211,92 +242,91 @@ class Population extends CI_Controller {
         }
 
         $esql  = "SELECT id,tanggal,growday,periode,";
-        $esql .= $inidata." AS isidata";
-        $esql .= " FROM bodyweight WHERE id_farm = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
+        if($inidata[0] == 'afterpopulation'){
+            $esql .= $inidata[0]." AS isidata,";
+            $esql .= $inidata[1]." AS isidata2,";
+            $esql .= $inidata[2]." AS isidata3";
+        }else{
+            $esql .= $inidata[0]." AS isidata";
+        }
+        $esql .= " FROM population WHERE id_farm = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
         $esql .= $esqlgrow;
         $esql .= $esqlperiode;
         $esql .= "ORDER BY growday ASC";
 
+        $esql2  = "SELECT id,tanggal,growday,periode,birdin";
+        $esql2 .= " FROM population WHERE id_farm = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
+        $esql2 .= "AND keterangan = 'birdin'";
+        $esql2 .= $esqlperiode;
+        $esql2 .= "ORDER BY growday ASC";
+
+        $databirdin = $this->db->query($esql2)->row_array();
+
         $label = [
-            'data_body_weight' => 'Body Weight'
+            'afterpopulation' => 'Population',
+            'mortality' => 'Mortality',
+            'selection' => 'Selection'
         ];
 
-        $stdlabel = [
-            'data_body_weight' => ['std_body_weight_min','std_body_weight_max']
-        ];
+        if($inidata[0] != 'afterpopulation'){
+            $stdlabel = [
+                'mortality' => ['std_mortality'],
+                'selection' => ['std_selection']
+            ];    
+        }
 
         if($growval == $growval2){
             $addlabel = ' : Growday '.$growval.' ';
         }else{
             $addlabel = ' : Growday '.$growval.' - '.$growval2;
         }
-        $glabel = $label[$inidata].$addlabel;
-        $linelabel[0] = $label[$inidata];
-        if(isset($stdlabel[$inidata][1])){
-            $linelabel[1] = 'Min Standard Value';
-            $linelabel[2] = 'Max Standard Value';
-        }else{
+        $glabel = $label[$inidata[0]].$addlabel;
+        $linelabel[0] = $label[$inidata[0]];
+
+        if($inidata[0] != 'afterpopulation'){
             $linelabel[1] = 'Standard Value';
+        }else{
+            $linelabel[1] = $label[$inidata[1]];
+            $linelabel[2] = $label[$inidata[2]];
         }
 
         //Data Utama
         $dataprimary1 = $this->db->query($esql)->result();
 
-        $dtsql = $stdlabel[$inidata][0];
+        if($inidata[0] != 'afterpopulation'){
+            $dtsql = $stdlabel[$inidata[0]][0];
 
-        if(isset($stdlabel[$inidata][1])){
-            $dtsql .= ",".$stdlabel[$inidata][1];
-        }
+            $sqlstd = "SELECT ".$dtsql." FROM standar_value WHERE kode_farm = '".$id_user."' AND kode_kandang = '".$id_farm."'";
 
-        $sqlstd = "SELECT ".$dtsql." FROM standar_value WHERE kode_farm = '".$id_user."' AND kode_kandang = '".$id_farm."'";
+            $dbstd = $this->db->query($sqlstd);
 
-        $dbstd = $this->db->query($sqlstd);
-
-        if($dbstd->num_rows() > 0  and $dbstd->row_array()[$stdlabel[$inidata][0]] != ''){
-            $dtmin = $dbstd->row_array()[$stdlabel[$inidata][0]];
-            $minex = explode(',',$dtmin);
-
-            if(isset($stdlabel[$inidata][1])){
-                $dtmax = $dbstd->row_array()[$stdlabel[$inidata][1]];
-                $maxex = explode(',',$dtmax);
-            }
-        }else{
-            $minex = [];
-
-            if(isset($stdlabel[$inidata][1])){
-                $maxex = [];
+            if($dbstd->num_rows() > 0  and $dbstd->row_array()[$stdlabel[$inidata[0]][0]] != ''){
+                $dtmin = $dbstd->row_array()[$stdlabel[$inidata[0]][0]];
+                $minex = explode(',',$dtmin);
+            }else{
+                $minex = [];
             }
         }
 
         $adata = [];
-        $stdmin = [];
 
-        if(isset($stdlabel[$inidata][1])){
-            $stdmax = [];
+        if($inidata[0] != 'afterpopulation'){
+            $stdmin = [];
         }
 
         foreach ($dataprimary1 as $value) {
-            $adata[] = ''.$value->growday.' - '.$value->periode;
+            $adata[] = ''.$value->growday;
 
-            $noarray = (int)$value->growday - 1;
-            if($noarray <= count($minex)){
-                $vstdmin = $minex[((int)$value->growday - 1)];
-            }else{
-                $vstdmin = 0;
-                // $vstdmin = end($minex);
-            }
-            if(isset($vstdmin)){$fvstdmin = $vstdmin;}else{$fvstdmin = 0;}
-            $stdmin[] = (int)$fvstdmin;
-
-            if(isset($stdlabel[$inidata][1])){
+            if($inidata[0] != 'afterpopulation'){
+                $noarray = (int)$value->growday - 1;
                 if($noarray <= count($minex)){
-                    $vstdmax = $maxex[((int)$value->growday - 1)];
+                    $vstdmin = $minex[((int)$value->growday - 1)];
                 }else{
-                    $vstdmax = 0;
-                    // $vstdmax = end($maxex);
+                    $vstdmin = 0;
+                    // $vstdmin = end($minex);
                 }
-                if(isset($vstdmax)){$fvstdmax = $vstdmax;}else{$fvstdmax = 0;}
-                $stdmax[] = (int)$fvstdmax;
+                if(isset($vstdmin)){$fvstdmin = $vstdmin;}else{$fvstdmin = 0;}
+                $stdmin[] = $fvstdmin;
             }
         }
         $isigrowday1 = $adata;
@@ -304,30 +334,49 @@ class Population extends CI_Controller {
         if(empty($isigrowday1[0])){$isigrowday1[0] = 0;}
         
         $bdata = [];
+        if($inidata[0] == 'afterpopulation'){
+            $cdata = [];
+            $ddata = [];
+            $vmor = 0;
+            $vsel = 0;
+        }else{
+            $vmor2 = 0;
+        }
         foreach ($dataprimary1 as $value2) {
-            $bdata[] = floatval($value2->isidata);
+            if($inidata[0] == 'afterpopulation'){
+                $bdata[] = floatval($value2->isidata);
+                $vmor = $vmor + floatval($value2->isidata2);
+                $vsel = $vsel + floatval($value2->isidata3);
+                $cdata[] = $vmor;
+                $ddata[] = $vsel;
+            }else{
+                $mort = 0;
+                $vmor2 = $vmor2 + floatval($value2->isidata);
+                $mort = ($vmor2 / $databirdin['birdin']) * 100;
+                $bdata[] = $mort;
+            }
         }
 
         if(empty($bdata[0])){$bdata[0] = 0;}
-        if(empty($stdmin[0])){$stdmin[0] = 0;}
         $isidatagrafik[0] = $bdata;
-        $isidatagrafik[1] = $stdmin;
-
-        if(isset($stdlabel[$inidata][1])){
-            if(empty($stdmax[0])){$stdmax[0] = 0;}
-            $isidatagrafik[2] = $stdmax;
-        }
-
-        //END Data Utama
         $datamin1[0] = min($bdata);
         $datamax1[0] = max($bdata);
 
-        $datamin1[1] = min($stdmin);
+        if($inidata[0] != 'afterpopulation'){
+            if(empty($stdmin[0])){$stdmin[0] = 0;}
+            $isidatagrafik[1] = $stdmin;
 
-        if(isset($stdlabel[$inidata][1])){
-            $datamax1[1] = max($stdmax);
-        }else{
+            $datamin1[1] = min($stdmin);
             $datamax1[1] = max($stdmin);
+        }else{
+            if(empty($cdata[0])){$cdata[0] = 0;}
+            $isidatagrafik[1] = $cdata;
+            $datamin1[1] = min($cdata);
+            $datamax1[1] = max($cdata);    
+            if(empty($ddata[0])){$ddata[0] = 0;}
+            $isidatagrafik[2] = $ddata;
+            $datamin1[2] = min($ddata);
+            $datamax1[2] = max($ddata);
         }
 
         $realmax = max($datamax1);
@@ -353,7 +402,11 @@ class Population extends CI_Controller {
         if($growval == ''){
             $difgrow = 1;
         }else{
-            $difgrow = $growval2 - $growval;
+            if(count($isidatagrafik[0]) > 30 ){
+                $difgrow = 2;
+            }else{
+                $difgrow = 1;
+            }
         }
 
         echo json_encode(['status'=>true,'periode'=>$periode,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari'=>$growval,'hoursampai'=>$growval2,'linelabel'=>$linelabel,'difgrow'=>$difgrow,'sizeyaxis1' => $sizeyaxis1]);
@@ -367,7 +420,7 @@ class Population extends CI_Controller {
 
         $id_user   = $this->session->userdata('id_user');
         $id_farm   = $this->input->post('kandang');
-        $inidata = ['data_body_weight'];
+        $inidata = $this->input->post('inidata');
         $growval = $this->input->post('growval');
         $growval2 = $this->input->post('growval2');
         $periode = $this->input->post('periode');
@@ -382,74 +435,87 @@ class Population extends CI_Controller {
         $esqlperiode = "AND periode = '".$periode."' ";
 
         $datsql1  = "SELECT id,tanggal,growday,periode,";
-        $datsql1 .= $inidata[0];
-        $datsql1 .= " FROM bodyweight WHERE id_farm = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
+        if($inidata[0] != 'afterpopulation'){
+            $datsql1 .= $inidata[0];
+        }else{
+            $datsql1 .= $inidata[0].','.$inidata[1].','.$inidata[2];
+        }
+        $datsql1 .= " FROM population WHERE id_farm = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
         $datsql1 .= $esqlperiode;
         $datsql1 .= $esqlgrow;
         $datsql1 .= "ORDER BY growday ASC";
 
+        $datsql2  = "SELECT id,tanggal,growday,periode,birdin";
+        $datsql2 .= " FROM population WHERE id_farm = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
+        $datsql2 .= "AND keterangan = 'birdin' ";
+        $datsql2 .= $esqlgrow;
+        $datsql2 .= "ORDER BY growday ASC";
+
+        
         //Data Utama
         $dataprimary1 = $this->db->query($datsql1);
 
-        $isistdlabel = [
-            'data_body_weight' => ['std_body_weight_min','std_body_weight_max']
-        ];
+        $databirdin = $this->db->query($datsql2)->row_array();
 
-        $stdlabel = $isistdlabel[$inidata[0]];
-        $dtsql = $stdlabel[0];
-
-        if(isset($stdlabel[1])){
-            $dtsql .= ",".$stdlabel[1];
-        }
-
-        $sqlstd = "SELECT ".$dtsql." FROM standar_value WHERE kode_farm = '".$id_user."' AND kode_kandang = '".$id_farm."'";
-        $dbstd = $this->db->query($sqlstd);
-
-        if($dbstd->num_rows() > 0  and $dbstd->row_array()[$stdlabel[0]] != ''){
-            $dtmin = $dbstd->row_array()[$stdlabel[0]];
-            $minex = explode(',',$dtmin);
-
-            if(isset($stdlabel[1])){
-                $dtmax = $dbstd->row_array()[$stdlabel[1]];
-                $maxex = explode(',',$dtmax);
-            }
-        }else{
-            $minex = [];
-
-            if(isset($stdlabel[1])){
-                $maxex = [];
-            }
+        if($inidata[0] != 'afterpopulation'){
+            $isistdlabel = [
+                'mortality' => ['std_mortality'],
+                'selection' => ['std_selection']
+            ];
+            $stdlabel = $isistdlabel[$inidata[0]];
+            $dtsql = $stdlabel[0];
+    
+            $sqlstd = "SELECT ".$dtsql." FROM standar_value WHERE kode_farm = '".$id_user."' AND kode_kandang = '".$id_farm."'";
+            $dbstd = $this->db->query($sqlstd);
+    
+            if($dbstd->num_rows() > 0  and $dbstd->row_array()[$stdlabel[0]] != ''){
+                $dtmin = $dbstd->row_array()[$stdlabel[0]];
+                $minex = explode(',',$dtmin);
+            }else{
+                $minex = [];
+            }    
         }
 
         $adata = [];
+
+        if($inidata[0] != 'afterpopulation'){
+            $vmor2 = 0;
+        }
+
         for ($iz=0; $iz < $dataprimary1->num_rows(); $iz++) {
             $isidata = $dataprimary1->row_array($iz);
 
-            $noarray = (int)$isidata['growday'] - 1;
-            if($noarray <= count($minex)){
-                $vstdmin = $minex[((int)$isidata['growday'] - 1)];
-            }else{
-                $vstdmin = 0;
-                // $vstdmin = end($minex);;
+            if($inidata[0] != 'afterpopulation'){
+                $noarray = (int)$isidata['growday'] - 1;
+                if($noarray <= count($minex)){
+                    $vstdmin = $minex[((int)$isidata['growday'] - 1)];
+                }else{
+                    $vstdmin = 0;
+                    // $vstdmin = end($minex);;
+                }
+                if(isset($vstdmin)){$fvstdmin = $vstdmin;}else{$fvstdmin = 0;}
             }
-            if(isset($vstdmin)){$fvstdmin = $vstdmin;}else{$fvstdmin = 0;}
 
             $kolomdata = [];
             $kolomdata[0]  = $iz + 1;
             $kolomdata[1]  = date_format(date_create($isidata['tanggal']),"d-m-Y");
             $kolomdata[2]  = $isidata['growday'];
-            $kolomdata[3]  = $isidata[$inidata[0]];
-            $kolomdata[4]  = (int)$fvstdmin;
 
-            if(isset($stdlabel[1])){
-                if($noarray <= count($minex)){
-                    $vstdmax = $maxex[((int)$isidata['growday'] - 1)];
-                }else{
-                    $vstdmax = 0;
-                    // $vstdmax = end($maxex);
-                }
-                if(isset($vstdmax)){$fvstdmax = $vstdmax;}else{$fvstdmax = 0;}
-                $kolomdata[5]  = (int)$fvstdmax;
+            if($inidata[0] != 'afterpopulation'){
+                $mort = 0;
+                $vmor2 = $vmor2 + floatval($isidata[$inidata[0]]);
+                $mort  = ($vmor2 / $databirdin['birdin']) * 100;
+                $vstdv = 0;
+                $vstdv = ($fvstdmin * $databirdin['birdin']) / 100;
+    
+                $kolomdata[3]  = $databirdin['birdin'];
+                $kolomdata[4]  = $isidata[$inidata[0]];
+                $kolomdata[5]  = $vmor2.' ('.$mort.')';
+                $kolomdata[6]  = $vstdv.' ('.$fvstdmin.')';
+            }else{
+                $kolomdata[3]  = $isidata[$inidata[0]];    
+                $kolomdata[4]  = $isidata[$inidata[1]];
+                $kolomdata[5]  = $isidata[$inidata[2]];
             }
 
             $adata[$iz] = $kolomdata;
