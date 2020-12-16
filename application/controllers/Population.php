@@ -450,7 +450,7 @@ class Population extends CI_Controller {
         $datsql2  = "SELECT id,tanggal,growday,periode,birdin";
         $datsql2 .= " FROM population WHERE id_farm = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
         $datsql2 .= "AND keterangan = 'birdin' ";
-        $datsql2 .= $esqlgrow;
+        $datsql1 .= $esqlperiode;
         $datsql2 .= "ORDER BY growday ASC";
 
         
