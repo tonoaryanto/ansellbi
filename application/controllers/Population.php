@@ -351,7 +351,7 @@ class Population extends CI_Controller {
                 $ddata[] = $vsel;
             }else{
                 $mort = 0;
-                if(floatval($value2->isidata) != 0){
+                if(floatval($value2->isidata) >= 1){
                     $vmor2 = $vmor2 + floatval($value2->isidata);
                     $mort = ($vmor2 / $databirdin['birdin']) * 100;    
                 }
