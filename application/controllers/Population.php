@@ -480,6 +480,9 @@ class Population extends CI_Controller {
 
         if($inidata[0] != 'afterpopulation'){
             $vmor2 = 0;
+        }else{
+            $vmor = 0;
+            $vsel = 0;
         }
 
         for ($iz=0; $iz < $dataprimary1->num_rows(); $iz++) {
@@ -513,9 +516,11 @@ class Population extends CI_Controller {
                 $kolomdata[5]  = $vmor2.' ('.$mort.')';
                 $kolomdata[6]  = $vstdv.' ('.$fvstdmin.')';
             }else{
-                $kolomdata[3]  = $isidata[$inidata[0]];    
-                $kolomdata[4]  = $isidata[$inidata[1]];
-                $kolomdata[5]  = $isidata[$inidata[2]];
+                $vmor = $vmor + floatval($isidata[$inidata[1]]);
+                $vsel = $vsel + floatval($isidata[$inidata[2]]);
+                $kolomdata[3]  = $isidata[$inidata[0]];
+                $kolomdata[4]  = $isidata[$inidata[1]].' ('.$vmor.')';
+                $kolomdata[5]  = $isidata[$inidata[2]].' ('.$vsel.')';
             }
 
             $adata[$iz] = $kolomdata;

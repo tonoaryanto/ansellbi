@@ -303,11 +303,11 @@ function loadtabel() {
                     orderable: false
                 },
                 {
-                    title: "MORTALITY",
+                    title: "MORTALITY (CUMULATIVE)",
                     orderable: false
                 },
                 {
-                    title: "SELECTION",
+                    title: "SELECTION (CUMULATIVE)",
                     orderable: false
                 }
               ]
