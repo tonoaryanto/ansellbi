@@ -179,8 +179,8 @@ class Population extends CI_Controller {
             $esql3 = "SELECT birdin,population,afterpopulation,keterangan,mortality,selection,tanggal FROM population WHERE id_farm = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY periode DESC, growday DESC LIMIT 1";
             $cekdb3 = $this->db->query($esql3);
             $isidb3 = $cekdb3->row_array();
-            $ttg1   = (int)(date_format(date_create($isidb3['tanggal']),"Y") + date_format(date_create($isidb3['tanggal']),"m") + date_format(date_create($isidb3['tanggal']),"d"));
-            $ttg2  = (int)(date_format(date_create($tanggal),"Y") + date_format(date_create($tanggal),"m") + date_format(date_create($tanggal),"d"));
+            $ttg1   = (int)(date_format(date_create($isidb3['tanggal']),"Y").date_format(date_create($isidb3['tanggal']),"m").date_format(date_create($isidb3['tanggal']),"d"));
+            $ttg2  = (int)(date_format(date_create($tanggal),"Y").date_format(date_create($tanggal),"m").date_format(date_create($tanggal),"d"));
 
             if($cekdb3->num_rows() > 0){
                 if($isidb3['keterangan'] == 'birdin' and $ttg2 == $ttg1){
