@@ -508,8 +508,11 @@ class Population extends CI_Controller {
 
             if($inidata[0] != 'afterpopulation'){
                 $mort = 0;
-                $vmor2 = $vmor2 + floatval($isidata[$inidata[0]]);
-                $mort  = ($vmor2 / $databirdin['birdin']) * 100;
+
+                if(floatval($value2->isidata) >= 1){
+                    $vmor2 = $vmor2 + floatval($isidata[$inidata[0]]);
+                    $mort  = ($vmor2 / $databirdin['birdin']) * 100;
+                }
                 $vstdv = 0;
                 $vstdv = ($fvstdmin * $databirdin['birdin']) / 100;
     
