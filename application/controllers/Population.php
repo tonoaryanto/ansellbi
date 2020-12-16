@@ -319,6 +319,7 @@ class Population extends CI_Controller {
 
             if($inidata[0] != 'afterpopulation'){
                 $noarray = (int)$value->growday - 1;
+                if(empty($minex[0])){$minex[0] = 0;}
                 if($noarray <= count($minex)){
                     $vstdmin = $minex[((int)$value->growday - 1)];
                 }else{
@@ -492,6 +493,7 @@ class Population extends CI_Controller {
 
             if($inidata[0] != 'afterpopulation'){
                 $noarray = (int)$isidata['growday'] - 1;
+                if(empty($minex[0])){$minex[0] = 0;}
                 if($noarray <= count($minex)){
                     $vstdmin = $minex[((int)$isidata['growday'] - 1)];
                 }else{
@@ -515,7 +517,7 @@ class Population extends CI_Controller {
                 }
                 $vstdv = 0;
                 $vstdv = ($fvstdmin * $databirdin['birdin']) / 100;
-    
+
                 $kolomdata[3]  = $databirdin['birdin'];
                 $kolomdata[4]  = $isidata[$inidata[0]];
                 $kolomdata[5]  = $vmor2.' ('.$mort.')';
