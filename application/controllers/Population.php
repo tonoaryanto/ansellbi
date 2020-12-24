@@ -10,12 +10,18 @@ class Population extends CI_Controller {
     }
 
     public function index(){
+        redirect(base_url('population/mortality'));
+    }
+
+    public function mortality(){
         $this->konfigurasi->cek_url();
         $id_user   = $this->session->userdata('id_user');
         $data = [
-            'txthead1'     => 'Population',
+            'txthead1'  => 'Mortality',
             'head1'     => 'Population',
-            'link1'     => 'population',
+            'link1'     => '#',
+            'head2'     => 'Mortality',
+            'link2'     => 'population/mortality',
             'isi'       => 'population/list',
             'cssadd'    => 'population/cssadd',
             'jsadd'     => 'population/jsadd',
@@ -24,13 +30,15 @@ class Population extends CI_Controller {
         $this->load->view('template/wrapper',$data);
     }
 
-    public function mortality(){
+    public function death(){
         $this->konfigurasi->cek_url();
         $id_user   = $this->session->userdata('id_user');
         $data = [
-            'txthead1'     => 'Population',
+            'txthead1'  => 'Death',
             'head1'     => 'Population',
-            'link1'     => 'population',
+            'link1'     => '#',
+            'head2'     => 'Death',
+            'link2'     => 'population/death',
             'isi'       => 'population/list',
             'cssadd'    => 'population/cssadd',
             'jsadd'     => 'population/jsadd',
@@ -39,13 +47,15 @@ class Population extends CI_Controller {
         $this->load->view('template/wrapper',$data);
     }
 
-    public function selection(){
+    public function culling(){
         $this->konfigurasi->cek_url();
         $id_user   = $this->session->userdata('id_user');
         $data = [
-            'txthead1'     => 'Population',
+            'txthead1'  => 'Culling',
             'head1'     => 'Population',
-            'link1'     => 'population',
+            'link1'     => '#',
+            'head2'     => 'Culling',
+            'link2'     => 'population/culling',
             'isi'       => 'population/list',
             'cssadd'    => 'population/cssadd',
             'jsadd'     => 'population/jsadd',
@@ -95,10 +105,11 @@ class Population extends CI_Controller {
             $data = array(
     			'id_farm' => $id_farm,
     			'kode_kandang' => $kode_kandang,
-    			'periode' => $periode,
-    			'growday' => $growday,
                 'tanggal' => $tanggal
 			);
+
+            $data['periode'] = $periode;
+            $data['growday'] = $growday;
 
             $where = $data;
             $cekbird = $this->umum_model->get('population',['id_farm' => $id_farm,'kode_kandang' => $kode_kandang])->num_rows();
@@ -126,17 +137,68 @@ class Population extends CI_Controller {
     }
 
     public function getgrow(){
+        $ck = 0;
+        $dk = 0;
         $id_farm = $this->session->userdata('id_user');
         $kode_kandang = $this->input->post('kandang');
         $tanggal = $this->input->post('tanggal');
 
-        $esql = "SELECT periode,growday,date_record FROM `data_record` WHERE kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY `data_record`.`periode` DESC,`data_record`.`growday` DESC LIMIT 1";
-        $cekdb = $this->db->query($esql);
-
-        $esql2 = "SELECT birdin,population,keterangan,mortality,selection FROM population WHERE tanggal = '".$tanggal."' AND id_farm = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY periode DESC, growday DESC LIMIT 1";
+        $esql2 = "SELECT periode,growday,birdin,population,keterangan,mortality,selection FROM population WHERE tanggal = '".$tanggal."' AND id_farm = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY periode DESC, growday DESC LIMIT 1";
         $cekdb2 = $this->db->query($esql2);
+        $isidb21 = $cekdb2->row_array();
 
+        if($cekdb2->num_rows() > 0){
+            $hasilgrow = $isidb21['growday'];
+            $hasilperiode = $isidb21['periode'];
+            if($isidb21['keterangan'] == 'birdin'){
+                $pp = [false,$isidb21['birdin'],$isidb21['mortality'],$isidb21['selection']];
+            }else{
+                $pp = [true,$isidb21['population'],$isidb21['mortality'],$isidb21['selection']];
+            }
+            echo json_encode(['status'=>true,'growday'=>$hasilgrow,'periode'=>$hasilperiode,'pp'=>$pp]);
+        }else{
+            $esql3 = "SELECT birdin,population,afterpopulation,keterangan,mortality,selection,tanggal FROM population WHERE id_farm = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY periode DESC, growday DESC LIMIT 1";
+            $cekdb3 = $this->db->query($esql3);
+            $isidb3 = $cekdb3->row_array();
+            $ttg1   = (int)(date_format(date_create($isidb3['tanggal']),"Y").date_format(date_create($isidb3['tanggal']),"m").date_format(date_create($isidb3['tanggal']),"d"));
+            $ttg2  = (int)(date_format(date_create($tanggal),"Y").date_format(date_create($tanggal),"m").date_format(date_create($tanggal),"d"));
+
+            if($cekdb3->num_rows() > 0){
+                if($ttg2 > $ttg1){
+                    $pp = [true,$isidb3['afterpopulation'],'',''];
+                }else{
+                    $ck = 1;
+                }
+            }else{
+                $ck = 1;
+            }
+
+            if($ck == 1){
+                $esql = "SELECT periode,growday,date_record FROM `data_record` WHERE date_record like '%".$tanggal."%' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY `data_record`.`periode` DESC,`data_record`.`growday` DESC LIMIT 1";
+                $cekdb = $this->db->query($esql);
+                $isidb = $cekdb->row_array();
+    
+                if($cekdb->num_rows() > 0){
+                    $diff=date_diff(date_create($isidb['date_record']),date_create($tanggal));
+                    $difgrow = (int)$isidb['growday'] + (int)$diff->format("%R%a");    
+                    if($difgrow < 1){
+                        
+                    }
+                }else{
+                    $dk = 1;
+                }
+            }
+
+            if($dk == 1){
+                $pp = [false,'','',''];
+            }
+
+            echo json_encode(['status'=>true,'growday'=>$hasilgrow,'periode'=>$hasilperiode,'pp'=>$pp]);
+        }
+
+        /*
         if($cekdb->num_rows() > 0){
+            $esql = "SELECT periode,growday,date_record FROM `data_record` WHERE kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY `data_record`.`periode` DESC,`data_record`.`growday` DESC LIMIT 1";
             $isidb = $cekdb->row_array();
             $diff=date_diff(date_create($isidb['date_record']),date_create($tanggal));
             $difgrow = (int)$isidb['growday'] + (int)$diff->format("%R%a");
@@ -168,6 +230,7 @@ class Population extends CI_Controller {
             $cq = 0;
         }
 
+
         if($cekdb2->num_rows() > 0){
             $isidb2 = $cekdb2->row_array();
             if($isidb2['keterangan'] == 'birdin'){
@@ -175,6 +238,8 @@ class Population extends CI_Controller {
             }else{
                 $pp = [true,$isidb2['population'],$isidb2['mortality'],$isidb2['selection']];
             }
+            $hasilgrow = $isidb2['growday'];
+            $hasilperiode = $isidb2['periode'];
         }else{
             $esql3 = "SELECT birdin,population,afterpopulation,keterangan,mortality,selection,tanggal FROM population WHERE id_farm = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY periode DESC, growday DESC LIMIT 1";
             $cekdb3 = $this->db->query($esql3);
@@ -197,12 +262,12 @@ class Population extends CI_Controller {
             }
         }
 
-
         if($cq == 1){
             echo json_encode(['status'=>true,'growday'=>$hasilgrow,'periode'=>$hasilperiode,'pp'=>$pp]);
         }else{
             echo json_encode(['status'=>false,'pp'=>$pp]);
         }
+        */
     }
 
     public function grafik(){
@@ -263,9 +328,9 @@ class Population extends CI_Controller {
         $databirdin = $this->db->query($esql2)->row_array();
 
         $label = [
-            'afterpopulation' => 'Population',
-            'mortality' => 'Mortality',
-            'selection' => 'Selection'
+            'afterpopulation' => 'Mortality',
+            'mortality' => 'Death',
+            'selection' => 'Culling'
         ];
 
         if($inidata[0] != 'afterpopulation'){
@@ -345,17 +410,15 @@ class Population extends CI_Controller {
         }
         foreach ($dataprimary1 as $value2) {
             if($inidata[0] == 'afterpopulation'){
-                $bdata[] = floatval($value2->isidata);
                 $vmor = $vmor + floatval($value2->isidata2);
                 $vsel = $vsel + floatval($value2->isidata3);
+                $bdata[] = $vmor + $vsel;
                 $cdata[] = $vmor;
                 $ddata[] = $vsel;
             }else{
                 $mort = 0;
-                if(floatval($value2->isidata) >= 1){
-                    $vmor2 = $vmor2 + floatval($value2->isidata);
-                    $mort = ($vmor2 / $databirdin['birdin']) * 100;    
-                }
+                $vmor2 = $vmor2 + floatval($value2->isidata);
+                $mort = ($vmor2 / $databirdin['birdin']) * 100;    
                 $bdata[] = $mort;
             }
         }
@@ -511,10 +574,8 @@ class Population extends CI_Controller {
             if($inidata[0] != 'afterpopulation'){
                 $mort = 0;
 
-                if(floatval($isidata[$inidata[0]]) >= 1){
-                    $vmor2 = $vmor2 + floatval($isidata[$inidata[0]]);
-                    $mort  = ($vmor2 / $databirdin['birdin']) * 100;
-                }
+                $vmor2 = $vmor2 + floatval($isidata[$inidata[0]]);
+                $mort  = ($vmor2 / $databirdin['birdin']) * 100;
                 $vstdv = 0;
                 $vstdv = ($fvstdmin * $databirdin['birdin']) / 100;
 
@@ -525,7 +586,7 @@ class Population extends CI_Controller {
             }else{
                 $vmor = $vmor + floatval($isidata[$inidata[1]]);
                 $vsel = $vsel + floatval($isidata[$inidata[2]]);
-                $kolomdata[3]  = $isidata[$inidata[0]];
+                $kolomdata[3]  = ($isidata[$inidata[1]] + $isidata[$inidata[2]]).' ('.($vmor + $vsel).')';
                 $kolomdata[4]  = $isidata[$inidata[1]].' ('.$vmor.')';
                 $kolomdata[5]  = $isidata[$inidata[2]].' ('.$vsel.')';
             }

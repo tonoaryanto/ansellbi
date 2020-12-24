@@ -54,14 +54,14 @@ class Egg_weight extends CI_Controller {
             $data = array(
     			'id_farm' => $id_farm,
     			'kode_kandang' => $kode_kandang,
-    			'periode' => $periode,
-    			'growday' => $growday,
                 'tanggal' => $tanggal
 			);
 
             $where = $data;
             $data['data_egg_weight'] = $input1;
-        
+            $data['periode'] = $periode;
+            $data['growday'] = $growday;
+    
             $cekdb = $this->umum_model->get('eggweight',$where)->num_rows();
             if($cekdb > 0){
                 $this->umum_model->update('eggweight',$data,$where);

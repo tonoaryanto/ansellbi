@@ -1,6 +1,20 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');?>
 $(document).ready(function(){
     selectdata_kandang();
+
+  $('[name="cekbirdin"]')
+  .iCheck({
+    checkboxClass: 'icheckbox_minimal-blue'
+  })
+  .on('ifChecked', function(event){
+    $('#inputbird').show();
+    $('#inputpopulation').hide();
+  })
+  .on('ifUnchecked', function(event){
+    $('#inputbird').hide();
+    $('#inputpopulation').show();
+  });
+
 });
 
 function selectdata_kandang(){
@@ -100,6 +114,7 @@ function getgrow(){
         $('[name="periode"]').removeAttr('disabled');
         $('[name="growday"]').removeAttr('disabled');
         if(data.pp[0] == true){
+          $('[name="cekbirdin"]').iCheck('uncheck');
           $('#inputpopulation').show();
           $('[name="population"]')
           .val(data.pp[1])
@@ -107,6 +122,8 @@ function getgrow(){
           $('#inputbird').hide();
           $('[name="birdin"]').val('');
         }else{
+          $('#birdinput').show();
+          $('[name="cekbirdin"]').iCheck('check');
           $('#inputpopulation').hide();
           $('#inputbird').show();
           $('[name="birdin"]').val(data.pp[1]);

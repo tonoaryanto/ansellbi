@@ -293,11 +293,11 @@ function loadtabel() {
                     orderable: false
                 },
                 {
-                    title: "SELECTION",
+                    title: "CULLING",
                     orderable: false
                 },
                 {
-                    title: "CUMULATIVE SELECTION (%)",
+                    title: "CUMULATIVE CULLING (%)",
                     orderable: false
                 },
                 {

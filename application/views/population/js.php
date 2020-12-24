@@ -251,11 +251,11 @@ function loadtabel() {
               dom: 'Bfrtip',
               buttons : [
                 {
-                      title : 'Data Population',
+                      title : 'Data Mortality',
                       extend: 'pdfHtml5',
                       orientation: 'landscape',
                       pageSize: 'A4',
-                      filename: 'Data Population',
+                      filename: 'Data Mortality',
                       attr:  {
                         id: 'btnpdf'
                       },
@@ -299,15 +299,15 @@ function loadtabel() {
                     orderable: false
                 },
                 {
-                    title: "POPULATION",
-                    orderable: false
-                },
-                {
                     title: "MORTALITY (CUMULATIVE)",
                     orderable: false
                 },
                 {
-                    title: "SELECTION (CUMULATIVE)",
+                    title: "DEATH (CUMULATIVE)",
+                    orderable: false
+                },
+                {
+                    title: "CULLING (CUMULATIVE)",
                     orderable: false
                 }
               ]

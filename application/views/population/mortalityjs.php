@@ -293,11 +293,11 @@ function loadtabel() {
                     orderable: false
                 },
                 {
-                    title: "MORTALITY",
+                    title: "DEATH",
                     orderable: false
                 },
                 {
-                    title: "CUMULATIVE MORTALITY (%)",
+                    title: "CUMULATIVE DEATH (%)",
                     orderable: false
                 },
                 {

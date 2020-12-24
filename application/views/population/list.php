@@ -3,9 +3,9 @@
     <div class="nav-tabs-custom">
       <ul class="nav nav-tabs">
         <li class=""><a href="<?php echo base_url('population/input_data');?>" class="btn btn-sm btn-success" title="Input Population"><i class="fa fa-plus"></i><span class="hidden-xs">&nbsp;&nbsp;Input Population</span></a></li>
-        <li class="<?php if($this->uri->segment(2) == ''){ echo 'active';} ?>"><a href="<?php echo base_url('population') ?>">Population</a></li>
         <li class="<?php if($this->uri->segment(2) == 'mortality'){ echo 'active';} ?>"><a href="<?php echo base_url('population/mortality') ?>">Mortality</a></li>
-        <li class="<?php if($this->uri->segment(2) == 'selection'){ echo 'active';} ?>"><a href="<?php echo base_url('population/selection') ?>">Selection</a></li>
+        <li class="<?php if($this->uri->segment(2) == 'death'){ echo 'active';} ?>"><a href="<?php echo base_url('population/death') ?>">Death</a></li>
+        <li class="<?php if($this->uri->segment(2) == 'culling'){ echo 'active';} ?>"><a href="<?php echo base_url('population/culling') ?>">Culling</a></li>
       </ul>
       <div class="tab-content">
         <div class="tab-pane active">
