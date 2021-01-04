@@ -106,7 +106,7 @@ class Egg_counter extends CI_Controller {
         if($sensor == 'history'){$urljs = 'egg_counter-farm-history.js';}
 
         $inidatafarm = $this->umum_model->get('data_kandang',"id = '".$idfarm."' AND kode_perusahaan = '".$id_user."'")->row_array();
-        $iniperiode = $this->umum_model->get("(SELECT periode,growday FROM data_eggcounter WHERE kode_kandang = '".$idfarm."' AND kode_perusahaan = '".$id_user."' ORDER BY periode DESC,growday DESC LIMIT 1) as data")->row_array();
+        $iniperiode = $this->umum_model->get("(SELECT periode,growday FROM data_eggcounter WHERE keterangan = 'ok' AND kode_kandang = '".$idfarm."' AND kode_perusahaan = '".$id_user."' ORDER BY periode DESC,growday DESC LIMIT 1) as data")->row_array();
         if ($inidatafarm['nama_kandang'] == '') {echo 'Silent is gold';return;}
 
         if($iniperiode['periode'] != ''){
@@ -167,7 +167,7 @@ class Egg_counter extends CI_Controller {
         }else{
         $esql .= $inidata." AS isidata";
         }
-        $esql .= " FROM data_eggcounter WHERE kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
+        $esql .= " FROM data_eggcounter WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
         $esql .= $esqlperiode;
         $esql .= $esqlgrow;
         $esql .= "ORDER BY date_record ASC";
@@ -202,7 +202,7 @@ class Egg_counter extends CI_Controller {
         $dataprimary1 = $this->db->query($esql)->result();
 
         if($inidata == 'sumegg'){
-            $sqlstd = "SELECT std_egg_counter FROM standar_value WHERE kode_farm = '".$id_user."' AND kode_kandang = '".$id_farm."'";
+            $sqlstd = "SELECT std_egg_counter FROM standar_value WHERE keterangan = 'ok' AND kode_farm = '".$id_user."' AND kode_kandang = '".$id_farm."'";
 
             $dbstd = $this->db->query($sqlstd);
 
@@ -361,7 +361,7 @@ class Egg_counter extends CI_Controller {
         $esqlperiode = "AND periode = '".$periode."' ";
 
         $datsql1  = "SELECT id,date_record,growday,periode,eggcounter1,eggcounter2,eggcounter3,eggcounter4,eggcounter5,eggcounter6,eggcounter7,eggcounter8,sumegg";
-        $datsql1 .= " FROM data_eggcounter WHERE kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
+        $datsql1 .= " FROM data_eggcounter WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
         $datsql1 .= $esqlperiode;
         $datsql1 .= $esqlgrow;
         $datsql1 .= "ORDER BY growday ASC";

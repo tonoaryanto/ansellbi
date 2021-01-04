@@ -196,7 +196,7 @@ class Grafik_model extends CI_Model {
             }else{
             $esql .= "req_temp AS isidata,".$inidata." AS isidata2";
             }
-            $esql .= " FROM data_record WHERE kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
+            $esql .= " FROM data_record WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
             $esql .= $esqlperiode;
             $esql .= $esqlgrow;
             $esql .= "ORDER BY date_record ASC";
@@ -253,6 +253,9 @@ class Grafik_model extends CI_Model {
         }
 
         $adata = [];
+        $stdmin = [];
+        $stdmax = [];
+
         foreach ($dataprimary1 as $value) {
             $jam = date_format(date_create($value->date_record),"H");
             $adata[] = ''.$value->growday.' - '.$jam;
@@ -275,6 +278,12 @@ class Grafik_model extends CI_Model {
 
         $bdata = [];
         $cdata2 = [];
+        if($inidata == 'alltemp'){
+            $cdata3 = [];
+            $cdata4 = [];
+            $cdata5 = [];
+        }
+
         foreach ($dataprimary1 as $value2) {
             $bdata[] = floatval($value2->isidata);
             $cdata2[] = floatval($value2->isidata2);
@@ -285,14 +294,23 @@ class Grafik_model extends CI_Model {
             }
         }
 
+        if(empty($bdata[0])){$bdata[0] = 0;}
+        if(empty($stdmin[0])){$stdmin[0] = 0;}
+        if(empty($stdmax[0])){$stdmax[0] = 0;}
+        if(empty($cdata2[0])){$cdata2[0] = 0;}
+
         $isidatagrafik[0] = $bdata;
         $isidatagrafik[1] = $stdmin;
         $isidatagrafik[2] = $stdmax;
         $isidatagrafik[3] = $cdata2;
         if($inidata == 'alltemp'){
-        $isidatagrafik[4] = $cdata3;
-        $isidatagrafik[5] = $cdata4;
-        $isidatagrafik[6] = $cdata5;
+            if(empty($cdata3[0])){$cdata3[0] = 0;}
+            if(empty($cdata4[0])){$cdata4[0] = 0;}
+            if(empty($cdata5[0])){$cdata5[0] = 0;}
+
+            $isidatagrafik[4] = $cdata3;
+            $isidatagrafik[5] = $cdata4;
+            $isidatagrafik[6] = $cdata5;
         }
 
         $datamax1[0] = max($cdata2);
@@ -350,7 +368,7 @@ class Grafik_model extends CI_Model {
 
         $esql  = "SELECT id,growday, date_record,";
         $esql .= $inidata." AS isidata";
-        $esql .= " FROM data_record WHERE kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
+        $esql .= " FROM data_record WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
         $esql .= $esqlperiode;
         $esql .= $esqlgrow;
         $esql .= "ORDER BY date_record ASC";        
@@ -447,10 +465,14 @@ class Grafik_model extends CI_Model {
             $bdata[] = floatval($value2->isidata);
         }
 
+        if(empty($bdata[0])){$bdata[0] = 0;}
+        if(empty($stdmin[0])){$stdmin[0] = 0;}
+
         $isidatagrafik[0] = $bdata;
         $isidatagrafik[1] = $stdmin;
 
         if(isset($stdlabel[$inidata][1])){
+            if(empty($stdmax[0])){$stdmax[0] = 0;}
             $isidatagrafik[2] = $stdmax;
         }
 
@@ -508,7 +530,7 @@ class Grafik_model extends CI_Model {
 
         $esql  = "SELECT id,growday, date_record,";
         $esql .= $inidata[0][0]." AS isidata, ".$inidata[0][1]." AS isidata2";
-        $esql .= " FROM data_record WHERE kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
+        $esql .= " FROM data_record WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
         $esql .= $esqlperiode;
         $esql .= $esqlgrow;
         $esql .= "ORDER BY date_record ASC";
@@ -564,6 +586,11 @@ class Grafik_model extends CI_Model {
             $bdata[] = floatval($value2->isidata);
             $cdata2[] = floatval($value2->isidata2);
         }
+
+        if(empty($bdata[0])){$bdata[0] = 0;}
+        if(empty($cdata2[0])){$cdata2[0] = 0;}
+        if(empty($stdmin[0])){$stdmin[0] = 0;}
+
         $isidatagrafik[0] = $bdata;
         $isidatagrafik[1] = $cdata2;
         $isidatagrafik[2] = $stdmin;

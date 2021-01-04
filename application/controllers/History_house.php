@@ -112,7 +112,7 @@ class History_house extends CI_Controller {
         if($sensor == 'fan'){$urljs = 'history_house-farm-fanjs.js';}
 
         $inidatafarm = $this->umum_model->get('data_kandang',"id = '".$idfarm."' AND kode_perusahaan = '".$id_user."'")->row_array();
-        $iniperiode = $this->umum_model->get("(SELECT periode,growday FROM data_record WHERE kode_kandang = '".$idfarm."' AND kode_perusahaan = '".$id_user."' ORDER BY periode DESC,growday DESC LIMIT 1) as data")->row_array();
+        $iniperiode = $this->umum_model->get("(SELECT periode,growday FROM data_record WHERE keterangan = 'ok' AND kode_kandang = '".$idfarm."' AND kode_perusahaan = '".$id_user."' ORDER BY periode DESC,growday DESC LIMIT 1) as data")->row_array();
         if ($inidatafarm['nama_kandang'] == '') {echo 'Silent is gold';return;}
 
         if($iniperiode['periode'] != ''){
@@ -165,7 +165,6 @@ class History_house extends CI_Controller {
             }else{
                 $esqlgrow = "AND growday BETWEEN '".$growval."' AND '".$growval2."' ";
             }
-
         }
 
         $esqlperiode = "AND periode = '".$periode."' ";
@@ -189,7 +188,7 @@ class History_house extends CI_Controller {
 
         $sizeyaxis1 = $hasildata['sizeyaxis'];
 
-        echo json_encode([
+        json_encode([
             'status'    => true,
             'labelgf'   => $isigrowday1,
             'data'      => $isidatagrafik,
@@ -412,7 +411,7 @@ class History_house extends CI_Controller {
 
         $datsql1  = "SELECT id,growday, date_record";
         $datsql1 .= ",req_temp,".$inidata[1].",".$inidata[2].",".$inidata[3].",".$inidata[4].",".$inidata[5].",".$inidata[0];
-        $datsql1 .= " FROM data_record WHERE kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
+        $datsql1 .= " FROM data_record WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
         $datsql1 .= $esqlperiode;
         $datsql1 .= $esqlgrow;
         $datsql1 .= "ORDER BY date_record ASC";
@@ -474,7 +473,7 @@ class History_house extends CI_Controller {
     {
         $datsql1  = "SELECT id,growday, date_record,";
         $datsql1 .= $inidata[0];
-        $datsql1 .= " FROM data_record WHERE kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
+        $datsql1 .= " FROM data_record WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
         $datsql1 .= $esqlperiode;
         $datsql1 .= $esqlgrow;
         $datsql1 .= "ORDER BY date_record ASC";
@@ -558,7 +557,7 @@ class History_house extends CI_Controller {
 
         $datsql1  = "SELECT id,growday, date_record,";
         $datsql1 .= $inidata1.",".$inidata2;
-        $datsql1 .= " FROM data_record WHERE kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
+        $datsql1 .= " FROM data_record WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
         $datsql1 .= $esqlperiode;
         $datsql1 .= $esqlgrow;
         $datsql1 .= "ORDER BY date_record ASC";
