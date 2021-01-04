@@ -115,6 +115,10 @@ class History_house extends CI_Controller {
         $iniperiode = $this->umum_model->get("(SELECT periode,growday FROM data_record WHERE keterangan = 'ok' AND kode_kandang = '".$idfarm."' AND kode_perusahaan = '".$id_user."' ORDER BY periode DESC,growday DESC LIMIT 1) as data")->row_array();
         if ($inidatafarm['nama_kandang'] == '') {echo 'Silent is gold';return;}
 
+        $hgrowchange = 0;
+        $cekgrowchange = $this->umum_model->get("(SELECT periode,growday FROM data_record WHERE keterangan = 'growchange' AND kode_kandang = '".$idfarm."' AND kode_perusahaan = '".$id_user."' ORDER BY periode DESC,growday DESC LIMIT 1) as data")->num_rows();
+        if($cekgrowchange > 0){$hgrowchange = 1;}
+
         if($iniperiode['periode'] != ''){
             $setperiode = $iniperiode['periode'];
         }else{
@@ -139,7 +143,8 @@ class History_house extends CI_Controller {
             'idfarm'    => $idfarm,
             'iniperiode' => $setperiode,
             'inigrow' => $setgrow,
-            'urljs' => $urljs
+            'urljs' => $urljs,
+            'cekgrowchange' => $hgrowchange
         ];
         $this->load->view('template/wrapper',$data);
     }
@@ -188,7 +193,7 @@ class History_house extends CI_Controller {
 
         $sizeyaxis1 = $hasildata['sizeyaxis'];
 
-        json_encode([
+        echo json_encode([
             'status'    => true,
             'labelgf'   => $isigrowday1,
             'data'      => $isidatagrafik,

@@ -1,4 +1,18 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+<div class="modal fade" id="ckgwd" data-ini="<?php echo $cekgrowchange?>">
+  <div class="modal-dialog">
+    <div class="modal-content" style="background:#0000;">
+      <div class="modal-header">
+        <a class="close btn btn-default btn-sm" aria-label="Close" href="../..">Back</a>
+        <h4 class="modal-title" style="color:#fff;">Warning!!</h4>
+      </div>    
+      <div class="modal-body" style="color:#fff;">
+        <h4>Terjadi perbedaan growday antara sistem ABI dengan kontroler. Mohon untuk disesuaikan terlebih dahulu sebelum memulai proses ini. silahkan tekan tombol <span class="btn btn-default btn-xs">Back</span> untuk kembali</h4>
+      </div>
+    </div>
+  </div>
+</div>
+</span>
 <div class="row">
   <div class="col-sm-12">
     <div class="nav-tabs-custom">
