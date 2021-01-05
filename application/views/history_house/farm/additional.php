@@ -22,6 +22,7 @@ $(document).ready(function(){
     $('#ckgwd').modal({backdrop: 'static', keyboard: false})
 
     if(cekdt == 1){
+        swal.close();
         $('#ckgwd').modal('show');
     }
 });

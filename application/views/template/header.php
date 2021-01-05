@@ -84,6 +84,9 @@
             <ul class="dropdown-menu dropmenu" style="width: 100px;">
             	<li class="hidden-lg"><p style="text-align: center;padding:5px 10px;border-bottom: 1px solid #ddd;"><b><?php echo $this->session->userdata('nama_user');?></b> </p></li>
               <li><a href="<?php echo base_url('setting/standard_value'); ?>" id=""><i class="fa fa-signal"></i> Standar Value</a></li>
+              <?php if($this->konfigurasi->get_growchange() == 1){ ?>
+              <li><a href="<?php echo base_url('setting/growchange'); ?>" id=""><i class="fa fa-clone"></i> Growday Change</a></li>
+              <?php } ?>
               <li style="padding:0px 10px;"><hr style="border-top:1px solid #888;margin:5px 0px;"></li>
               <li><a href="#" id="logout"><i class="fa fa-power-off"></i> Log out</a></li>
             </ul>

@@ -27,8 +27,8 @@ class Setting extends CI_Controller {
                 'link2'     => 'setting/standard_value',
                 'head3'     => 'Form',
                 'link3'     => '#',
-                'isi'       => 'setting/form',
-                'cssadd'    => 'setting/cssadd',
+                'isi'       => 'setting/standard_value/form',
+                'cssadd'    => 'setting/standard_value/cssadd',
                 'jsadd'     => $this->setjs($dataform),
                 'texttitle' => $datatitle,
                 'tpval' => $this->tpvalue($dataform)
@@ -41,9 +41,9 @@ class Setting extends CI_Controller {
                 'link1'     => '#',
                 'head2'     => 'Standard Value',
                 'link2'     => 'setting/standard_value',
-                'isi'       => 'setting/list',
-                'cssadd'    => 'setting/cssadd',
-                'jsadd'     => 'setting/jsadd',
+                'isi'       => 'setting/standard_value/list',
+                'cssadd'    => 'setting/standard_value/cssadd',
+                'jsadd'     => 'setting/standard_value/jsadd',
             ];
             $this->load->view('template/wrapper',$data);
         }
@@ -215,20 +215,97 @@ class Setting extends CI_Controller {
     private function setjs($data)
     {
         $ini = [
-            'temperature' => 'setting/jsadd2',
-            'humidity' => 'setting/jsadd',
-            'speed_fan' => 'setting/jsadd',
-            'wind_speed' => 'setting/jsadd',
-            'body_weight' => 'setting/jsadd2',
-            'egg_weight' => 'setting/jsadd2',
-            'egg_counter' => 'setting/jsadd',
-            'water' => 'setting/jsadd2',
-            'feed' => 'setting/jsadd2',
-            'static_pressure' =>'setting/jsadd',
-            'mortality' => 'setting/jsadd',
-            'selections' => 'setting/jsadd'
+            'temperature' => 'setting/standard_value/jsadd2',
+            'humidity' => 'setting/standard_value/jsadd',
+            'speed_fan' => 'setting/standard_value/jsadd',
+            'wind_speed' => 'setting/standard_value/jsadd',
+            'body_weight' => 'setting/standard_value/jsadd2',
+            'egg_weight' => 'setting/standard_value/jsadd2',
+            'egg_counter' => 'setting/standard_value/jsadd',
+            'water' => 'setting/standard_value/jsadd2',
+            'feed' => 'setting/standard_value/jsadd2',
+            'static_pressure' =>'setting/standard_value/jsadd',
+            'mortality' => 'setting/standard_value/jsadd',
+            'selections' => 'setting/standard_value/jsadd'
         ];
 
         return $ini[$data];
+    }
+
+    public function growchange(){
+        $this->konfigurasi->cek_url();
+        $id_user   = $this->session->userdata('id_user');
+
+        $data = [
+            'txthead1'     => 'Growday Change',
+            'head1'     => 'Setting',
+            'link1'     => '#',
+            'head2'     => 'Growday Change',
+            'link2'     => 'setting/growchange',
+            'isi'       => 'setting/growchange/list',
+            'cssadd'    => 'setting/growchange/cssadd',
+            'jsadd'     => 'setting/growchange/jsadd',
+        ];
+        $this->load->view('template/wrapper',$data);
+    }
+
+    public function data_change_kandang(){
+        $cek_sess = $this->konfigurasi->cek_js();
+        if ($cek_sess == 0) {
+            echo json_encode(['sess' => $cek_sess]);
+        }else{
+            $id_user = $this->session->userdata('id_user');
+
+            $data1 = $this->db->query("SELECT data_record.kode_kandang As id,data_kandang.nama_kandang As text FROM `data_record` LEFT JOIN data_kandang ON data_record.kode_kandang = data_kandang.id WHERE data_record.kode_perusahaan = '".$id_user."' AND data_record.keterangan = 'growchange' GROUP BY data_record.kode_kandang ORDER BY data_record.kode_kandang ASC")->result();
+
+            $dataini1 = [array('id'   => '','text' => '',)];
+            foreach ($data1 as $data1) {
+                $dataini = [
+                    'id'   => $data1->id,
+                    'text' => $data1->text,
+                ];
+                $dataini1[] = $dataini;
+            }
+
+            echo json_encode($dataini1);
+        }
+    }
+
+    public function load_growchange_val(){
+        $cek_sess = $this->konfigurasi->cek_js();
+        if ($cek_sess == 0) {
+            echo json_encode(['sess' => $cek_sess]);
+        }else{
+            $id_farm = $this->session->userdata('id_user');
+            $kode_kandang = $this->input->post('nama_kandang');
+            $tpval = $this->input->post('tpval');
+            $datasave = [
+                'kode_farm' => $id_farm,
+                'kode_kandang' => $kode_kandang,
+            ];
+            $inidb = $this->umum_model->get('standar_value',$datasave);
+            $cekdb = $inidb->num_rows();
+            $isidb = $inidb->row_array();
+            $setdt = $this->tpvalue2($tpval);
+            $iniweek = explode(',',$isidb[$setdt[0]]);
+            if($cekdb > 0 and $iniweek[0] != ''){
+                $iniweek = explode(',',$isidb[$setdt[0]]);
+                $modweek = (count($iniweek) % 7);
+                if($modweek > 0){$addweek = 1;}else{$addweek = 0;}
+                $totweek = (int)((count($iniweek) - $modweek) / 7) + $addweek;
+                $dataini = [
+                    'dataweek' => $iniweek,
+                    'countweek' => $totweek
+                ];
+
+                if(isset($setdt[1])){
+                    $dataini['dataweek2'] = explode(',',$isidb[$setdt[1]]);
+                }
+
+                echo json_encode(['status' => true, 'dataSet' => $dataini]);
+            }else{
+                echo json_encode(['status' => false]);
+            }
+        }
     }
 }
