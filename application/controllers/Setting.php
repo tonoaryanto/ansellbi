@@ -271,41 +271,78 @@ class Setting extends CI_Controller {
         }
     }
 
-    public function load_growchange_val(){
+    public function load_growchange(){
         $cek_sess = $this->konfigurasi->cek_js();
         if ($cek_sess == 0) {
             echo json_encode(['sess' => $cek_sess]);
         }else{
             $id_farm = $this->session->userdata('id_user');
             $kode_kandang = $this->input->post('nama_kandang');
-            $tpval = $this->input->post('tpval');
-            $datasave = [
-                'kode_farm' => $id_farm,
-                'kode_kandang' => $kode_kandang,
-            ];
-            $inidb = $this->umum_model->get('standar_value',$datasave);
-            $cekdb = $inidb->num_rows();
-            $isidb = $inidb->row_array();
-            $setdt = $this->tpvalue2($tpval);
-            $iniweek = explode(',',$isidb[$setdt[0]]);
-            if($cekdb > 0 and $iniweek[0] != ''){
-                $iniweek = explode(',',$isidb[$setdt[0]]);
-                $modweek = (count($iniweek) % 7);
-                if($modweek > 0){$addweek = 1;}else{$addweek = 0;}
-                $totweek = (int)((count($iniweek) - $modweek) / 7) + $addweek;
-                $dataini = [
-                    'dataweek' => $iniweek,
-                    'countweek' => $totweek
-                ];
 
-                if(isset($setdt[1])){
-                    $dataini['dataweek2'] = explode(',',$isidb[$setdt[1]]);
-                }
+            $rawsql = "SELECT periode,growday,date_record FROM data_record WHERE kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ";
+            $esql1 = $rawsql."AND keterangan = 'ok' ORDER BY growday DESC, date_record DESC LIMIT 1";
+            $esql2 = $rawsql."AND keterangan = 'growchange' ORDER BY growday ASC, date_record ASC LIMIT 1";
+            $esql3 = $rawsql."AND keterangan = 'growchange' ORDER BY growday DESC, date_record DESC LIMIT 1";
 
-                echo json_encode(['status' => true, 'dataSet' => $dataini]);
+            $inidb1 = $this->db->query($esql1);
+            $inidb2 = $this->db->query($esql2);
+            $inidb3 = $this->db->query($esql3);
+
+            $cekdb = $inidb2->num_rows();
+            $isidb1 = $inidb1->row_array();
+            $isidb2 = $inidb2->row_array();
+            $isidb3 = $inidb3->row_array();
+
+            $dataini = [];
+            $dataini['last_date'] = date_format(date_create($isidb1['date_record']),"H:i:s d F Y");
+            $dataini['last_growday'] = $isidb1['growday'];
+            $dataini['last_flock'] = $isidb1['periode'];
+            $dataini['change_date'] = date_format(date_create($isidb2['date_record']),"H:i:s d F Y");
+            $dataini['change_growday'] = $isidb2['growday'];
+            $dataini['change_flock'] = $isidb2['periode'];
+
+            $tgl1 = date_create("2020-12-28");//date_create($isidb1['date_record']);
+            $tgl2 = date_create("2020-12-29");//date_create($isidb2['date_record']);
+            $tgl3 = date_create("2021-01-04");//date_create($isidb3['date_record']);
+
+            $difftgl1 = date_diff($tgl1,$tgl2);
+            $difftgl2 = date_diff($tgl1,$tgl3);
+
+            $growawal = (int)$isidb1['growday'] + (int)$difftgl1->format("%R%a");
+            $growakhir = (int)$isidb1['growday'] + (int)$difftgl2->format("%R%a");
+
+            $dataini['real_date'] = date_format(date_create($isidb2['date_record']),"H:i:s d F Y")." to ".date_format(date_create($isidb3['date_record']),"H:i:s d F Y");
+            $dataini['real_growday'] = $growawal." to ".$growakhir ;
+            $dataini['real_flock'] = $isidb1['periode'];
+            $dataini['startgl'] = date_format(date_create($isidb2['date_record']),"Y-m-d");
+            $dataini['startime'] = date_format(date_create($isidb2['date_record']),"H:i");
+            $dataini['stargrow'] = $growawal;
+            $dataini['endtgl'] = date_format(date_create($isidb3['date_record']),"Y-m-d");
+            $dataini['endtime'] = date_format(date_create($isidb3['date_record']),"H:i");
+            $dataini['endgrow'] = $growakhir;
+
+            if($cekdb > 0){
+                echo json_encode(['status' => true, 'dataset' => $dataini]);
             }else{
                 echo json_encode(['status' => false]);
             }
         }
     }
+
+    public function load_inputchange(){
+        $cek_sess = $this->konfigurasi->cek_js();
+        if ($cek_sess == 0) {
+            echo json_encode(['sess' => $cek_sess]);
+        }else{
+            $id_farm = $this->session->userdata('id_user');
+            $kode_kandang = $this->input->post('nama_kandang');
+            $startgl = $this->input->post('startgl');
+            $endtgl = $this->input->post('endtgl');
+            $rawsql = "SELECT periode,growday,date_record FROM data_record WHERE kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ";
+            $esql1 = $rawsql."AND date_record = '".$startgl."' AND keterangan = 'ok' ORDER BY growday DESC LIMIT 1";
+            $inidb1 = $this->db->query($esql1)->row_array();
+            $inidb1['date_record'];
+        }
+    }
+
 }

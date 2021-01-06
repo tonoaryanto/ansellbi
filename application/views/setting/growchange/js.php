@@ -4,26 +4,6 @@ $(document).ready(function(){
     $('.select2').select2();
 });
 
-function addweek(){
-    var count_week = parseInt($('#inputweek').attr('data-week'));
-    var newweek = count_week + 1;
-    var vweek = 7 * newweek;
-
-    $('<div>')
-    .attr({'class' : 'form-group col-md-2', 'id' : 'week'+newweek})
-    .html('<label>Week '+newweek+'</label><div style="margin-bottom:15px;border-style:solid;padding:10px;border-width: thin;border-radius: 5px;border-color: #ccc;"><div class="form-group"><label>Day '+(vweek - 6)+' </label><input name="week'+(vweek - 6)+'" type="text" class="form-control" value=""></div><div class="form-group"><label>Growday '+(vweek - 5)+' </label><input name="week'+(vweek - 5)+'" type="text" class="form-control" value=""></div><div class="form-group"><label>Growday '+(vweek - 4)+' </label><input name="week'+(vweek - 4)+'" type="text" class="form-control" value=""></div><div class="form-group"><label>Growday '+(vweek - 3)+' </label><input name="week'+(vweek - 3)+'" type="text" class="form-control" value=""></div><div class="form-group"><label>Growday '+(vweek - 2)+' </label><input name="week'+(vweek - 2)+'" type="text" class="form-control" value=""></div><div class="form-group"><label>Growday '+(vweek - 1)+' </label><input name="week'+(vweek - 1)+'" type="text" class="form-control" value=""></div><div class="form-group"><label>Growday '+vweek+' </label><input name="week'+vweek+'" type="text" class="form-control" value=""></div></div>')
-    .appendTo('#inputweek');
-    $('#inputweek').attr('data-week',newweek);
-}
-
-function removeweek(){
-    var count_week = parseInt($('#inputweek').attr('data-week'));
-    var newweek = count_week - 1;
-    if(count_week == 1){return;}
-    $('#week'+count_week).remove();
-    $('#inputweek').attr('data-week',newweek)
-}
-
 function selectdata_kandang(){
   var inidata = $.ajax({
     type: "GET",
@@ -52,11 +32,60 @@ function isiselect_kandang(inidata){
 }
 
 function loaddata(){
-    $('#inputweek').html('');
-    $('#inputweek').attr('data-week','0');
     var ling = '<?php echo base_url('setting/load_growchange'); ?>';
     var isidata = {
+        'nama_kandang' : $('[name="kandang"]').val()
+    };
+
+    $('#last_date').text('');
+    $('#last_growday').text('');
+    $('#last_flock').text('');
+    $('#change_date').text('');
+    $('#change_growday').text('');
+    $('#change_flock').text('');
+    $('#real_date').text('');
+    $('#real_growday').text('');
+    $('#real_flock').text('');
+
+    $.ajax({
+        url : ling,
+        type: "POST",
+        data: isidata,
+        dataType: "JSON",
+        success : function(data)
+        {
+            get_sess(data.sess);
+            if( data.status == true){
+                $('#last_date').text(data.dataset['last_date']);
+                $('#last_growday').text(data.dataset['last_growday']);
+                $('#last_flock').text(data.dataset['last_flock']);
+                $('#change_date').text(data.dataset['change_date']);
+                $('#change_growday').text(data.dataset['change_growday']);
+                $('#change_flock').text(data.dataset['change_flock']);
+                $('#real_date').text(data.dataset['real_date']);
+                $('#real_growday').text(data.dataset['real_growday']);
+                $('#real_flock').text(data.dataset['real_flock']);
+                $('[name="startgl"]').val(data.dataset['startgl']);
+                $('[name="startime"]').val(data.dataset['startime']);
+                $('[name="stargrow"]').val(data.dataset['stargrow']);
+                $('[name="endtgl"]').val(data.dataset['endtgl']);
+                $('[name="endtime"]').val(data.dataset['endtime']);
+                $('[name="endgrow"]').val(data.dataset['endgrow']);
+                $('[name="flock"]').val(data.dataset['real_flock']);
+            }
+        }
+    });
+}
+
+function changedate(){
+    var startgl = $('[name="startgl"]').val();
+    var endtgl = $('[name="endtgl"]').val();
+
+    var ling = '<?php echo base_url('setting/load_inputchange'); ?>';
+    var isidata = {
         'nama_kandang' : $('[name="kandang"]').val(),
+        'startgl' : startgl,
+        'endtgl' : endtgl
     };
 
     $.ajax({
@@ -68,8 +97,6 @@ function loaddata(){
         {
             get_sess(data.sess);
             if( data.status == true){
-
-            }else{
 
             }
         }
