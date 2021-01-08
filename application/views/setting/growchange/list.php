@@ -20,21 +20,29 @@
             <div class="row">
             <div class="form-group col-sm-4">
                 <label>Star Date : </label>
-                <input onchange="changedate()" type="date" name="startgl" class="form-control" id="optionselect_kandang" style="width: 100%;line-height:unset;border-radius:5px;">
+                <input onchange="changedate()" type="date" name="startgl" class="form-control" style="width: 100%;line-height:unset;border-radius:5px;">
+              </div>
+              <div class="form-group col-sm-3">
+                <label>&nbsp;</label>
+                <input readonly type="time" name="startime" class="form-control" style="width: 100%;line-height:unset;border-radius:5px;">
               </div>
               <div class="form-group col-sm-4">
                 <label>Star Growday : </label>
-                <input style="background:#0000;border-radius:5px;" type="text" name="stargrow" class="form-control" id="optionselect_kandang" style="width: 100%;line-height:unset;border-radius:5px;">
+                <input onchange="changedate_end()" style="background:#0000;border-radius:5px;" type="text" name="stargrow" class="form-control" style="width: 100%;line-height:unset;border-radius:5px;">
               </div>
             </div>
             <div class="row">
               <div class="form-group col-sm-4">
                 <label>End Date : </label>
-                <input type="date" name="endtgl" class="form-control" id="optionselect_kandang" style="width: 100%;line-height:unset;border-radius:5px;">
+                <input onchange="changedate_end()" type="date" name="endtgl" class="form-control" style="width: 100%;line-height:unset;border-radius:5px;">
+              </div>
+              <div class="form-group col-sm-3">
+                <label>&nbsp;</label>
+                <input readonly type="time" name="endtime" class="form-control" style="width: 100%;line-height:unset;border-radius:5px;">
               </div>
               <div class="form-group col-sm-4">
                 <label>End Growday : </label>
-                <input style="border-radius:5px;" type="text" readonly name="endgrow" class="form-control" id="optionselect_kandang" style="width: 100%;line-height:unset;border-radius:5px;">
+                <input style="border-radius:5px;" type="text" readonly name="endgrow" class="form-control" style="width: 100%;line-height:unset;border-radius:5px;">
               </div>
             </div>
             <div class="row">

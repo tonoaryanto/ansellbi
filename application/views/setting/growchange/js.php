@@ -88,6 +88,10 @@ function changedate(){
         'endtgl' : endtgl
     };
 
+    $('[name="stargrow"]').val('');
+    $('[name="endgrow"]').val('');
+
+
     $.ajax({
         url : ling,
         type: "POST",
@@ -97,85 +101,119 @@ function changedate(){
         {
             get_sess(data.sess);
             if( data.status == true){
+                $('[name="stargrow"]').val(data.dataset['stargrow']);
+                $('[name="endgrow"]').val(data.dataset['endgrow']);
+                $('[name="startime"]').val(data.dataset['startime']);
+                $('[name="endtime"]').val(data.dataset['endtime']);
+            }
+        }
+    });
+}
 
+function changedate_end(){
+    var startgl = $('[name="startgl"]').val();
+    var stargrow = $('[name="stargrow"]').val();
+    var endtgl = $('[name="endtgl"]').val();
+
+    var ling = '<?php echo base_url('setting/load_inputchangeend'); ?>';
+    var isidata = {
+        'nama_kandang' : $('[name="kandang"]').val(),
+        'startgl' : startgl,
+        'stargrow' : stargrow,
+        'endtgl' : endtgl
+    };
+
+    $('[name="endgrow"]').val('');
+
+    $.ajax({
+        url : ling,
+        type: "POST",
+        data: isidata,
+        dataType: "JSON",
+        success : function(data)
+        {
+            get_sess(data.sess);
+            if( data.status == true){
+                $('[name="endgrow"]').val(data.dataset['endgrow']);
+                $('[name="endtime"]').val(data.dataset['endtime']);
             }
         }
     });
 }
 
 function save(){
-    var ling = '<?php echo base_url('setting/save_standard_val'); ?>';
+var ling = '<?php echo base_url('setting/save_growchange'); ?>';
+var isidata = {
+    'nama_kandang' : $('[name="kandang"]').val(),
+    'startgl' : $('[name="startgl"]').val(),
+    'stargrow' : $('[name="stargrow"]').val(),
+    'endtgl' : $('[name="endtgl"]').val(),
+    'endgrow' : $('[name="endgrow"]').val(),
+    'flock' : $('[name="flock"]').val()
+};
+var cek = validasi();
 
-    var isidata = {
-            'nama_kandang' : $('[name="kandang"]').val(),
-            'tpval' : $('[name="tpval"]').val()
-        };
+if(cek != 1){
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-default',
+            cancelButton: 'btn btn-primary'
+        },
+        buttonsStyling: false
+    })
 
-    var count_week = parseInt($('#inputweek').attr('data-week'));
-    var isiweek = {}
-    var mp = 7;
-    for (i = 0; i < count_week; i++) {
-        var vweek = 7 * (i +1);
-
-        var dt = {};
-        var xdt = {};
-        dt[0] = $('[name="week'+ (vweek - 6) +'"]').val();
-        dt[1] = $('[name="week'+ (vweek - 5) +'"]').val();
-        dt[2] = $('[name="week'+ (vweek - 4) +'"]').val();
-        dt[3] = $('[name="week'+ (vweek - 3) +'"]').val();
-        dt[4] = $('[name="week'+ (vweek - 2) +'"]').val();
-        dt[5] = $('[name="week'+ (vweek - 1) +'"]').val();
-        dt[6] = $('[name="week'+ vweek +'"]').val();
-
-        for(a = 0; a < 7; a++) {
-            var kur = 7 - a;
-            var cdt = {};
-            cdt[0] = dt[a];
-            isiweek[(vweek - kur)] = cdt;
-        }
-    }
-
-    isidata['week'] = isiweek;
-
-    var cek = validasi();
-
-    if(cek != 1){
-        $.ajax({
-            url : ling,
-            type: "POST",
-            data: isidata,
-            dataType: "JSON",
-            success : function(data)
-            {
-                get_sess(data.sess);
-                if( data.status == true){
-                    swal.fire({
-                      title: "Successl!",
-                      html : data.message,
-                      type: "success",
-                    });
-                }else{
-                    swal.fire({
-                      title: "No data changes!",
-                      html : data.message,
-                    });
+    swalWithBootstrapButtons.fire({
+        title: 'Are you sure?',
+        html : '<p style="font-size: 14px">You will not be able to restore the changed data!</p>',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'No, Return',
+        cancelButtonText: 'Yes, Change it!',
+        reverseButtons: false
+        }).then((result) => {
+        if (result.isConfirmed) {
+            return;
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+            $.ajax({
+                url : ling,
+                type: "POST",
+                data: isidata,
+                dataType: "JSON",
+                success : function(data)
+                {
+                    get_sess(data.sess);
+                    if( data.status == true){
+                        swal.fire({
+                        title: "Successl!",
+                        html : data.message,
+                        type: "success",
+                        });
+                    }else{
+                        swal.fire({
+                        title: "No data changes!",
+                        html : data.message,
+                        });
+                    }
                 }
-            }
-        });
-    }else{
-        swal.fire({
-            title: "Warning!",
-            html : '<p style="font-size: 14px">The input value is still empty or wrong!</p>',
-            type: "warning",
-        });
-    }
+            });
+        }
+    });
+}else{
+    swal.fire({
+        title: "Warning!",
+        html : '<p style="font-size: 14px">The input value is still empty or wrong!</p>',
+        type: "warning",
+    });
+}
 }
 
 function validasi(){
     var cek = 0;
     if($('[name="kandang"]').val() == ''){cek = 1;}
-    if($('[name="week1"]').val() == ''){cek = 1;}
-    if($('#inputweek').html() == ''){cek = 1;}
-    
+    if($('[name="startgl"]').val() == ''){cek = 1;}
+    if($('[name="stargrow"]').val() == ''){cek = 1;}
+    if($('[name="endtgl"]').val() == ''){cek = 1;}
+    if($('[name="endgrow"]').val() == ''){cek = 1;}
+    if($('[name="flock"]').val() == ''){cek = 1;}   
     return cek;
 }
