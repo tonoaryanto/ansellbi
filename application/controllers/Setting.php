@@ -235,6 +235,7 @@ class Setting extends CI_Controller {
     public function growchange(){
         $this->konfigurasi->cek_url();
         $id_user   = $this->session->userdata('id_user');
+        $data1cek = $this->db->query("SELECT id FROM `data_record` WHERE data_record.kode_perusahaan = '".$id_user."' AND data_record.keterangan = 'growchange' LIMIT 1")->num_rows();
 
         $data = [
             'txthead1'     => 'Growday Change',
@@ -245,6 +246,7 @@ class Setting extends CI_Controller {
             'isi'       => 'setting/growchange/list',
             'cssadd'    => 'setting/growchange/cssadd',
             'jsadd'     => 'setting/growchange/jsadd',
+            'cekdata'   => $data1cek
         ];
         $this->load->view('template/wrapper',$data);
     }
@@ -300,9 +302,9 @@ class Setting extends CI_Controller {
         $dataini['change_growday'] = $isidb2['growday'];
         $dataini['change_flock'] = $isidb2['periode'];
 
-        $tgl1 = date_create($isidb1['date_record']);
-        $tgl2 = date_create($isidb2['date_record']);
-        $tgl3 = date_create($isidb3['date_record']);
+        $tgl1 = date_create(date_format(date_create($isidb1['date_record']),"Y-m-d"));
+        $tgl2 = date_create(date_format(date_create($isidb2['date_record']),"Y-m-d"));
+        $tgl3 = date_create(date_format(date_create($isidb3['date_record']),"Y-m-d"));
 
         $difftgl1 = date_diff($tgl1,$tgl2);
         $difftgl2 = date_diff($tgl1,$tgl3);
@@ -402,7 +404,12 @@ class Setting extends CI_Controller {
  
             $datesr = date_format(date_create($endtgl),"Y").date_format(date_create($endtgl),"m").date_format(date_create($endtgl),"d")."00";
             $dateend = date_format(date_create($inidb3['date_record']),"Y").date_format(date_create($inidb3['date_record']),"m").date_format(date_create($inidb3['date_record']),"d").date_format(date_create($inidb3['date_record']),"H");
-            $dataini['endtime'] = date_format(date_create($inidb2['date_record']),"H:i");
+
+            if($inidb2['date_record'] != ''){
+                $dataini['endtime'] = date_format(date_create($inidb2['date_record']),"H:i");
+            }else{
+                $dataini['endtime'] = date_format(date_create("11:11"),"H:i");
+            }
 
             if((int)$datesr > (int)$dateend){
                 echo json_encode(['status' => false]);
@@ -427,10 +434,67 @@ class Setting extends CI_Controller {
         $flock        = $this->input->post('flock');
 
         $rawsql = "SELECT periode,growday,date_record,reset_time FROM data_record WHERE kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ";
-        $esql2 = $rawsql."AND growday like '".$stargrow."' AND keterangan = 'ok' ORDER BY growday ASC, date_record ASC LIMIT 1";
         $esql3 = $rawsql."AND keterangan = 'growchange' ORDER BY growday ASC, date_record ASC LIMIT 1";
-        $var = "ELECT periode,growday,date_record,reset_time FROM data_record WHERE kode_perusahaan = '1' AND kode_kandang = '1' AND growday like '102' AND keterangan = 'ok' ORDER BY growday ASC, date_record ASC LIMIT 1";
-        $inidb2 = $this->db->query($esql2)->row_array();
 
-    }
+        $addwhere = "kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."'";
+        $addorder1 = "ORDER BY date_record ASC LIMIT 1";
+        $addorder2 = "ORDER BY date_record DESC LIMIT 1";
+
+        $getgrowday1 = "SELECT growday FROM data_record WHERE ".$addwhere." AND date_record like '".$startgl."%' ".$addorder1;
+        $gettglawal = "SELECT date_record FROM data_record WHERE ".$addwhere." AND growday = (".$getgrowday1.") ".$addorder1;
+
+        $getgrowday2 = "SELECT growday FROM data_record WHERE ".$addwhere." AND date_record like '".$endtgl."%' ".$addorder2;
+        $gettglakhir = "SELECT date_record FROM data_record WHERE ".$addwhere." AND growday = (".$getgrowday2.") ".$addorder2;
+
+        $esqlloop = "SELECT periode,growday,date_record,reset_time FROM data_record WHERE kode_perusahaan = '1' AND kode_kandang = '1' AND date_record >= (".$gettglawal.") AND date_record <= (".$gettglakhir.") ORDER BY date_record ASC";
+
+        $inidb2 = $this->db->query($esqlloop)->result();
+
+        $data2 = [];
+        foreach ($inidb2 as $value) {
+            $diff1 = date_create(date_format(date_create($startgl),"Y-m-d"));
+            $diff2 = date_create(date_format(date_create($value->date_record),"Y-m-d"));
+            $difftgl1 = date_diff($diff1,$diff2);
+            $growset = (int)$stargrow + (int)$difftgl1->format("%R%a");
+
+            $jamrecord = date_format(date_create($value->date_record),"H").date_format(date_create($value->date_record),"i").date_format(date_create($value->date_record),"s");
+            $jamreset = date_format(date_create($value->reset_time),"H").date_format(date_create($value->reset_time),"i").date_format(date_create($value->reset_time),"s");
+            if((int)$jamrecord >= (int)$jamreset){$growset2 = $growset +1;}else{$growset2 = $growset;}
+
+            $data = [];
+            $data['growday'] = $growset2;
+            $data['periode'] = $flock;
+            $data['keterangan'] = 'ok';
+            $where = ['date_record' => $value->date_record];
+
+            $this->db->update('data_record',$data,$where);
+
+            $data['date_record'] = $where['date_record'];
+            $data2 = $data;
+            $data2['reset'] = $jamreset;
+        }
+        
+        $cekdb = $this->db->query("SELECT growday FROM data_record WHERE ".$addwhere." AND keterangan = 'growchange' LIMIT 1")->num_rows();
+        $cekdb2 = $this->db->query("SELECT growday FROM data_record WHERE kode_perusahaan = '".$id_farm."' AND keterangan = 'growchange' LIMIT 1")->num_rows();
+
+        $diffsh1 = date_create(date_format(date_create($data2['date_record']),"Y-m-d"));
+        $diffsh2 = date_create(date_format(date_create(date("Y-m-d")),"Y-m-d"));
+        $difftgl2 = date_diff($diffsh1,$diffsh2);
+        $growsetsh = (int)$data2['growday'] + (int)$difftgl2->format("%R%a");
+        $jamnow = date_format(date_create(date("Y-m-d")),"Y").date_format(date_create(date("Y-m-d")),"m").date_format(date_create(date("Y-m-d")),"d");
+        if((int)$jamnow >= (int)$data2['reset']){$growsetsh = $growsetsh +1;}
+
+        $html = '<p style="font-size: 16px">Data has been changed!<br><br>';
+        if($cekdb == 0){
+            $html .= 'The next step is to change growday data on the controller. The growday data for the current date (<b>'.date_format(date_create(date("Y-m-d")),"d F Y").'</b>) is <b>'.$growsetsh.'</b>.';
+            if($cekdb2 == 0){
+                $html .= '</b>.<br><br>After closed, this form will automatically switch pages.';
+            }
+        }else{
+            $html .= '<span style="font-size: 15px"><b>There are still incorrect data</b></span>. <br>Please change the growday data again or you can change the flock data to create a new flock data.';
+        }
+        $html .= '</p>';
+        
+        echo json_encode(['status' => true,'message' => $html]);
+     }
 }

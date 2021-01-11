@@ -170,7 +170,7 @@ if(cek != 1){
         confirmButtonText: 'No, Return',
         cancelButtonText: 'Yes, Change it!',
         reverseButtons: false
-        }).then((result) => {
+    }).then((result) => {
         if (result.isConfirmed) {
             return;
         } else if (result.dismiss === Swal.DismissReason.cancel) {
@@ -186,7 +186,10 @@ if(cek != 1){
                         swal.fire({
                         title: "Successl!",
                         html : data.message,
+                        allowOutsideClick: false,
                         type: "success",
+                        }).then((result) => {
+                            location.reload();
                         });
                     }else{
                         swal.fire({

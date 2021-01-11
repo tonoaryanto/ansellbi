@@ -1,3 +1,5 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');if($cekdata == 0){ redirect(base_url());}?>
+
 <div class="row">
   <div class="col-sm-12">
     <div id="boxoption" class="box">
