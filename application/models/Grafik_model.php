@@ -261,8 +261,16 @@ class Grafik_model extends CI_Model {
             $adata[] = ''.$value->growday.' - '.$jam;
             $noarray = (int)$value->growday - 1;
             if($noarray <= count($minex)){
-                $vstdmin = $minex[((int)$value->growday - 1)];
-                $vstdmax = $maxex[((int)$value->growday - 1)];
+                if(isset($minex[((int)$value->growday - 1)])){
+                    $vstdmin = $minex[((int)$value->growday - 1)];
+                }else{
+                    $vstdmin = 0;
+                }
+                if(isset($maxex[((int)$value->growday - 1)])){
+                    $vstdmax = $maxex[((int)$value->growday - 1)];
+                }else{
+                    $vstdmax = 0;
+                }
             }else{
                 $vstdmin = 0;
                 $vstdmax = 0;
@@ -332,10 +340,10 @@ class Grafik_model extends CI_Model {
         if($realmax < 99){$realmax = $realmax + 2;}
         if($realmin > 1){$realmin = $realmin - 1;}
 
-        $countrange = 10;
+        $countrange = 8;
         $dif1 = $realmax - $realmin;
-        if($dif1 == $realmax){$dif1range = $dif1 / 10;}
-        else{$dif1range = $dif1 / $countrange;}
+        //if($dif1 == $realmax){$dif1range = $dif1 / 8;}else{$dif1range = $dif1 / $countrange;}
+        $dif1range = $dif1 / $countrange;
         if($dif1range < 1){$dif1range = 1;}
         if(isset(explode(".",$dif1range)[1])){
             if(explode(".",$dif1range)[1] >= 1){$dif1range = explode(".",$dif1range)[0] + 1;}
@@ -494,10 +502,10 @@ class Grafik_model extends CI_Model {
         if($realmax < 99){$realmax = $realmax + 2;}
         if($realmin > 1){$realmin = $realmin - 1;}
 
-        $countrange = 10;
+        $countrange = 8;
         $dif1 = $realmax - $realmin;
-        if($dif1 == $realmax){$dif1range = $dif1 / 10;}
-        else{$dif1range = $dif1 / $countrange;}
+        //if($dif1 == $realmax){$dif1range = $dif1 / 8;}else{$dif1range = $dif1 / $countrange;}
+        $dif1range = $dif1 / $countrange;
         if($dif1range < 1){$dif1range = 1;}
         if(isset(explode(".",$dif1range)[1])){
             if(explode(".",$dif1range)[1] >= 1){$dif1range = explode(".",$dif1range)[0] + 1;}
@@ -611,10 +619,10 @@ class Grafik_model extends CI_Model {
         if($realmax < 99){$realmax = $realmax + 2;}
         if($realmin > 1){$realmin = $realmin - 1;}
 
-        $countrange = 10;
+        $countrange = 8;
         $dif1 = $realmax - $realmin;
-        if($dif1 == $realmax){$dif1range = $dif1 / 10;}
-        else{$dif1range = round($dif1 / $countrange);}
+        //if($dif1 == $realmax){$dif1range = $dif1 / 8;}else{$dif1range = $dif1 / $countrange;}
+        $dif1range = $dif1 / $countrange;
         if($dif1range < 1){$dif1range = 1;}
         if(isset(explode(".",$dif1range)[1])){
             if(explode(".",$dif1range)[1] >= 1){$dif1range = explode(".",$dif1range)[0] + 1;}
