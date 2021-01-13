@@ -46,6 +46,13 @@ function loaddata(){
     $('#real_date').text('');
     $('#real_growday').text('');
     $('#real_flock').text('');
+    $('[name="startgl"]').val('');
+    $('[name="startime"]').val('');
+    $('[name="stargrow"]').val('');
+    $('[name="endtgl"]').val('');
+    $('[name="endtime"]').val('');
+    $('[name="endgrow"]').val('');
+    $('[name="flock"]').val('');
 
     $.ajax({
         url : ling,

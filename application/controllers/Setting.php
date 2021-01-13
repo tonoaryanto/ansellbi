@@ -302,9 +302,9 @@ class Setting extends CI_Controller {
         $dataini['change_growday'] = $isidb2['growday'];
         $dataini['change_flock'] = $isidb2['periode'];
 
-        $tgl1 = date_create(date_format(date_create($isidb1['date_record']),"Y-m-d"));
-        $tgl2 = date_create(date_format(date_create($isidb2['date_record']),"Y-m-d"));
-        $tgl3 = date_create(date_format(date_create($isidb3['date_record']),"Y-m-d"));
+        $tgl1 = date_create(date_format(date_create($isidb1['date_record']),"Y-m-d H:i:s"));
+        $tgl2 = date_create(date_format(date_create($isidb2['date_record']),"Y-m-d H:i:s"));
+        $tgl3 = date_create(date_format(date_create($isidb3['date_record']),"Y-m-d H:i:s"));
 
         $difftgl1 = date_diff($tgl1,$tgl2);
         $difftgl2 = date_diff($tgl1,$tgl3);
@@ -446,11 +446,13 @@ class Setting extends CI_Controller {
         $getgrowday2 = "SELECT growday FROM data_record WHERE ".$addwhere." AND date_record like '".$endtgl."%' ".$addorder2;
         $gettglakhir = "SELECT date_record FROM data_record WHERE ".$addwhere." AND growday = (".$getgrowday2.") ".$addorder2;
 
-        $esqlloop = "SELECT periode,growday,date_record,reset_time FROM data_record WHERE kode_perusahaan = '1' AND kode_kandang = '1' AND date_record >= (".$gettglawal.") AND date_record <= (".$gettglakhir.") ORDER BY date_record ASC";
+        $esqlloop = "SELECT periode,growday,date_record,reset_time FROM data_record WHERE ".$addwhere." AND date_record >= (".$gettglawal.") AND date_record <= (".$gettglakhir.") ORDER BY date_record ASC";
 
         $inidb2 = $this->db->query($esqlloop)->result();
 
         $data2 = [];
+        $difftglegg = "";
+
         foreach ($inidb2 as $value) {
             $diff1 = date_create(date_format(date_create($startgl),"Y-m-d"));
             $diff2 = date_create(date_format(date_create($value->date_record),"Y-m-d"));
@@ -468,6 +470,17 @@ class Setting extends CI_Controller {
             $where = ['date_record' => $value->date_record];
 
             $this->db->update('data_record',$data,$where);
+
+            if($difftglegg != $value->date_record){
+                $dbegg = $this->db->query("SELECT date_record FROM data_eggcounter WHERE ".$addwhere." AND date_record = '".$where['date_record']."' LIMIT 1");
+                $cekegg = $dbegg->num_rows();
+                $hsegg = $dbegg->row_array();
+
+                if($cekegg > 0){
+                    $difftglegg = $hsegg['date_record'];
+                    $this->db->update('data_eggcounter',$data,$where);
+                }    
+            }
 
             $data['date_record'] = $where['date_record'];
             $data2 = $data;

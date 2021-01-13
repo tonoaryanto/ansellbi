@@ -121,6 +121,8 @@ class Egg_counter extends CI_Controller {
             $setgrow = '1';
         }
 
+        $hgrowchange = $this->umum_model->get("(SELECT periode,growday FROM data_record WHERE keterangan = 'growchange' AND kode_kandang = '".$idfarm."' AND kode_perusahaan = '".$id_user."' ORDER BY periode DESC,growday DESC LIMIT 1) as data")->num_rows();
+
         $data = [
             'txthead1'     => 'Egg Counter - '.$inidatafarm['nama_kandang'],
             'head1'     => 'Egg Counter',
@@ -133,7 +135,8 @@ class Egg_counter extends CI_Controller {
             'idfarm'    => $idfarm,
             'iniperiode' => $setperiode,
             'inigrow' => $setgrow,
-            'urljs' => $urljs
+            'urljs' => $urljs,
+            'cekgrowchange' => $hgrowchange
         ];
         $this->load->view('template/wrapper',$data);
     }
@@ -202,7 +205,7 @@ class Egg_counter extends CI_Controller {
         $dataprimary1 = $this->db->query($esql)->result();
 
         if($inidata == 'sumegg'){
-            $sqlstd = "SELECT std_egg_counter FROM standar_value WHERE keterangan = 'ok' AND kode_farm = '".$id_user."' AND kode_kandang = '".$id_farm."'";
+            $sqlstd = "SELECT std_egg_counter FROM standar_value WHERE kode_farm = '".$id_user."' AND kode_kandang = '".$id_farm."'";
 
             $dbstd = $this->db->query($sqlstd);
 

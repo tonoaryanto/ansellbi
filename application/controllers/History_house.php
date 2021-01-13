@@ -115,9 +115,7 @@ class History_house extends CI_Controller {
         $iniperiode = $this->umum_model->get("(SELECT periode,growday FROM data_record WHERE keterangan = 'ok' AND kode_kandang = '".$idfarm."' AND kode_perusahaan = '".$id_user."' ORDER BY periode DESC,growday DESC LIMIT 1) as data")->row_array();
         if ($inidatafarm['nama_kandang'] == '') {echo 'Silent is gold';return;}
 
-        $hgrowchange = 0;
-        $cekgrowchange = $this->umum_model->get("(SELECT periode,growday FROM data_record WHERE keterangan = 'growchange' AND kode_kandang = '".$idfarm."' AND kode_perusahaan = '".$id_user."' ORDER BY periode DESC,growday DESC LIMIT 1) as data")->num_rows();
-        if($cekgrowchange > 0){$hgrowchange = 1;}
+        $hgrowchange = $this->umum_model->get("(SELECT periode,growday FROM data_record WHERE keterangan = 'growchange' AND kode_kandang = '".$idfarm."' AND kode_perusahaan = '".$id_user."' ORDER BY periode DESC,growday DESC LIMIT 1) as data")->num_rows();
 
         if($iniperiode['periode'] != ''){
             $setperiode = $iniperiode['periode'];
