@@ -77,25 +77,25 @@ class Body_weight extends CI_Controller {
     public function getgrow(){
         $id_farm = $this->session->userdata('id_user');
         $kode_kandang = $this->input->post('kandang');
-        $tanggal = $this->input->post('tanggal');
+        $tanggal = date_format(date_create($this->input->post('tanggal')),"Y-m-d");
 
-        $esql = "SELECT periode,growday,date_record FROM `data_record` WHERE kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY `data_record`.`periode` DESC,`data_record`.`growday` DESC LIMIT 1";
+        $esql = "SELECT periode,growday,date_record FROM `data_record` WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY `data_record`.`periode` DESC,`data_record`.`growday` DESC LIMIT 1";
         $cekdb = $this->db->query($esql);
 
         if($cekdb->num_rows() > 0){
             $isidb = $cekdb->row_array();
-            $diff=date_diff(date_create($isidb['date_record']),date_create($tanggal));
+            $diff=date_diff(date_create(date_format(date_create($isidb['date_record']),"Y-m-d")),date_create($tanggal));
             $difgrow = (int)$isidb['growday'] + (int)$diff->format("%R%a");
             
             if($difgrow < 1){
-                $cekperiod = (int)$isidb['periode'] - 1;
+                $cekperiod = (int)$isidb['periode'];
 
-                $esql3 = "SELECT periode,growday,date_record FROM `data_record` WHERE periode = '".$cekperiod."' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY `data_record`.`periode` DESC,`data_record`.`growday` DESC LIMIT 1";
+                $esql3 = "SELECT periode,growday,date_record FROM `data_record` WHERE keterangan = 'ok' AND periode != '".$cekperiod."' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY `data_record`.`periode` DESC,`data_record`.`growday` DESC LIMIT 1";
                 $cekdb3 = $this->db->query($esql3);
-        
+
                 if($cekdb3->num_rows() > 0){
                     $isidb3 = $cekdb3->row_array();
-                    $hasilgrow = (int)$isidb3['growday'] + $difgrow;
+                    $hasilgrow = (int)$isidb3['growday'] + (int)$diff->format("%R%a");
                     $hasilperiode = (int)$isidb3['periode'];
                     if($hasilgrow < 1){
                         $cq = 0;
