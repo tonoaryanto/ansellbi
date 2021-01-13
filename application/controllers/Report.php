@@ -75,7 +75,7 @@ class Report extends CI_Controller {
 
             if($filhour1 == $filhour2){
                 if($filhour1 == '-1'){
-                    $filhour1 = $this->db->query("SELECT growday FROM data_record WHERE periode = '".$filperiode."' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$fil3."' ORDER BY growday DESC LIMIT 1")->row_array()['growday'];
+                    $filhour1 = $this->db->query("SELECT growday FROM data_record WHERE keterangan = 'ok' AND periode = '".$filperiode."' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$fil3."' ORDER BY growday DESC LIMIT 1")->row_array()['growday'];
                     $filhour2 = $filhour1;
                 }
                 $esqlgrow = "AND growday = '".$filhour1."'";
@@ -84,7 +84,7 @@ class Report extends CI_Controller {
             }
 
             $esqlgen  = "SELECT growday, date_record,".$fil2." AS isidata FROM `data_record` ";
-            $esqlgen .= "WHERE kode_perusahaan = '".$id_user."' ";
+            $esqlgen .= "WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_user."' ";
             $esqlorder = "ORDER BY date_record ASC";
 
             if($fil1 == 'HOUR_1'){
@@ -122,7 +122,7 @@ class Report extends CI_Controller {
             }
             $isiprimary = $bdata;
 
-            $esqlmin1  = "SELECT MAX($fil2) as maxdata1,MIN($fil2) as mindata1 FROM `data_record` WHERE kode_perusahaan = '".$id_user."' AND kode_kandang = '".$fil3."' ";
+            $esqlmin1  = "SELECT MAX($fil2) as maxdata1,MIN($fil2) as mindata1 FROM `data_record` WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$fil3."' ";
             $esqlmin1 .= "AND periode = '".$filperiode."' ";
             $esqlmin1 .= $esqlgrow;
             $esqlmin1 .= $esqlorder;
@@ -162,7 +162,7 @@ class Report extends CI_Controller {
                             $cdata[$k] = 0;
                         }
                     }
-                    $esqlmin1c  = "SELECT MAX($fil2) as maxdata1,MIN($fil2) as mindata1 FROM `data_record` WHERE kode_perusahaan = '".$id_user."' AND kode_kandang = '".$valpem['valkandang'.$urutan]."' ";
+                    $esqlmin1c  = "SELECT MAX($fil2) as maxdata1,MIN($fil2) as mindata1 FROM `data_record` WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$valpem['valkandang'.$urutan]."' ";
                     $esqlmin1c .= "AND periode = '".$valpem['valperiode'.$urutan]."' ";
                     $esqlmin1c .= $esqlgrow;
                     $esqlmin1c .= $esqlorder;
@@ -215,7 +215,7 @@ class Report extends CI_Controller {
 
         if($filhour1 == $filhour2){
             if($filhour1 == '-1'){
-                $filhour1 = $this->db->query("SELECT growday FROM data_record WHERE periode = '".$data1periode."' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$data1kandang."' ORDER BY growday DESC LIMIT 1")->row_array()['growday'];
+                $filhour1 = $this->db->query("SELECT growday FROM data_record WHERE keterangan = 'ok' AND periode = '".$data1periode."' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$data1kandang."' ORDER BY growday DESC LIMIT 1")->row_array()['growday'];
                 $filhour2 = $filhour1;
             }
             $esqlgrow = "AND growday = '".$filhour1."'";
@@ -224,7 +224,7 @@ class Report extends CI_Controller {
         }
 
         $esqlgen  = "SELECT growday, date_record,".$data1data." AS isidata,".$data2data." AS isidata2 FROM `data_record` ";
-        $esqlgen .= "WHERE kode_perusahaan = '".$id_user."' AND kode_kandang = '".$data1kandang."' ";
+        $esqlgen .= "WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$data1kandang."' ";
         $esqlorder = "ORDER BY date_record ASC";
 
         $xlabel = $this->grafik_model->list_data('all');
@@ -259,7 +259,7 @@ class Report extends CI_Controller {
             //END Data 2
             $difgrow = $filhour1 - $filhour2;
 
-            $esqlmin1  = "SELECT MAX($data1data) as maxdata1,MAX($data2data) as maxdata2, MIN($data1data) as mindata1,MIN($data2data) as mindata2 FROM `data_record` WHERE kode_perusahaan = '".$id_user."' AND kode_kandang = '".$data1kandang."' ";
+            $esqlmin1  = "SELECT MAX($data1data) as maxdata1,MAX($data2data) as maxdata2, MIN($data1data) as mindata1,MIN($data2data) as mindata2 FROM `data_record` WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$data1kandang."' ";
             $esqlmin1 .= "AND periode = '".$data1periode."' ";
             $esqlmin1 .= $esqlgrow;
             $esqlmin1 .= $esqlorder;
@@ -316,7 +316,7 @@ class Report extends CI_Controller {
         
         $datsql1  = "SELECT id,growday, date_record,";
         $datsql1 .= $fil2.",".$data2data;
-        $datsql1 .= " FROM data_record WHERE kode_perusahaan = '".$id_user."' AND kode_kandang = '".$fil3."' ";
+        $datsql1 .= " FROM data_record WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$fil3."' ";
         $datsql1 .= "AND periode = '".$filperiode."' ";
         $datsql1 .= $esqlgrow;
         $datsql1 .= "ORDER BY date_record ASC";
