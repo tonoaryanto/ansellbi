@@ -32,7 +32,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-12">
-                                    <label>Period</label>
+                                    <label>Flock</label>
                                     <div class="input-group col-lg-3">
                                         <input type="text" class="form-control pull-right" name="periode" disabled>
                                     </div>
