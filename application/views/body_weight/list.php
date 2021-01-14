@@ -22,7 +22,7 @@
             <p style="padding: 10px;color:#aaa;">Please fill in the house data before starting</p>
           </div>
           <div class="col-sm-2" id="boxperiod" style="display: none;">
-            <p><label>Period : </label></p>
+            <p><label>Flock : </label></p>
             <div class="form-group">
               <input type="number" class="form-control" name="periode" id="periode">
             </div>
