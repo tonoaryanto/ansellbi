@@ -33,7 +33,7 @@
               <h3 class="widget-user-username"><?php echo $value->nama_kandang; ?></h3>
               <h5 class="widget-user-desc">
               <table border="0">
-                <tr><td class="font14">FLock</td><td>&nbsp;&nbsp;:&nbsp;&nbsp;</td><td style="font-weight: bold;" id="shperiode<?php echo $nomor;?>"><?php if($data_farm['periode'] == ''){echo '0';}else{echo $data_farm['periode'];} ?></td></tr>
+                <tr><td class="font14">Flock</td><td>&nbsp;&nbsp;:&nbsp;&nbsp;</td><td style="font-weight: bold;" id="shperiode<?php echo $nomor;?>"><?php if($data_farm['periode'] == ''){echo '0';}else{echo $data_farm['periode'];} ?></td></tr>
                 <tr><td class="font14">Growday</td><td>&nbsp;&nbsp;:&nbsp;&nbsp;</td><td style="font-weight: bold;" id="shgrow<?php echo $nomor;?>"><?php if($data_farm['growday'] == ''){echo '0';}else{echo $data_farm['growday'];} ?></td></tr>
                 <tr><td class="font14">Date</td><td>&nbsp;&nbsp;:&nbsp;&nbsp;</td><td style="font-weight: bold;" id="shtgl<?php echo $nomor;?>"><?php if($data_farm['date_create'] == ''){echo '-';}else{echo date_format(date_create($data_farm['date_create']), "d-m-Y");} ?></td></tr>
                 <tr><td class="font14">Time</td><td>&nbsp;&nbsp;:&nbsp;&nbsp;</td><td style="font-weight: bold;" id="shjam<?php echo $nomor;?>"><?php if($data_farm['date_create'] == ''){echo '-';}else{echo date_format(date_create($data_farm['date_create']), "H").":".$menit.":00";} ?></td></tr>
