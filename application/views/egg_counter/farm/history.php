@@ -51,7 +51,7 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
       if (datperiode == '' || datperiode < 0) {
         swal.fire({
           title: "Warning!",
-          html : '<p style="font-size: 14px">Periode is incorrect!</p>',
+          html : '<p style="font-size: 14px">Flock is incorrect!</p>',
           type : "warning",
         });
         return;

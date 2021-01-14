@@ -31,7 +31,7 @@
             </div>
             <div id="boxoption_body" class="box-body">
               <div class="row" style="padding-left: 10px;padding-right: 10px">
-                <div class="col-sm-3">Periode : <span class="font16" id="shperiode<?php echo $nomor;?>"><?php if($data_farm['periode'] == ''){echo '0';}else{echo $data_farm['periode'];} ?></span></div>
+                <div class="col-sm-3">Flock : <span class="font16" id="shperiode<?php echo $nomor;?>"><?php if($data_farm['periode'] == ''){echo '0';}else{echo $data_farm['periode'];} ?></span></div>
                 <div class="col-sm-3">Growday : <span class="font16" id="shgrow<?php echo $nomor;?>"><?php if($data_farm['growday'] == ''){echo '0';}else{echo $data_farm['growday'];} ?></span></div>
                 <div class="col-sm-3">Date : <span class="font16" id="shtgl<?php echo $nomor;?>"><?php if($data_farm['date_create'] == ''){echo '-';}else{echo date_format(date_create($data_farm['date_create']), "d-m-Y");} ?></span></div>
                 <div class="col-sm-3">Time : <span class="font16" id="shjam<?php echo $nomor;?>"><?php if($data_farm['date_create'] == ''){echo '-';}else{echo date_format(date_create($data_farm['date_create']), "H").":".$menit.":00";} ?></span></div>
