@@ -136,18 +136,34 @@ class Population extends CI_Controller {
         }
     }
 
+    public function getflock(){
+        $id_farm = $this->session->userdata('id_user');
+        $kode_kandang = $this->input->post('kandang');
+        $esql2 = "SELECT flock FROM data_kandang WHERE id = '".$kode_kandang."'";
+        $cekdb2 = $this->db->query($esql2);
+        $isidb21 = $cekdb2->row_array();
+
+        if($cekdb2->num_rows() > 0){
+            echo json_encode(['status'=>true,'periode'=>$isidb21['flock']]);
+        }else{
+            echo json_encode(['status'=>false]);
+        }
+    }
+
     public function getgrow(){
         $ck = 0;
         $dk = 0;
         $id_farm = $this->session->userdata('id_user');
         $kode_kandang = $this->input->post('kandang');
         $tanggal = $this->input->post('tanggal');
+        $periode = $this->input->post('periode');
 
-        $esql2 = "SELECT periode,growday,birdin,population,keterangan,mortality,selection FROM population WHERE tanggal = '".$tanggal."' AND id_farm = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY periode DESC, growday DESC LIMIT 1";
+        $esql2 = "SELECT periode,growday,birdin,population,keterangan,mortality,selection FROM population WHERE periode = '".$periode."' AND tanggal = '".$tanggal."' AND id_farm = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY growday DESC LIMIT 1";
         $cekdb2 = $this->db->query($esql2);
         $isidb21 = $cekdb2->row_array();
 
         if($cekdb2->num_rows() > 0){
+
             $hasilgrow = $isidb21['growday'];
             $hasilperiode = $isidb21['periode'];
             if($isidb21['keterangan'] == 'birdin'){
@@ -157,32 +173,37 @@ class Population extends CI_Controller {
             }
             echo json_encode(['status'=>true,'growday'=>$hasilgrow,'periode'=>$hasilperiode,'pp'=>$pp]);
         }else{
-            $esql3 = "SELECT birdin,population,afterpopulation,keterangan,mortality,selection,tanggal FROM population WHERE id_farm = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY periode DESC, growday DESC LIMIT 1";
+            $esql3 = "SELECT periode,growday,birdin,population,afterpopulation,keterangan,mortality,selection,tanggal FROM population WHERE tanggal <= '".$tanggal."' AND periode = '".$periode."' AND id_farm = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY tanggal DESC, growday DESC LIMIT 1";
             $cekdb3 = $this->db->query($esql3);
             $isidb3 = $cekdb3->row_array();
-            $ttg1   = (int)(date_format(date_create($isidb3['tanggal']),"Y").date_format(date_create($isidb3['tanggal']),"m").date_format(date_create($isidb3['tanggal']),"d"));
-            $ttg2  = (int)(date_format(date_create($tanggal),"Y").date_format(date_create($tanggal),"m").date_format(date_create($tanggal),"d"));
+            $ttg1   = date_format(date_create($isidb3['tanggal']),"Y-m-d");
+            $ttg2  = date_format(date_create($tanggal),"Y-m-d");
 
             if($cekdb3->num_rows() > 0){
-                if($ttg2 > $ttg1){
-                    $pp = [true,$isidb3['afterpopulation'],'',''];
-                }else{
-                    $ck = 1;
-                }
+                $diff2 = date_diff(date_create($ttg1),date_create($ttg2));
+                $difgrow2 = (int)$isidb3['growday'] + (int)$diff2->format("%R%a");
+                $pp = [true,$isidb3['afterpopulation'],'',''];
+                $hasilgrow = $difgrow2;
+                $hasilperiode = $isidb3['periode'];
             }else{
                 $ck = 1;
             }
 
             if($ck == 1){
-                $esql = "SELECT periode,growday,date_record FROM `data_record` WHERE date_record like '%".$tanggal."%' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY `data_record`.`periode` DESC,`data_record`.`growday` DESC LIMIT 1";
+                $esql = "SELECT periode,growday,date_record FROM `data_record` WHERE keterangan = 'ok' AND periode = '".$periode."' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY date_record DESC, growday DESC LIMIT 1";
                 $cekdb = $this->db->query($esql);
                 $isidb = $cekdb->row_array();
     
                 if($cekdb->num_rows() > 0){
                     $diff=date_diff(date_create($isidb['date_record']),date_create($tanggal));
-                    $difgrow = (int)$isidb['growday'] + (int)$diff->format("%R%a");    
+                    $difgrow = (int)$isidb['growday'] + (int)$diff->format("%R%a");
+                    $hasilperiode = $isidb['periode'];
+
+                    $pp = [false,'','',''];
                     if($difgrow < 1){
-                        
+                        $hasilgrow = '';
+                    }else{
+                        $hasilgrow = $difgrow;
                     }
                 }else{
                     $dk = 1;
@@ -191,6 +212,8 @@ class Population extends CI_Controller {
 
             if($dk == 1){
                 $pp = [false,'','',''];
+                $hasilgrow = '';
+                $hasilperiode = $periode;
             }
 
             echo json_encode(['status'=>true,'growday'=>$hasilgrow,'periode'=>$hasilperiode,'pp'=>$pp]);
@@ -290,14 +313,15 @@ class Population extends CI_Controller {
         if($growval == '' and isset($cekdb['growday'])){
             $growval = (int)$cekdb['growday'] - 30;
         }
+        if($growval < 1){$growval = 1;}
         if($growval2 == '' and isset($cekdb['growday'])){
-            $growval2 = (int)$cekdb['growday'] + 1;
+            $growval2 = (int)$cekdb['growday'];
         }
 
         if($periode == '' and isset($cekdb['periode'])){
             $periode = (int)$cekdb['periode'];
         }
-
+ 
         $esqlperiode = "AND periode = '".$periode."' ";
 
         if($growval == $growval2){
@@ -314,6 +338,7 @@ class Population extends CI_Controller {
         }else{
             $esql .= $inidata[0]." AS isidata";
         }
+
         $esql .= " FROM population WHERE id_farm = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
         $esql .= $esqlgrow;
         $esql .= $esqlperiode;
@@ -419,7 +444,7 @@ class Population extends CI_Controller {
                 $mort = 0;
                 $vmor2 = $vmor2 + floatval($value2->isidata);
                 $mort = ($vmor2 / $databirdin['birdin']) * 100;    
-                $bdata[] = $mort;
+                $bdata[] = number_format($mort,2);
             }
         }
 
@@ -448,21 +473,24 @@ class Population extends CI_Controller {
         $realmax = max($datamax1);
         $realmin = min($datamin1);
 
-        if($realmax < 99){$realmax = $realmax + 2;}
+        if(isset(explode(".",$realmax)[1])){if(explode(".",$realmax)[1] >= 1){$realmax = explode(".",$realmax)[0] + 1;}}
         if($realmin > 1){$realmin = $realmin - 1;}
 
         $countrange = 10;
         $dif1 = $realmax - $realmin;
-        if($dif1 == $realmax){$dif1range = $dif1 / 10;}
-        else{$dif1range = $dif1 / $countrange;}
+        // if($dif1 == $realmax){$dif1range = $dif1 / 10;}else{$dif1range = $dif1 / $countrange;}
+        $dif1range = $dif1 / $countrange;
         if($dif1range < 1){$dif1range = 1;}
         if(isset(explode(".",$dif1range)[1])){
             if(explode(".",$dif1range)[1] >= 1){$dif1range = explode(".",$dif1range)[0] + 1;}
         };
-        $sizeyaxis1[0] = $realmin;
+        $sizeyaxis1[0] = floatval(number_format($realmin,2));
+        if($realmax <= 5){$dif1range = $dif1range / 2;}
+        if($realmax <= 2){$dif1range = $dif1range / 2;}
         for ($i=0; $i < $countrange; $i++) { 
             $realmin = $realmin + $dif1range;
-            $sizeyaxis1[$i+1] = $realmin;
+            $sizeyaxis1[$i+1] = floatval(number_format($realmin,2));
+            if($sizeyaxis1[$i+1] >= $realmax){break;}
         }
 
         if($growval == ''){
@@ -475,7 +503,7 @@ class Population extends CI_Controller {
             }
         }
 
-        echo json_encode(['status'=>true,'periode'=>$periode,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari'=>$growval,'hoursampai'=>$growval2,'linelabel'=>$linelabel,'difgrow'=>$difgrow,'sizeyaxis1' => $sizeyaxis1]);
+        echo json_encode(['bd' => $realmax, 'status'=>true,'periode'=>$periode,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari'=>$growval,'hoursampai'=>$growval2,'linelabel'=>$linelabel,'difgrow'=>$difgrow,'sizeyaxis1' => $sizeyaxis1]);
     }
 
     public function datatable(){
@@ -586,9 +614,10 @@ class Population extends CI_Controller {
             }else{
                 $vmor = $vmor + floatval($isidata[$inidata[1]]);
                 $vsel = $vsel + floatval($isidata[$inidata[2]]);
-                $kolomdata[3]  = ($isidata[$inidata[1]] + $isidata[$inidata[2]]).' ('.($vmor + $vsel).')';
-                $kolomdata[4]  = $isidata[$inidata[1]].' ('.$vmor.')';
-                $kolomdata[5]  = $isidata[$inidata[2]].' ('.$vsel.')';
+                $kolomdata[3]  = $databirdin['birdin'];
+                $kolomdata[4]  = ($isidata[$inidata[1]] + $isidata[$inidata[2]]).' ('.($vmor + $vsel).')';
+                $kolomdata[5]  = $isidata[$inidata[1]].' ('.$vmor.')';
+                $kolomdata[6]  = $isidata[$inidata[2]].' ('.$vsel.')';
             }
 
             $adata[$iz] = $kolomdata;

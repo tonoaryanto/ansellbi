@@ -384,5 +384,5 @@ class Report extends CI_Controller {
 
             echo json_encode($dataini1);
         }
-    }    
+    }
 }

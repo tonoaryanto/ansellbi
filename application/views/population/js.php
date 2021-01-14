@@ -299,6 +299,10 @@ function loadtabel() {
                     orderable: false
                 },
                 {
+                    title: "BIRD IN",
+                    orderable: false
+                },
+                {
                     title: "MORTALITY (CUMULATIVE)",
                     orderable: false
                 },

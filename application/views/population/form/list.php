@@ -11,15 +11,6 @@
                 <form id="form-aksi">
                 <div class="col-lg-12">
                     <div class="col-lg-4">
-                        <div class="form-group col-md-12">
-                            <label>Date</label>
-                            <div class="input-group date col-lg-5">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
-                                </div>
-                                <input name="tanggal" type="date" style="line-height: normal;" class="form-control pull-right" id="datepicker" onchange="getgrow()">
-                            </div>
-                        </div>
                         <div class="form-group col-lg-12">
                             <label>Data House</label>
                             <div class="input-group col-lg-8">
@@ -31,8 +22,17 @@
                         <div class="form-group col-sm-12">
                                 <label>Flock</label>
                                 <div class="input-group col-lg-5">
-                                    <input type="text" class="form-control pull-right" name="periode" disabled>
+                                    <input type="text" class="form-control pull-right" onchange="getgrow()" name="periode" disabled>
                                 </div>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label>Date</label>
+                            <div class="input-group date col-lg-5">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-calendar"></i>
+                                </div>
+                                <input name="tanggal" type="date" style="line-height: normal;" class="form-control pull-right" id="datepicker" onchange="getgrow()">
+                            </div>
                         </div>
                         <div class="form-group col-sm-12">
                                 <label>Growday</label>
@@ -43,7 +43,7 @@
                     </div>
                     <div class="col-lg-4">
                         <div class="form-group col-sm-12" id="birdinput" style="display:none;">
-                        <label><input type="checkbox" class="minimal" style="position: absolute; opacity: 0;" name="cekbirdin">&nbsp;Bird In</label>
+                            <label><input type="checkbox" class="minimal" style="position: absolute; opacity: 0;" name="cekbirdin">&nbsp;Bird In</label>
                             <div class="input-group col-lg-8" id="inputbird" style="display:none;">
                                 <input type="text" class="form-control pull-right" name="birdin">
                             </div>
