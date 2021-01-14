@@ -20,6 +20,9 @@ class Report extends CI_Controller {
 
     public function history_house_hour($site=null)
     {
+        $id_user   = $this->session->userdata('id_user');
+        $hgrowchange = $this->umum_model->get("(SELECT periode,growday FROM data_record WHERE keterangan = 'growchange' AND kode_perusahaan = '".$id_user."' ORDER BY periode DESC,growday DESC LIMIT 1) as data")->num_rows();
+
         if($site == null){
         $this->konfigurasi->cek_url();
         $data = [
@@ -33,6 +36,7 @@ class Report extends CI_Controller {
             'isi'       => 'report/house_hour/list',
             'cssadd'    => 'report/house_hour/cssadd',
             'jsadd'     => 'report/house_hour/jsadd',
+            'cekgrowchange' => $hgrowchange
         ];
         $this->load->view('template/wrapper',$data);
         }
@@ -49,6 +53,7 @@ class Report extends CI_Controller {
                 'isi'       => 'report/house_hour/myaxis/list',
                 'cssadd'    => 'report/house_hour/myaxis/cssadd',
                 'jsadd'     => 'report/house_hour/myaxis/jsadd',
+                'cekgrowchange' => $hgrowchange
             ];
             $this->load->view('template/wrapper',$data);
         }

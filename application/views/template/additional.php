@@ -15,8 +15,6 @@ $(document).ready(function(){
     modal.css({
     "background" : "#000c",
     "position": "absolute",
-    "top": ((bh - h) / 2) + "px",
-    "left": ((bw - w) / 2) + "px"
     })
 
     $('#ckgwd').modal({backdrop: 'static', keyboard: false})

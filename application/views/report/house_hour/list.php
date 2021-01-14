@@ -1,3 +1,27 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed');?>
+<?php if($cekgrowchange == 1){ ?>
+<div class="modal fade" id="ckgwd" data-ini="<?php echo $cekgrowchange?>">
+  <div class="modal-dialog">
+    <div class="modal-content" style="background:#0000;">
+      <div class="modal-header">
+        <a class="close btn btn-default btn-sm" aria-label="Close" href="../..">Back</a>
+        <h4 class="modal-title" style="color:#fff;">Warning!!</h4>
+      </div>    
+      <div class="modal-body" style="color:#fff;">
+        <h4>
+        There is a growday difference between the ABI system and the controller. Please adjust it first before starting this process. please press button <span class="btn btn-default btn-xs">Back</span> to return. After that go to the Growday change menu
+        <br>
+        <br>
+        <br>
+        <center>
+        <img style="opacity:80%;" src="<?php echo base_url(); ?>assets/img/growchange.png">
+        </center>
+        </h4>
+      </div>
+    </div>
+  </div>
+</div>
+<?php } ?>
 <div class="row">
 	<div class="col-sm-12">
 		<div class="nav-tabs-custom">

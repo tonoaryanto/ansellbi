@@ -12,3 +12,4 @@
 <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.html5.min.js"></script>
 <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.print.min.js"></script>
 <script src="<?php echo base_url('get_source/my_style/js/report-house_hour-myaxis-js.js');?>"></script>
+<script src="<?php echo base_url('get_source/my_style/js/template-additional.js'); ?>"></script>

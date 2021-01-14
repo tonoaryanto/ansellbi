@@ -49,7 +49,7 @@
                   </p>
                   <div class="form-group col-sm-3">
                     <div class="input-group">
-                      <span class="input-group-addon" style="border-top-left-radius:4px;border-bottom-left-radius:4px;">Periode</span>
+                      <span class="input-group-addon" style="border-top-left-radius:4px;border-bottom-left-radius:4px;">Flock</span>
                       <input name="val_periode" class="form-control" id="inputperiode" style="width: 100%;border-top-right-radius:4px;border-bottom-right-radius:4px;" type="number" min="1" placeholder="-Masukan periode-" value="<?php echo $iniperiode; ?>">
                     </div>
                   </div>
