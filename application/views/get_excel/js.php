@@ -6,7 +6,7 @@ $(document).ready(function(){
     if ($('[name="periode"]').val() == '') {
       swal.fire({
         title: "Warning!",
-        html : '<p style="font-size: 14px">Please Input Period!</p>',
+        html : '<p style="font-size: 14px">Please Input Flock!</p>',
         type: "warning",
       });
       $('[name="periode"]').focus();

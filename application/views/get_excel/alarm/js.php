@@ -6,7 +6,7 @@ $(document).ready(function(){
     if ($('[name="periode"]').val() == '') {
       swal.fire({
         title: "Warning!",
-        html : '<p style="font-size: 14px">Please Input Period!</p>',
+        html : '<p style="font-size: 14px">Please input flock!</p>',
         type: "warning",
       });
       $('[name="periode"]').focus();
@@ -15,7 +15,7 @@ $(document).ready(function(){
     if ($('[name="select_kandang"]').val() == null) {
       swal.fire({
         title: "Warning!",
-        html : '<p style="font-size: 14px">Please Input House name!</p>',
+        html : '<p style="font-size: 14px">Please input house name!</p>',
         type: "warning",
       });
       $('[name="select_kandang"]').focus();

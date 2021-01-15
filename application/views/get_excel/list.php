@@ -9,8 +9,8 @@
                 <div class="row">
                   <div class="col-sm-4">
                     <div class="form-group">
-                      <label>Period</label>
-                      <input placeholder="input Period" type="number" min="1" name="periode" size="20" class="form-control" width="100px" style="border-radius:5px;" onchange="data_terakhir();">
+                      <label>Flock</label>
+                      <input placeholder="Input Flock" type="number" min="1" name="periode" size="20" class="form-control" width="100px" style="border-radius:5px;" onchange="data_terakhir();">
                     </div>
                   </div>
                   <div class="col-sm-4">
