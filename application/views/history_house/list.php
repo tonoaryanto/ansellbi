@@ -42,13 +42,13 @@
             <div class="box-footer no-padding">
               <ul class="nav nav-stacked">
                 <li class="font16"><a href="javascript:void(0);">Required Temperature<span class="pull-right"><span id="shreqtemp<?php echo $nomor;?>"><?php if($data_farm['req_temp'] != ''){echo $data_farm['req_temp'];}else{echo '0';} ?></span> °C</span></a></li>
-                <li class="font16"><a href="javascript:void(0);">Average Temperature<span class="pull-right"><span id="shavgtemp<?php echo $nomor;?>"><?php if($data_farm['avg_temp'] != ''){echo $data_farm['avg_temp'];}else{echo '0';} ?></span> °C</span></a></li>
+                <li class="font16"><a href="javascript:void(0);">Current Temperature<span class="pull-right"><span id="shavgtemp<?php echo $nomor;?>"><?php if($data_farm['avg_temp'] != ''){echo $data_farm['avg_temp'];}else{echo '0';} ?></span> °C</span></a></li>
                 <li class="font16"><a href="javascript:void(0);">Humidity<span class="pull-right"><span id="shhum<?php echo $nomor;?>"><?php if($data_farm['humidity'] != ''){echo $data_farm['humidity'];}else{echo '0';} ?></span> %</span></a></li>
+                <li class="font16"><a href="javascript:void(0);">Fan Speed <span class="pull-right"><span id="shfan<?php echo $nomor;?>"><?php if($data_farm['fan'] != ''){echo $data_farm['fan'];}else{echo '0';} ?></span> %</span></a></li>
                 <li class="font16"><a href="javascript:void(0);">Wind Speed<span class="pull-right"><span id="shwind<?php echo $nomor;?>"><?php if($data_farm['windspeed'] != ''){echo $data_farm['windspeed'];}else{echo '0';} ?></span> M/s</span></a></li>
                 <li class="font16"><a href="javascript:void(0);">Feed Consumtion<span class="pull-right"><span id="shfeed<?php echo $nomor;?>"><?php if($data_farm['feed'] != ''){echo $data_farm['feed'];}else{echo '0';} ?></span> Kg</span></a></li>
                 <li class="font16"><a href="javascript:void(0);">Water Consumption <span class="pull-right"><span id="shwater<?php echo $nomor;?>"><?php if($data_farm['water'] != ''){echo $data_farm['water'];}else{echo '0';} ?></span> Liter</span></a></li>
                 <li class="font16"><a href="javascript:void(0);">Static Pressure <span class="pull-right"><span id="shpress<?php echo $nomor;?>"><?php if($data_farm['static_pressure'] != ''){echo $data_farm['static_pressure'];}else{echo '0';} ?></span></span></a></li>
-                <li class="font16"><a href="javascript:void(0);">Fan Speed <span class="pull-right"><span id="shfan<?php echo $nomor;?>"><?php if($data_farm['fan'] != ''){echo $data_farm['fan'];}else{echo '0';} ?></span> %</span></a></li>
               </ul>
             </div>
           </div>
