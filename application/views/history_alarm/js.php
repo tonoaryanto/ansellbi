@@ -53,7 +53,7 @@ function data_alarm(){
   if (datperiode == '' || datperiode < 1) {
     swal.fire({
       title: "Warning!",
-      html : '<p style="font-size: 14px">Incorrect period data</p>',
+      html : '<p style="font-size: 14px">Incorrect Flock data</p>',
       type : "warning",
     });
     return;

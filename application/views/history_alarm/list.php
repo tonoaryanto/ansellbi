@@ -17,7 +17,7 @@
               </select>
             </div>
             <div class="form-group col-sm-4">
-              <input class="form-control" id="inputperiode" style="width: 100%;border-radius: 3px;" type="number" min="1" placeholder="-Input Period-">
+              <input class="form-control" id="inputperiode" style="width: 100%;border-radius: 3px;" type="number" min="1" placeholder="-Input Flock-">
             </div>
             <div class="form-group col-sm-4">
               <button class="btn btn-default" onclick="data_alarm()">Apply</button>
