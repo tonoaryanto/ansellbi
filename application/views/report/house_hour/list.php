@@ -41,8 +41,8 @@
 									</select>
 								</div>
 								<div class="form-group col-sm-2">
-									<label>Period</label>
-									<input name="val_periode" class="form-control" id="inputperiode" style="width: 100%;border-radius: 3px;" type="number" min="1" placeholder="-Input period-" onchange="">
+									<label>Flock</label>
+									<input name="val_periode" class="form-control" id="inputperiode" style="width: 100%;border-radius: 3px;" type="number" min="1" placeholder="-Input FLock-" onchange="">
 								</div>
 								<div class="form-group col-sm-2">
 									<label>Data parameter</label>

@@ -26,7 +26,7 @@ $(document).ready(function(){
   if (datperiode == '' || datperiode < 1) {
     swal.fire({
       title: "Warning!",
-      html : '<p style="font-size: 14px">Data Period is empty</p>',
+      html : '<p style="font-size: 14px">Data Flock is empty</p>',
       type : "warning",
     });
     return;
@@ -67,7 +67,7 @@ $(document).ready(function(){
       if ($('[name="val_pemperiode'+i+'"]').val() == '' || $('[name="val_pemperiode'+i+'"]').val() == null || $('[name="val_pemperiode'+i+'"]').val() == undefined) {
         swal.fire({
           title: "Warning!",
-          html : '<p style="font-size: 14px">Data period '+i+' is empty!</p>',
+          html : '<p style="font-size: 14px">Data FLock '+i+' is empty!</p>',
           type : "warning",
         });
         return;
@@ -201,7 +201,7 @@ function grafik(){
   if (datperiode == '' || datperiode < 1) {
     swal.fire({
       title: "Warning!",
-      html : '<p style="font-size: 14px">Data Period is empty</p>',
+      html : '<p style="font-size: 14px">Data Flock is empty</p>',
       type : "warning",
     });
     return;
@@ -242,7 +242,7 @@ function grafik(){
       if ($('[name="val_pemperiode'+i+'"]').val() == '' || $('[name="val_pemperiode'+i+'"]').val() == null || $('[name="val_pemperiode'+i+'"]').val() == undefined) {
         swal.fire({
           title: "Warning!",
-          html : '<p style="font-size: 14px">Data period '+i+' is empty!</p>',
+          html : '<p style="font-size: 14px">Data Flock '+i+' is empty!</p>',
           type : "warning",
         });
         return;
@@ -493,7 +493,7 @@ function addpembanding() {
   }
   $('<div>')
     .attr({'class' : 'col-sm-6','id' : 'bodypem'+ isibox})
-    .html('<label>Data comparison '+isibox+'</label><div style="padding:10px;border-style: solid;border-width: thin;border-radius: 5px;border-color:#ccc;margin-bottom:10px;"><div class="row"><div class="form-group col-sm-4"><label>Data house</label><select name="val_pemkandang'+isibox+'" class="form-control" id="optionselect_kandang" style="width: 100%"><option disabled selected>-Select Data house-</option></select></div><div class="form-group col-sm-4"><label>Period</label><input name="val_pemperiode'+isibox+'" class="form-control" id="inputperiode" style="width: 100%;border-radius: 3px;" type="number" min="1" placeholder="-Input period-"></div></div></div>')
+    .html('<label>Data comparison '+isibox+'</label><div style="padding:10px;border-style: solid;border-width: thin;border-radius: 5px;border-color:#ccc;margin-bottom:10px;"><div class="row"><div class="form-group col-sm-4"><label>Data house</label><select name="val_pemkandang'+isibox+'" class="form-control" id="optionselect_kandang" style="width: 100%"><option disabled selected>-Select Data house-</option></select></div><div class="form-group col-sm-4"><label>Flock</label><input name="val_pemperiode'+isibox+'" class="form-control" id="inputperiode" style="width: 100%;border-radius: 3px;" type="number" min="1" placeholder="-Input Flock-"></div></div></div>')
     .appendTo('#boxpembanding');
 
   $('[name="val_pemkandang'+isibox+'"]').empty();

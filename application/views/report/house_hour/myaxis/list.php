@@ -110,8 +110,8 @@
 								</div>
 							</div>
 							<div class="form-group col-sm-3">
-										<label>Period</label>
-										<input name="val_periode1" class="form-control" id="inputperiode1" style="width: 100%;border-radius: 3px;" type="number" min="1" placeholder="-Input period-">
+										<label>Flock</label>
+										<input name="val_periode1" class="form-control" id="inputperiode1" style="width: 100%;border-radius: 3px;" type="number" min="1" placeholder="-Input Flock-">
 									</div>
 							<div class="form-group col-sm-3">
 								<label>Actions</label>

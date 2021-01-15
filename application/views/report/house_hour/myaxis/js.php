@@ -240,11 +240,11 @@ function cekgrafik() {
 
   if (data2posisi == '' || data2posisi == null || data2posisi == undefined) {title = 'Data 2 input position is empty!';cek = 1;}
   if (data2data == '' || data2data == null || data2data == 'null' || data2data == undefined) {title = 'Data 2 input data parameter is empty!';cek = 1;}
-  if (data2periode == '' || data2periode < 1) {title = 'Data 2 input period is empty!';cek = 1;}
+  if (data2periode == '' || data2periode < 1) {title = 'Data 2 input flock is empty!';cek = 1;}
   if (data2kandang == '' || data2kandang == null || data2kandang == undefined) {title = 'Data 2 input house is empty!';cek = 1;}
   if (data1posisi == '' || data1posisi == null || data1posisi == undefined) {title = 'Data 1 input position is empty!';cek = 1;}
   if (data1data == '' || data1data == null || data1data == 'null' || data1data == undefined) {title = 'Data 1 input data parameter is empty!';cek = 1;}
-  if (data1periode == '' || data1periode < 1) {title = 'Period is empty!';cek = 1;}
+  if (data1periode == '' || data1periode < 1) {title = 'Flock is empty!';cek = 1;}
   if (data1kandang == '' || data1kandang == null || data1kandang == undefined) {title = 'Data 1 input house is empty!';cek = 1;}
   if (parseInt($('[name="hourdari1"]').val()) > parseInt($('[name="hourdari2"]').val())) {title = 'Data Grow Day is worng!';cek = 1;}
   if (title == '') {title = 'Chart name is empty!';cek = 1;}
