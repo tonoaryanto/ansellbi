@@ -479,7 +479,7 @@ class Setting extends CI_Controller {
                 if($cekegg > 0){
                     $difftglegg = $hsegg['date_record'];
                     $this->db->update('data_eggcounter',$data,$where);
-                }    
+                }
             }
 
             $data['date_record'] = $where['date_record'];
@@ -494,7 +494,7 @@ class Setting extends CI_Controller {
         $diffsh2 = date_create(date_format(date_create(date("Y-m-d")),"Y-m-d"));
         $difftgl2 = date_diff($diffsh1,$diffsh2);
         $growsetsh = (int)$data2['growday'] + (int)$difftgl2->format("%R%a");
-        $jamnow = date_format(date_create(date("Y-m-d")),"Y").date_format(date_create(date("Y-m-d")),"m").date_format(date_create(date("Y-m-d")),"d");
+        $jamnow = date_format(date_create(date("H:i:s")),"H").date_format(date_create(date("H:i:s")),"i").date_format(date_create(date("H:i:s")),"s");
         if((int)$jamnow >= (int)$data2['reset']){$growsetsh = $growsetsh +1;}
 
         $html = '<p style="font-size: 16px">Data has been changed!<br><br>';
