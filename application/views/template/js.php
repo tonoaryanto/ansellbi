@@ -1,4 +1,8 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
+	$(document).ready(function(){
+		nfr();
+		datnfr();
+	});
 
 	$('#menu-push').on('click',function () {
 		var ini = $(this).attr('data-menu');
@@ -111,3 +115,39 @@
 	myFunction(x) // Call listener function at run time
 	x.addListener(myFunction) // Attach listener function on state	
 
+	function nfr(){
+		var d = new Date();
+		var waktu = 60 - d.getSeconds();
+		setInterval(function() {
+			d = new Date();
+			waktu = 60 - parseInt(d.getSeconds());
+			if(parseInt(waktu) < 2) {
+				datnfr();
+			}
+		}, 1000);
+	}
+
+	function datnfr(){
+		$.ajax({
+		url : '<?php echo base_url('setting/nfd')?>',
+		type : "GET",
+		dataType : "JSON",
+		success : function(data)
+		{
+			get_sess(data.sess);
+			if(data.status == true){
+				$('#nfframe').removeAttr('style');
+				$('#nfcount').text(data.nfc);
+				$('#nfdt').html(data.nfd);
+			}else{
+				$('#nfframe').attr('style','display:none');
+				$('#nfcount').text('');
+				$('#nfdt').html('');
+			}
+		},
+		error: function (jqXHR, textStatus, errorThrown)
+		{
+			console.log(textStatus);
+		}
+	});
+	}

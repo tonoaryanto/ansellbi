@@ -70,6 +70,18 @@
 
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
+          <li class="dropdown notifications-menu">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <i class="fa fa-bell-o"></i>
+              <span class="label label-warning" id="nfcount"></span>
+            </a>
+            <ul class="dropdown-menu" id="nfframe" style="display:none;">
+              <li style="padding:5px 0px;">
+                <ul class="menu" id="nfdt">
+                </ul>
+              </li>
+            </ul>
+          </li>
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">

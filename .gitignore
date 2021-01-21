@@ -1,4 +1,4 @@
-application/config/database.php
+database.php
 *.xlsx
 *.csv
 *.xls

@@ -510,4 +510,75 @@ class Setting extends CI_Controller {
         
         echo json_encode(['status' => true,'message' => $html]);
      }
+
+    public function nfd(){
+        $cek_sess = $this->konfigurasi->cek_js();
+        if ($cek_sess == 0) {echo json_encode(['sess' => $cek_sess]);return;}
+        $id_farm  = $this->session->userdata('id_user');
+
+        $dt_kandang = $this->db->query("SELECT id,nama_kandang FROM data_kandang WHERE id = '".$id_farm."' LIMIT 1")->result();
+        $countnf = 0;
+        $html = "";
+        foreach ($dt_kandang as $value) {
+            $where = [
+                "kode_kandang" => $value->id,
+                "kode_perusahaan" => $value->id,
+            ];
+            $dbrealtime = $this->umum_model->get("data_realtime",$where);
+            $dbrealtimer = $dbrealtime->row_array();
+            $suhunow = floatval($dbrealtimer['avg_temp']);
+            $suhureq = floatval($dbrealtimer['req_temp']);
+            $difsuhu = $suhunow - $suhureq;
+
+            $img = base_url()."assets/icon_software_ansell/data1.png";
+            $nama_kandang = $value->nama_kandang;
+
+            if($difsuhu > 0){
+                if($difsuhu > 1){
+                    $countnf = $countnf + 1;
+                    $statussuhu = "higher";
+                    $iconarrow = 'fa-arrow-up';
+                    $colorarrow = '#ce3232';
+                }else {
+                    $countnf = $countnf + 1;
+                    $statussuhu = "higher";
+                    $iconarrow = 'fa-arrow-up';
+                    $colorarrow = '#d78721';    
+                }
+            }else if($difsuhu < -1){
+                $countnf = $countnf + 1;
+                $statussuhu = "lower";
+                $iconarrow = 'fa-arrow-down';
+                $colorarrow = '#258fff';
+            }
+
+            if($difsuhu < -1 OR $difsuhu > 0){
+                $html .= '<li><label><img src="';
+                $html .= $img;
+                $html .= '" style="height:inherit;width:25px;"><span style="font-weight:lighter;">Temperature</span> (<span>';
+                $html .= $nama_kandang;
+                $html .= '</span>)</label>';
+                $html .= '<p style="padding:0px 10px; 0px"><i class="fa ';
+                $html .= $iconarrow;
+                $html .= '" style="color:';
+                $html .= $colorarrow;
+                $html .= ';"></i>&nbsp;Current data is ';
+                $html .= $suhunow;
+                $html .= "&nbsp;";
+                $html .= $statussuhu;
+                $html .= '&nbsp;than&nbsp;';
+                $html .= $suhureq;
+                $html .= '<br><br>';
+                $html .= '<span style="float:right;">';
+                $html .= $dbrealtimer['date_create'];
+                $html .= '</span></p><hr></li>';    
+            }
+        }
+
+        if($countnf != 0){
+            echo json_encode(['status'=>true,'nfd'=>$html,'nfc'=>$countnf]);
+        }else{
+            echo json_encode(['status'=>false]);
+        }
+    }
 }

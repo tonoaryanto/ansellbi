@@ -23,6 +23,21 @@ class History_house extends CI_Controller {
         $this->load->view('template/wrapper',$data);
     }
 
+    public function index2(){
+        $this->konfigurasi->cek_url();
+        $id_user   = $this->session->userdata('id_user');
+        $data = [
+            'txthead1'     => 'History House',
+            'head1'     => 'History House',
+            'link1'     => 'history_house',
+            'isi'       => 'history_house/list2',
+            'cssadd'    => 'history_house/cssadd',
+            'jsadd'     => 'history_house/jsadd',
+            'farm'      => $this->umum_model->get('data_kandang',"kode_perusahaan = '".$id_user."'")->result(),
+        ];
+        $this->load->view('template/wrapper',$data);
+    }
+
     public function rdata(){
         $id_user   = $this->session->userdata('id_user');
         $farm = $this->umum_model->get('data_kandang',"kode_perusahaan = '".$id_user."'");
