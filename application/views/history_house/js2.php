@@ -1,7 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');?>
 $(document).ready(function(){
     reload_data();
-    getdat();
 });
 
 function reload_data(){
@@ -29,7 +28,21 @@ function getdat(){
             if(data.status == true){
                 var i;
                 var isi = data.isi;
-                setdt(data.countfarm,0,isi);
+                for (i = 0; i < data.countfarm; i++) {
+                    var isidata = isi[i];
+                    $('#shperiode' + i).text(isidata.periode);
+                    $('#shgrow' + i).text(isidata.growday);
+                    $('#shtgl' + i).text(isidata.tanggal);
+                    $('#shjam' + i).text(isidata.jam);
+                    $('#shreqtemp' + i).text(isidata.req_temp);
+                    $('#shavgtemp' + i).text(isidata.avg_temp);
+                    $('#shhum' + i).text(isidata.humidity);
+                    $('#shwind' + i).text(isidata.wind);
+                    $('#shfeed' + i).text(isidata.feed);
+                    $('#shwater' + i).text(isidata.water);
+                    $('#shpress' + i).text(isidata.static_pressure);
+                    $('#shfan' + i).text(isidata.fan);
+                }
             }
         },
         error: function (jqXHR, textStatus, errorThrown)
@@ -37,25 +50,4 @@ function getdat(){
             console.log(textStatus);
         }
     });
-}
-
-function setdt(count,i,data){
-    if(i < count){
-        var isidata = data;
-        $('#dtrt0_' + i).text(isidata.periode[i]);
-        $('#dtrt1_' + i).text(isidata.growday[i]);
-        $('#dtrt2_' + i).html(isidata.tanggal[i]);
-        $('#dtrt3_' + i).text(isidata.jam[i]);
-        $('#dtrt4_' + i).text(isidata.req_temp[i]);
-        $('#dtrt5_' + i).attr('style','background:'+isidata.avg_bg[i]);
-        $('#dtrt5_' + i).text(isidata.avg_temp[i]);
-        $('#dtrt6_' + i).text(isidata.humidity[i]);
-        $('#dtrt7_' + i).text(isidata.fan[i]);
-        $('#dtrt8_' + i).text(isidata.windspeed[i]);
-        $('#dtrt9_' + i).text(isidata.feed[i]);
-        $('#dtrt10_' + i).text(isidata.water[i]);
-        $('#dtrt11_' + i).text(isidata.static_pressure[i]);
-        i = i + 1;
-        setdt(count,i,data);
-    }
 }

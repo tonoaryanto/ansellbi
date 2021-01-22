@@ -53,10 +53,13 @@ class History_house extends CI_Controller {
 
             $data2 =[];
             $nomor = 0;
+            $suhuatas = 1;
+            $suhubawah = -2;
             foreach ($datafarm as $value) {
                 $isi = $this->umum_model->get('data_realtime',['kode_perusahaan' => $id_user,'kode_kandang' => $value->id])->row_array();
                 if($isi['id'] != ''){
-                    $tanggal = date_format(date_create($isi['date_create']), "d-m-Y");
+                    $tanggalsc = date_format(date_create($isi['date_create']), "d-m");
+                    $tanggal = date_format(date_create($isi['date_create']), "d F Y");
                     $xmenit = (int)str_split(date_format(date_create($isi['date_create']), "i"))[1] - 5;
                     if($xmenit < 0){
                       $xmenit = 0;
@@ -64,40 +67,48 @@ class History_house extends CI_Controller {
                       $xmenit = 5;
                     }
                     $menit = str_split(date_format(date_create($isi['date_create']), "i"))[0].$xmenit;
-                    $jam = date_format(date_create($isi['date_create']), "H").":".$menit.":00";
-                    $data2[$nomor] = [
-                        'id' => $isi['id'],
-                        'periode' => $isi['periode'],
-                        'growday' => $isi['growday'],
-                        'tanggal' => $tanggal,
-                        'jam' => $jam,
-                        'req_temp' => $isi['req_temp'],
-                        'avg_temp' => $isi['avg_temp'],
-                        'humidity' => $isi['humidity'],
-                        'windspeed' => $isi['windspeed'],
-                        'feed' => $isi['feed'],
-                        'water' => $isi['water'],
-                        'static_pressure' => $isi['static_pressure'],
-                        'fan' => $isi['fan']
-                    ];
+                    $jam = date_format(date_create($isi['date_create']), "H").":".$menit."";
+                    $data2['periode'][$nomor] = $isi['periode'];
+                    $data2['growday'][$nomor] = $isi['growday'];
+                    $data2['tanggal'][$nomor] = '<a href="javascript:void(0);" title="'.$tanggal.'" style="color:#333;">'.$tanggalsc.'</a>';
+                    $data2['jam'][$nomor] = $jam;
+                    $data2['req_temp'][$nomor] = $isi['req_temp'];
+
+                    $diffsuhu = floatval($isi['avg_temp']) - floatval($isi['req_temp']);
+                    if($diffsuhu > 0 ){
+                        if($diffsuhu > $suhuatas){
+                            $avgtemp = '#ce3232bf';
+                        }else{
+                            $avgtemp = '#d78721bf';
+                        }
+                    }else if($diffsuhu < $suhubawah){
+                        $avgtemp = '#258fffbf';
+                    }else{
+                        $avgtemp = '#0000';
+                    }
+                    $data2['avg_bg'][$nomor] = $avgtemp;
+                    $data2['avg_temp'][$nomor] = $isi['avg_temp'];
+                    $data2['humidity'][$nomor] = $isi['humidity'];
+                    $data2['windspeed'][$nomor] = $isi['windspeed'];
+                    $data2['feed'][$nomor] = $isi['feed'];
+                    $data2['water'][$nomor] = $isi['water'];
+                    $data2['static_pressure'][$nomor] = $isi['static_pressure'];
+                    $data2['fan'][$nomor] = $isi['fan'];
                 }else{
                     $tanggal = "-";
-                    $jam = "-";    
-                    $data2[$nomor] = [
-                        'id' => '',
-                        'periode' => '0',
-                        'growday' => '0',
-                        'tanggal' => '',
-                        'jam' => '',
-                        'req_temp' => '0',
-                        'avg_temp' => '0',
-                        'humidity' => '0',
-                        'windspeed' => '0',
-                        'feed' => '0',
-                        'water' => '0',
-                        'static_pressure' => '0',
-                        'fan' => '0'
-                    ];
+                    $jam = "-";
+                    $data2['periode'][$nomor] = "-";
+                    $data2['growday'][$nomor] = "-";
+                    $data2['tanggal'][$nomor] = $tanggal;
+                    $data2['jam'][$nomor] = $jam;
+                    $data2['req_temp'][$nomor] = "-";
+                    $data2['avg_temp'][$nomor] = "-";
+                    $data2['humidity'][$nomor] = "-";
+                    $data2['windspeed'][$nomor] = "-";
+                    $data2['feed'][$nomor] = "-";
+                    $data2['water'][$nomor] = "-";
+                    $data2['static_pressure'][$nomor] = "-";
+                    $data2['fan'][$nomor] = "-";
                 }
                 $nomor = $nomor + 1;
             }
@@ -110,6 +121,79 @@ class History_house extends CI_Controller {
         }
         echo json_encode($data);
     }
+
+    // public function rdata(){
+    //     $id_user   = $this->session->userdata('id_user');
+    //     $farm = $this->umum_model->get('data_kandang',"kode_perusahaan = '".$id_user."'");
+
+    //     $countfarm = $farm->num_rows();
+    //     $datafarm = $farm->result();
+
+    //     if($countfarm > 0){
+    //         $data = [
+    //             'status' => true,
+    //             'countfarm' => $countfarm
+    //         ];
+
+    //         $data2 =[];
+    //         $nomor = 0;
+    //         foreach ($datafarm as $value) {
+    //             $isi = $this->umum_model->get('data_realtime',['kode_perusahaan' => $id_user,'kode_kandang' => $value->id])->row_array();
+    //             if($isi['id'] != ''){
+    //                 $tanggal = date_format(date_create($isi['date_create']), "d-m-Y");
+    //                 $xmenit = (int)str_split(date_format(date_create($isi['date_create']), "i"))[1] - 5;
+    //                 if($xmenit < 0){
+    //                   $xmenit = 0;
+    //                 }else if($xmenit >= 0){
+    //                   $xmenit = 5;
+    //                 }
+    //                 $menit = str_split(date_format(date_create($isi['date_create']), "i"))[0].$xmenit;
+    //                 $jam = date_format(date_create($isi['date_create']), "H").":".$menit.":00";
+    //                 $data2[$nomor] = [
+    //                     'id' => $isi['id'],
+    //                     'periode' => $isi['periode'],
+    //                     'growday' => $isi['growday'],
+    //                     'tanggal' => $tanggal,
+    //                     'jam' => $jam,
+    //                     'req_temp' => $isi['req_temp'],
+    //                     'avg_temp' => $isi['avg_temp'],
+    //                     'humidity' => $isi['humidity'],
+    //                     'windspeed' => $isi['windspeed'],
+    //                     'feed' => $isi['feed'],
+    //                     'water' => $isi['water'],
+    //                     'static_pressure' => $isi['static_pressure'],
+    //                     'fan' => $isi['fan']
+    //                 ];
+    //             }else{
+    //                 $tanggal = "-";
+    //                 $jam = "-";    
+    //                 $data2[$nomor] = [
+    //                     'id' => '',
+    //                     'periode' => '0',
+    //                     'growday' => '0',
+    //                     'tanggal' => '',
+    //                     'jam' => '',
+    //                     'req_temp' => '0',
+    //                     'avg_temp' => '0',
+    //                     'humidity' => '0',
+    //                     'windspeed' => '0',
+    //                     'feed' => '0',
+    //                     'water' => '0',
+    //                     'static_pressure' => '0',
+    //                     'fan' => '0'
+    //                 ];
+    //             }
+    //             $nomor = $nomor + 1;
+    //         }
+
+    //         $data['isi'] = $data2;
+    //     }else{
+    //         $data = [
+    //             'status' => false
+    //         ];
+    //     }
+    //     echo json_encode($data);
+    // }
 
     public function farm($idfarm,$sensor=null){
         if ($sensor == null) {redirect('history_house/farm/'.$idfarm.'/temperature');}
