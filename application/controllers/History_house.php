@@ -75,12 +75,8 @@ class History_house extends CI_Controller {
                     $data2['req_temp'][$nomor] = $isi['req_temp'];
 
                     $diffsuhu = floatval($isi['avg_temp']) - floatval($isi['req_temp']);
-                    if($diffsuhu > 0 ){
-                        if($diffsuhu > $suhuatas){
-                            $avgtemp = '#ce3232bf';
-                        }else{
-                            $avgtemp = '#d78721bf';
-                        }
+                    if($diffsuhu > $suhuatas){
+                        $avgtemp = '#ce3232bf';
                     }else if($diffsuhu < $suhubawah){
                         $avgtemp = '#258fffbf';
                     }else{

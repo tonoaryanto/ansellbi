@@ -536,18 +536,11 @@ class Setting extends CI_Controller {
             $img = base_url()."assets/icon_software_ansell/data1.png";
             $nama_kandang = $value->nama_kandang;
 
-            if($difsuhu > 0){
-                if($difsuhu > $suhuatas){
-                    $countnf = $countnf + 1;
-                    $statussuhu = "higher";
-                    $iconarrow = 'fa-arrow-up';
-                    $colorarrow = '#ce3232';
-                }else {
-                    $countnf = $countnf + 1;
-                    $statussuhu = "higher";
-                    $iconarrow = 'fa-arrow-up';
-                    $colorarrow = '#d78721';    
-                }
+            if($difsuhu > $suhuatas){
+                $countnf = $countnf + 1;
+                $statussuhu = "higher";
+                $iconarrow = 'fa-arrow-up';
+                $colorarrow = '#ce3232';
             }else if($difsuhu < $suhubawah){
                 $countnf = $countnf + 1;
                 $statussuhu = "lower";
