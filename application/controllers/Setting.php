@@ -516,13 +516,13 @@ class Setting extends CI_Controller {
         if ($cek_sess == 0) {echo json_encode(['sess' => $cek_sess]);return;}
         $id_farm  = $this->session->userdata('id_user');
 
-        $dt_kandang = $this->db->query("SELECT id,nama_kandang FROM data_kandang WHERE id = '".$id_farm."' LIMIT 1")->result();
+        $dt_kandang = $this->db->query("SELECT id,nama_kandang,kode_perusahaan FROM data_kandang WHERE kode_perusahaan = '".$id_farm."'")->result();
         $countnf = 0;
         $html = "";
         foreach ($dt_kandang as $value) {
             $where = [
                 "kode_kandang" => $value->id,
-                "kode_perusahaan" => $value->id,
+                "kode_perusahaan" => $value->kode_perusahaan,
             ];
             $dbrealtime = $this->umum_model->get("data_realtime",$where);
             $dbrealtimer = $dbrealtime->row_array();
