@@ -519,6 +519,9 @@ class Setting extends CI_Controller {
         $dt_kandang = $this->db->query("SELECT id,nama_kandang,kode_perusahaan FROM data_kandang WHERE kode_perusahaan = '".$id_farm."'")->result();
         $countnf = 0;
         $html = "";
+        $suhuatas = 1;
+        $suhubawah = -2;
+
         foreach ($dt_kandang as $value) {
             $where = [
                 "kode_kandang" => $value->id,
@@ -534,7 +537,7 @@ class Setting extends CI_Controller {
             $nama_kandang = $value->nama_kandang;
 
             if($difsuhu > 0){
-                if($difsuhu > 1){
+                if($difsuhu > $suhuatas){
                     $countnf = $countnf + 1;
                     $statussuhu = "higher";
                     $iconarrow = 'fa-arrow-up';
@@ -545,7 +548,7 @@ class Setting extends CI_Controller {
                     $iconarrow = 'fa-arrow-up';
                     $colorarrow = '#d78721';    
                 }
-            }else if($difsuhu < -1){
+            }else if($difsuhu < $suhubawah){
                 $countnf = $countnf + 1;
                 $statussuhu = "lower";
                 $iconarrow = 'fa-arrow-down';
