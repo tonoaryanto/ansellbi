@@ -230,6 +230,11 @@ class History_house extends CI_Controller {
             $settgl = date_format(date_create(date('Y-m-d')),"Y-m-d");
         }
 
+        $date = strtotime($settgl);
+        $date = strtotime("-1 day", $date);
+        $settgl1 = date('Y-m-d', $date);
+        $settgl2 = $settgl;
+
         $data = [
             'txthead1'     => 'History House - '.$inidatafarm['nama_kandang'],
             'head1'     => 'History House',
@@ -242,7 +247,8 @@ class History_house extends CI_Controller {
             'idfarm'    => $idfarm,
             'iniperiode' => $setperiode,
             'inigrow' => $setgrow,
-            'initgl' => $settgl,
+            'initgl1' => $settgl1,
+            'initgl2' => $settgl2,
             'urljs' => $urljs,
             'cekgrowchange' => $hgrowchange
         ];
@@ -257,6 +263,7 @@ class History_house extends CI_Controller {
         $kode_kandang = $this->session->userdata('idfarm');
         $periode = $this->input->post('periode');
         $startgl = $this->input->post('tgl');
+        $urut = $this->input->post('dt');
 
         $rawsql = "SELECT growday,date_record FROM data_record WHERE periode = '".$periode."' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ";
         $esql1 = $rawsql."AND keterangan = 'ok' ORDER BY growday DESC, date_record DESC LIMIT 1";
@@ -272,8 +279,18 @@ class History_house extends CI_Controller {
         $difftgl1 = date_diff($tgl1,$tgl2);
         $growawal = (int)$isidb1['growday'] + (int)$difftgl1->format("%R%a");
 
+        $date = date_format(date_create($isidb1['date_record']),"Y-m-d");
+        $date = strtotime($date);
+        $date = strtotime(($difftgl1->format("%R%a") + 1)." day", $date);
+        $growawaltgl = date('Y-m-d', $date);
+        $growawalgrow = $growawal + 1;
+
+        if($urut == 1){
+            $growawal = $growawal + 1;
+        }
+
         if($cekdb > 0 AND $startgl != ''){
-            echo json_encode(['status' => true, 'dataset' => $growawal]);
+            echo json_encode(['status' => true, 'dataset' => $growawal, 'datasettgl' => $growawaltgl, 'datasetgrow' => $growawalgrow]);
         }else{
             echo json_encode(['status' => false]);
         }
@@ -287,6 +304,7 @@ class History_house extends CI_Controller {
         $kode_kandang = $this->session->userdata('idfarm');
         $periode = $this->input->post('periode');
         $grow1 = $this->input->post('grow');
+        $urut = $this->input->post('dt');
 
         $rawsql = "SELECT growday,date_record FROM data_record WHERE periode = '".$periode."' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ";
         $esql1 = $rawsql."AND keterangan = 'ok' ORDER BY growday DESC, date_record DESC LIMIT 1";
@@ -302,10 +320,17 @@ class History_house extends CI_Controller {
         $date = date_format(date_create($isidb1['date_record']),"Y-m-d");
         $date = strtotime($date);
         $date = strtotime($diffgrow1." day", $date);
+        $growawaltgl = date('Y-m-d', $date);
+
+        if($urut == 1){
+            $date = strtotime("-1 day", $date);
+        }
         $growawal = date('Y-m-d', $date);
 
+        $growawalgrow = $grow1;
+
         if($cekdb > 0 AND $grow1 != ''){
-            echo json_encode(['status' => true, 'dataset' => $growawal]);
+            echo json_encode(['status' => true, 'dataset' => $growawal, 'datasettgl' => $growawaltgl, 'datasetgrow' => $growawalgrow]);
         }else{
             echo json_encode(['status' => false]);
         }

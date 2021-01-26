@@ -19,6 +19,7 @@ $(document).ready(function(){
 
 function changetgl(dt){
   data_json = {
+    'dt' : dt,
     'tgl' : $('[name="tgl'+dt+'"]').val(),
     'periode' : $('#inputperiode').val(),
   };
@@ -32,6 +33,10 @@ function changetgl(dt){
         get_sess(isi.sess);
         if(isi.status == true){
           $('[name="growval'+dt+'"]').val(isi.dataset);
+          if(dt == 1){
+            $('[name="tgl2"]').val(isi.datasettgl);
+            $('[name="growval2"]').val(isi.datasetgrow);
+          }
         }
       }
   });
@@ -39,6 +44,7 @@ function changetgl(dt){
 
 function changegrow(dt){
   data_json = {
+    'dt' : dt,
     'grow' : $('[name="growval'+dt+'"]').val(),
     'periode' : $('#inputperiode').val(),
   };
@@ -52,6 +58,10 @@ function changegrow(dt){
         get_sess(isi.sess);
         if(isi.status == true){
           $('[name="tgl'+dt+'"]').val(isi.dataset);
+          if(dt == 1){
+            $('[name="tgl2"]').val(isi.datasettgl);
+            $('[name="growval2"]').val(isi.datasetgrow);
+          }
         }
       }
   });

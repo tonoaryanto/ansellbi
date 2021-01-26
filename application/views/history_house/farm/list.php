@@ -56,7 +56,7 @@
                   <div class="form-group col-sm-3">
                   <label>Start Date & Growday</label>
                     <div class="input-group">
-                      <input name="tgl1" onchange="changetgl(1);" class="form-control" value="<?php echo $initgl; ?>" type="date" style="border-top-left-radius:4px;border-bottom-left-radius:4px;line-height:unset;">
+                      <input name="tgl1" onchange="changetgl(1);" class="form-control" value="<?php echo $initgl1; ?>" type="date" style="border-top-left-radius:4px;border-bottom-left-radius:4px;line-height:unset;">
                       <span class="input-group-addon" style="border-top-right-radius:4px;border-bottom-right-radius:4px;padding:0px;">
                       <input onchange="changegrow(1);" min="-1" name="growval1" value="<?php echo $inigrow; ?>" type="number" class="form-control" style="border-style:none;height: 32px;border-radius: 4px;min-width: 90px;">
                       </span>
@@ -65,7 +65,7 @@
                   <div class="form-group col-sm-3">
                     <label>End Date & Growday</label>
                     <div class="input-group">
-                      <input name="tgl2" onchange="changetgl(2);" class="form-control" value="<?php echo $initgl; ?>" type="date" style="border-top-left-radius:4px;border-bottom-left-radius:4px;line-height:unset;">
+                      <input name="tgl2" onchange="changetgl(2);" class="form-control" value="<?php echo $initgl2; ?>" type="date" style="border-top-left-radius:4px;border-bottom-left-radius:4px;line-height:unset;">
                       <span class="input-group-addon" style="border-top-right-radius:4px;border-bottom-right-radius:4px;padding:0px;">
                       <input onchange="changegrow(2);" min="-1" name="growval2" value="<?php echo $inigrow; ?>" type="number" class="form-control" style="border-style:none;height: 32px;border-radius: 4px;min-width: 90px;">
                       </span>
