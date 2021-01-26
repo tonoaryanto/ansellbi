@@ -189,6 +189,8 @@ class Grafik_model extends CI_Model {
         $esqlgrow = $reqdata['esqlgrow'];
         $growval = $reqdata['growval'];
         $growval2 = $reqdata['growval2'];
+        $tgl = date_format(date_create($reqdata['tgl']),"d/m/Y");
+        $tgl2 = date_format(date_create($reqdata['tgl2']),"d/m/Y");
 
             $esql  = "SELECT id,growday, date_record,";
             if($inidata == 'alltemp'){
@@ -214,10 +216,13 @@ class Grafik_model extends CI_Model {
 
         if($growval == $growval2){
             $addlabel = ' : Grow Day '.$growval.' ';
+            $addtgl = " | Date ".$tgl;
         }else{
             $addlabel = ' : Grow Day '.$growval.' - '.$growval2;
+            $addtgl = " | Date ".$tgl.' - '.$tgl2;
         }
-        $glabel = $label[$inidata].$addlabel;
+
+        $glabel = $label[$inidata].$addlabel.$addtgl;
 
         $linelabel[0] = $label['req_temp'];
         if($inidata == 'alltemp'){
@@ -258,7 +263,10 @@ class Grafik_model extends CI_Model {
 
         foreach ($dataprimary1 as $value) {
             $jam = date_format(date_create($value->date_record),"H");
-            $adata[] = ''.$value->growday.' - '.$jam;
+            $d = date_format(date_create($value->date_record),"d");
+            $m = date_format(date_create($value->date_record),"m");
+            $y = date_format(date_create($value->date_record),"y");
+            $adata[] = ''.$d.$m.$y.' - '.$jam;
             $noarray = (int)$value->growday - 1;
             if($noarray <= count($minex)){
                 if(isset($minex[((int)$value->growday - 1)])){
@@ -373,6 +381,8 @@ class Grafik_model extends CI_Model {
         $esqlgrow = $reqdata['esqlgrow'];
         $growval = $reqdata['growval'];
         $growval2 = $reqdata['growval2'];
+        $tgl = date_format(date_create($reqdata['tgl']),"d/m/Y");
+        $tgl2 = date_format(date_create($reqdata['tgl2']),"d/m/Y");
 
         $esql  = "SELECT id,growday, date_record,";
         $esql .= $inidata." AS isidata";
@@ -399,10 +409,14 @@ class Grafik_model extends CI_Model {
 
         if($growval == $growval2){
             $addlabel = ' : Grow Day '.$growval.' ';
+            $addtgl = " | Date ".$tgl;
         }else{
             $addlabel = ' : Grow Day '.$growval.' - '.$growval2;
+            $addtgl = " | Date ".$tgl.' - '.$tgl2;
         }
-        $glabel = $label[$inidata].$addlabel;
+
+        $glabel = $label[$inidata].$addlabel.$addtgl;
+
         $linelabel[0] = $label[$inidata];
         if(isset($stdlabel[$inidata][1])){
             $linelabel[1] = 'Min Standard Value';
@@ -443,7 +457,10 @@ class Grafik_model extends CI_Model {
         $adata = [];
         foreach ($dataprimary1 as $value) {
             $jam = date_format(date_create($value->date_record),"H");
-            $adata[] = ''.$value->growday.' - '.$jam;
+            $d = date_format(date_create($value->date_record),"d");
+            $m = date_format(date_create($value->date_record),"m");
+            $y = date_format(date_create($value->date_record),"y");
+            $adata[] = ''.$d.$m.$y.' - '.$jam;
 
             $noarray = (int)$value->growday - 1;
             if($noarray <= count($minex)){
@@ -535,6 +552,8 @@ class Grafik_model extends CI_Model {
         $esqlgrow = $reqdata['esqlgrow'];
         $growval = $reqdata['growval'];
         $growval2 = $reqdata['growval2'];
+        $tgl = date_format(date_create($reqdata['tgl']),"d/m/Y");
+        $tgl2 = date_format(date_create($reqdata['tgl2']),"d/m/Y");
 
         $esql  = "SELECT id,growday, date_record,";
         $esql .= $inidata[0][0]." AS isidata, ".$inidata[0][1]." AS isidata2";
@@ -552,10 +571,14 @@ class Grafik_model extends CI_Model {
 
         if($growval == $growval2){
             $addlabel = ' : Grow Day '.$growval.' ';
+            $addtgl = " | Date ".$tgl;
         }else{
             $addlabel = ' : Grow Day '.$growval.' - '.$growval2;
+            $addtgl = " | Date ".$tgl.' - '.$tgl2;
         }
-        $glabel = 'Wind Speed'.$addlabel;
+
+        $glabel = 'Wind Speed'.$addlabel.$addtgl;
+
         $linelabel[0] = $label[$inidata[0][0]];
         
         //Data Utama
@@ -575,7 +598,10 @@ class Grafik_model extends CI_Model {
         $adata = [];
         foreach ($dataprimary1 as $value) {
             $jam = date_format(date_create($value->date_record),"H");
-            $adata[] = ''.$value->growday.' - '.$jam;
+            $d = date_format(date_create($value->date_record),"d");
+            $m = date_format(date_create($value->date_record),"m");
+            $y = date_format(date_create($value->date_record),"y");
+            $adata[] = ''.$d.$m.$y.' - '.$jam;
             $noarray = (int)$value->growday - 1;
             if($noarray <= count($minex)){
                 $vstdmin = $minex[((int)$value->growday - 1)];

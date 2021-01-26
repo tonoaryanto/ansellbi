@@ -207,7 +207,7 @@ class History_house extends CI_Controller {
         if($sensor == 'fan'){$urljs = 'history_house-farm-fanjs.js';}
 
         $inidatafarm = $this->umum_model->get('data_kandang',"id = '".$idfarm."' AND kode_perusahaan = '".$id_user."'")->row_array();
-        $iniperiode = $this->umum_model->get("(SELECT periode,growday FROM data_record WHERE keterangan = 'ok' AND kode_kandang = '".$idfarm."' AND kode_perusahaan = '".$id_user."' ORDER BY periode DESC,growday DESC LIMIT 1) as data")->row_array();
+        $iniperiode = $this->umum_model->get("(SELECT periode,growday,date_record FROM data_record WHERE keterangan = 'ok' AND kode_kandang = '".$idfarm."' AND kode_perusahaan = '".$id_user."' ORDER BY periode DESC,growday DESC LIMIT 1) as data")->row_array();
         if ($inidatafarm['nama_kandang'] == '') {echo 'Silent is gold';return;}
 
         $hgrowchange = $this->umum_model->get("(SELECT periode,growday FROM data_record WHERE keterangan = 'growchange' AND kode_kandang = '".$idfarm."' AND kode_perusahaan = '".$id_user."' ORDER BY periode DESC,growday DESC LIMIT 1) as data")->num_rows();
@@ -218,10 +218,16 @@ class History_house extends CI_Controller {
             $setperiode = '1';
         }
 
-        if($iniperiode['periode'] != ''){
+        if($iniperiode['growday'] != ''){
             $setgrow = $iniperiode['growday'];
         }else{
             $setgrow = '1';
+        }
+
+        if($iniperiode['date_record'] != ''){
+            $settgl = date_format(date_create($iniperiode['date_record']),"Y-m-d");
+        }else{
+            $settgl = date_format(date_create(date('Y-m-d')),"Y-m-d");
         }
 
         $data = [
@@ -236,14 +242,77 @@ class History_house extends CI_Controller {
             'idfarm'    => $idfarm,
             'iniperiode' => $setperiode,
             'inigrow' => $setgrow,
+            'initgl' => $settgl,
             'urljs' => $urljs,
             'cekgrowchange' => $hgrowchange
         ];
         $this->load->view('template/wrapper',$data);
     }
 
+    public function changetgl(){
+        $cek_sess = $this->konfigurasi->cek_js();
+        if ($cek_sess == 0) {echo json_encode(['sess' => $cek_sess]);return;}
+
+        $id_farm = $this->session->userdata('id_user');
+        $kode_kandang = $this->session->userdata('idfarm');
+        $periode = $this->input->post('periode');
+        $startgl = $this->input->post('tgl');
+
+        $rawsql = "SELECT growday,date_record FROM data_record WHERE periode = '".$periode."' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ";
+        $esql1 = $rawsql."AND keterangan = 'ok' ORDER BY growday DESC, date_record DESC LIMIT 1";
+
+        $inidb1 = $this->db->query($esql1);
+
+        $cekdb = $inidb1->num_rows();
+        $isidb1 = $inidb1->row_array();
+
+        $tgl1 = date_create(date_format(date_create($isidb1['date_record']),"Y-m-d"));
+        $tgl2 = date_create(date_format(date_create($startgl),"Y-m-d"));
+
+        $difftgl1 = date_diff($tgl1,$tgl2);
+        $growawal = (int)$isidb1['growday'] + (int)$difftgl1->format("%R%a");
+
+        if($cekdb > 0 AND $startgl != ''){
+            echo json_encode(['status' => true, 'dataset' => $growawal]);
+        }else{
+            echo json_encode(['status' => false]);
+        }
+    }
+
+    public function changegrow(){
+        $cek_sess = $this->konfigurasi->cek_js();
+        if ($cek_sess == 0) {echo json_encode(['sess' => $cek_sess]);return;}
+
+        $id_farm = $this->session->userdata('id_user');
+        $kode_kandang = $this->session->userdata('idfarm');
+        $periode = $this->input->post('periode');
+        $grow1 = $this->input->post('grow');
+
+        $rawsql = "SELECT growday,date_record FROM data_record WHERE periode = '".$periode."' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ";
+        $esql1 = $rawsql."AND keterangan = 'ok' ORDER BY growday DESC, date_record DESC LIMIT 1";
+
+        $inidb1 = $this->db->query($esql1);
+
+        $cekdb = $inidb1->num_rows();
+        $isidb1 = $inidb1->row_array();
+
+        $grow2 = $isidb1['growday'];
+        $diffgrow1 = $grow1 - $grow2;
+
+        $date = date_format(date_create($isidb1['date_record']),"Y-m-d");
+        $date = strtotime($date);
+        $date = strtotime($diffgrow1." day", $date);
+        $growawal = date('Y-m-d', $date);
+
+        if($cekdb > 0 AND $grow1 != ''){
+            echo json_encode(['status' => true, 'dataset' => $growawal]);
+        }else{
+            echo json_encode(['status' => false]);
+        }
+    }
+
     public function grafik_temperature(){
-        //Cek Seesion
+            //Cek Seesion
         $cek_sess = $this->konfigurasi->cek_js();
         if ($cek_sess == 0) {echo json_encode(['sess' => $cek_sess]);return;}
         //END Cek Session
@@ -255,6 +324,8 @@ class History_house extends CI_Controller {
 
         $growval = $this->input->post('growval');
         $growval2 = $this->input->post('growval2');
+        $tgl = $this->input->post('tgl');
+        $tgl2 = $this->input->post('tgl2');
         $periode = $this->input->post('periode');
 
         if ($radio == 'grow') {
@@ -274,6 +345,8 @@ class History_house extends CI_Controller {
         $reqdata['esqlgrow'] = $esqlgrow;
         $reqdata['growval'] = $growval;
         $reqdata['growval2'] = $growval2;
+        $reqdata['tgl'] = $tgl;
+        $reqdata['tgl2'] = $tgl2;
 
         $hasildata = $this->grafik_model->grafik_temperature($reqdata);
 
@@ -308,7 +381,8 @@ class History_house extends CI_Controller {
         $id_user   = $this->session->userdata('id_user');
         $id_farm   = $this->session->userdata('idfarm');
         $inidata = $this->input->post('inidata');
-
+        $tgl = $this->input->post('tgl');
+        $tgl2 = $this->input->post('tgl2');
         $growval = $this->input->post('growval');
         $growval2 = $this->input->post('growval2');
         $periode = $this->input->post('periode');
@@ -329,6 +403,8 @@ class History_house extends CI_Controller {
         $reqdata['id_farm'] = $id_farm;
         $reqdata['esqlperiode'] = $esqlperiode;
         $reqdata['esqlgrow'] = $esqlgrow;
+        $reqdata['tgl'] = $tgl;
+        $reqdata['tgl2'] = $tgl2;
         $reqdata['growval'] = $growval;
         $reqdata['growval2'] = $growval2;
 
@@ -355,7 +431,8 @@ class History_house extends CI_Controller {
         $id_user   = $this->session->userdata('id_user');
         $id_farm   = $this->session->userdata('idfarm');
         $inidata = $this->input->post('inidata');
-
+        $tgl = $this->input->post('tgl');
+        $tgl2 = $this->input->post('tgl2');
         $growval = $this->input->post('growval');
         $growval2 = $this->input->post('growval2');
         $periode = $this->input->post('periode');
@@ -376,6 +453,8 @@ class History_house extends CI_Controller {
         $reqdata['id_farm'] = $id_farm;
         $reqdata['esqlperiode'] = $esqlperiode;
         $reqdata['esqlgrow'] = $esqlgrow;
+        $reqdata['tgl'] = $tgl;
+        $reqdata['tgl2'] = $tgl2;
         $reqdata['growval'] = $growval;
         $reqdata['growval2'] = $growval2;
         
