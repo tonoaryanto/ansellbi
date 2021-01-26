@@ -546,7 +546,7 @@ class Setting extends CI_Controller {
                 $colorarrow = '#258fff';
             }
 
-            if($difsuhu < $suhubawah OR $difsuhu > 0){
+            if($difsuhu < $suhubawah OR $difsuhu > $suhuatas){
                 $html .= '<li><label><img src="';
                 $html .= $img;
                 $html .= '" style="height:inherit;width:25px;"><span style="font-weight:lighter;">Temperature</span> (<span>';
