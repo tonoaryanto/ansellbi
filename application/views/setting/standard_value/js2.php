@@ -192,7 +192,27 @@ function loaddata(){
                     var htm = '';
                     htm += '<label>Week '+a+'</label>';
                     htm += '<div class="col-lg-12" style="margin-bottom:15px;border-style:solid;padding:10px;border-width: thin;border-radius: 5px;border-color: #ccc;">';
-                    htm += '<div class="form-group">';
+                    htm += '<div class="form-group col-lg-12">';
+                    htm += '<div class="col-lg-3" style="line-height: 34px;">';
+                    htm += '<label>Input per week</label>';
+                    htm += '</div>';
+                    htm += '<div class="col-lg-3">';
+                    htm += '<div class="input-group">';
+                    htm += '<span class="input-group-addon">Min</span>';
+                    htm += '<input name="weeka" onkeyup="weekinput(1,'+a+');" type="text" class="form-control" value="">';
+                    htm += '</div>';
+                    htm += '</div>';
+                    htm += '<div class="col-lg-3">';
+                    htm += '<div class="input-group">';
+                    htm += '<span class="input-group-addon">Max</span>';
+                    htm += '<input name="mxweeka" onkeyup="weekinput(2,'+a+');" type="text" class="form-control" value="">';
+                    htm += '</div>';
+                    htm += '</div>';
+                    htm += '</div>';
+                    htm += '<div class="col-lg-12">';
+                    htm += '<hr style="margin-top:0px;">';
+                    htm += '</div>';
+                    htm += '<div class="form-group col-lg-7">';
                     htm += '<label class="col-lg-12">Growday '+(vweek - 6)+' </label>';
                     htm += '<div class="input-group col-lg-12" style="margin-bottom:10px;">';
                     htm += '<span class="input-group-addon">Min</span>';
@@ -203,7 +223,7 @@ function loaddata(){
                     htm += '<input name="mxweek'+(vweek - 6)+'" type="text" class="form-control" value="'+isinya21+'">';
                     htm += '</div>';
                     htm += '</div>';
-                    htm += '<div class="form-group">';
+                    htm += '<div class="form-group col-lg-7">';
                     htm += '<label class="col-lg-12">Growday '+(vweek - 5)+' </label>';
                     htm += '<div class="input-group col-lg-12" style="margin-bottom:10px;">';
                     htm += '<span class="input-group-addon">Min</span>';
@@ -214,7 +234,7 @@ function loaddata(){
                     htm += '<input name="mxweek'+(vweek - 5)+'" type="text" class="form-control" value="'+isinya22+'">';
                     htm += '</div>';
                     htm += '</div>';
-                    htm += '<div class="form-group">';
+                    htm += '<div class="form-group col-lg-7">';
                     htm += '<label class="col-lg-12">Growday '+(vweek - 4)+' </label>';
                     htm += '<div class="input-group col-lg-12" style="margin-bottom:10px;">';
                     htm += '<span class="input-group-addon">Min</span>';
@@ -225,7 +245,7 @@ function loaddata(){
                     htm += '<input name="mxweek'+(vweek - 4)+'" type="text" class="form-control" value="'+isinya23+'">';
                     htm += '</div>';
                     htm += '</div>';
-                    htm += '<div class="form-group">';
+                    htm += '<div class="form-group col-lg-7">';
                     htm += '<label class="col-lg-12">Growday '+(vweek - 3)+' </label>';
                     htm += '<div class="input-group col-lg-12" style="margin-bottom:10px;">';
                     htm += '<span class="input-group-addon">Min</span>';
@@ -236,7 +256,7 @@ function loaddata(){
                     htm += '<input name="mxweek'+(vweek - 3)+'" type="text" class="form-control" value="'+isinya24+'">';
                     htm += '</div>';
                     htm += '</div>';
-                    htm += '<div class="form-group">';
+                    htm += '<div class="form-group col-lg-7">';
                     htm += '<label class="col-lg-12">Growday '+(vweek - 2)+' </label>';
                     htm += '<div class="input-group col-lg-12" style="margin-bottom:10px;">';
                     htm += '<span class="input-group-addon">Min</span>';
@@ -247,7 +267,7 @@ function loaddata(){
                     htm += '<input name="mxweek'+(vweek - 2)+'" type="text" class="form-control" value="'+isinya25+'">';
                     htm += '</div>';
                     htm += '</div>';
-                    htm += '<div class="form-group">';
+                    htm += '<div class="form-group col-lg-7">';
                     htm += '<label class="col-lg-12">Growday '+(vweek - 1)+' </label>';
                     htm += '<div class="input-group col-lg-12" style="margin-bottom:10px;">';
                     htm += '<span class="input-group-addon">Min</span>';
@@ -258,7 +278,7 @@ function loaddata(){
                     htm += '<input name="mxweek'+(vweek - 1)+'" type="text" class="form-control" value="'+isinya26+'">';
                     htm += '</div>';
                     htm += '</div>';
-                    htm += '<div class="form-group">';
+                    htm += '<div class="form-group col-lg-7">';
                     htm += '<label class="col-lg-12">Growday '+vweek+' </label>';
                     htm += '<div class="input-group col-lg-12" style="margin-bottom:10px;">';
                     htm += '<span class="input-group-addon">Min</span>';
@@ -272,7 +292,7 @@ function loaddata(){
                     htm += '</div>';
 
                     $('<div>')
-                    .attr({'class' : 'form-group col-md-2', 'id' : 'week'+a})
+                    .attr({'class' : 'form-group col-md-12', 'id' : 'week'+a})
                     .html(htm)
                     .appendTo('#inputweek');
                     $('#inputweek').attr('data-week',a);
@@ -286,7 +306,27 @@ function loaddata(){
                     var htm = '';
                     htm += '<label>Week '+a+'</label>';
                     htm += '<div class="col-lg-12" style="margin-bottom:15px;border-style:solid;padding:10px;border-width: thin;border-radius: 5px;border-color: #ccc;">';
-                    htm += '<div class="form-group">';
+                    htm += '<div class="form-group col-lg-12">';
+                    htm += '<div class="col-lg-3" style="line-height: 34px;">';
+                    htm += '<label>Input per week</label>';
+                    htm += '</div>';
+                    htm += '<div class="col-lg-3">';
+                    htm += '<div class="input-group">';
+                    htm += '<span class="input-group-addon">Min</span>';
+                    htm += '<input name="weeka" onkeyup="weekinput(1,'+a+');" placeholder="--Optional--" type="text" class="form-control" value="">';
+                    htm += '</div>';
+                    htm += '</div>';
+                    htm += '<div class="col-lg-3">';
+                    htm += '<div class="input-group">';
+                    htm += '<span class="input-group-addon">Max</span>';
+                    htm += '<input name="mxweeka" onkeyup="weekinput(2,'+a+');" placeholder="--Optional--" type="text" class="form-control" value="">';
+                    htm += '</div>';
+                    htm += '</div>';
+                    htm += '</div>';
+                    htm += '<div class="col-lg-12">';
+                    htm += '<hr style="margin-top:0px;">';
+                    htm += '</div>';
+                    htm += '<div class="form-group col-lg-7">';
                     htm += '<label class="col-lg-12">Growday '+(vweek - 6)+' </label>';
                     htm += '<div class="input-group col-lg-12" style="margin-bottom:10px;">';
                     htm += '<span class="input-group-addon">Min</span>';
@@ -297,7 +337,7 @@ function loaddata(){
                     htm += '<input name="mxweek'+(vweek - 6)+'" type="text" class="form-control" value="">';
                     htm += '</div>';
                     htm += '</div>';
-                    htm += '<div class="form-group">';
+                    htm += '<div class="form-group col-lg-7">';
                     htm += '<label class="col-lg-12">Growday '+(vweek - 5)+' </label>';
                     htm += '<div class="input-group col-lg-12" style="margin-bottom:10px;">';
                     htm += '<span class="input-group-addon">Min</span>';
@@ -308,7 +348,7 @@ function loaddata(){
                     htm += '<input name="mxweek'+(vweek - 5)+'" type="text" class="form-control" value="">';
                     htm += '</div>';
                     htm += '</div>';
-                    htm += '<div class="form-group">';
+                    htm += '<div class="form-group col-lg-7">';
                     htm += '<label class="col-lg-12">Growday '+(vweek - 4)+' </label>';
                     htm += '<div class="input-group col-lg-12" style="margin-bottom:10px;">';
                     htm += '<span class="input-group-addon">Min</span>';
@@ -319,7 +359,7 @@ function loaddata(){
                     htm += '<input name="mxweek'+(vweek - 4)+'" type="text" class="form-control" value="">';
                     htm += '</div>';
                     htm += '</div>';
-                    htm += '<div class="form-group">';
+                    htm += '<div class="form-group col-lg-7">';
                     htm += '<label class="col-lg-12">Growday '+(vweek - 3)+' </label>';
                     htm += '<div class="input-group col-lg-12" style="margin-bottom:10px;">';
                     htm += '<span class="input-group-addon">Min</span>';
@@ -330,7 +370,7 @@ function loaddata(){
                     htm += '<input name="mxweek'+(vweek - 3)+'" type="text" class="form-control" value="">';
                     htm += '</div>';
                     htm += '</div>';
-                    htm += '<div class="form-group">';
+                    htm += '<div class="form-group col-lg-7">';
                     htm += '<label class="col-lg-12">Growday '+(vweek - 2)+' </label>';
                     htm += '<div class="input-group col-lg-12" style="margin-bottom:10px;">';
                     htm += '<span class="input-group-addon">Min</span>';
@@ -341,7 +381,7 @@ function loaddata(){
                     htm += '<input name="mxweek'+(vweek - 2)+'" type="text" class="form-control" value="">';
                     htm += '</div>';
                     htm += '</div>';
-                    htm += '<div class="form-group">';
+                    htm += '<div class="form-group col-lg-7">';
                     htm += '<label class="col-lg-12">Growday '+(vweek - 1)+' </label>';
                     htm += '<div class="input-group col-lg-12" style="margin-bottom:10px;">';
                     htm += '<span class="input-group-addon">Min</span>';
@@ -352,7 +392,7 @@ function loaddata(){
                     htm += '<input name="mxweek'+(vweek - 1)+'" type="text" class="form-control" value="">';
                     htm += '</div>';
                     htm += '</div>';
-                    htm += '<div class="form-group">';
+                    htm += '<div class="form-group col-lg-7">';
                     htm += '<label class="col-lg-12">Growday '+vweek+' </label>';
                     htm += '<div class="input-group col-lg-12" style="margin-bottom:10px;">';
                     htm += '<span class="input-group-addon">Min</span>';
@@ -366,7 +406,7 @@ function loaddata(){
                     htm += '</div>';
 
                     $('<div>')
-                    .attr({'class' : 'form-group col-md-2', 'id' : 'week'+a})
+                    .attr({'class' : 'form-group col-md-12', 'id' : 'week'+a})
                     .html(htm)
                     .appendTo('#inputweek');
                     $('#inputweek').attr('data-week',a);
@@ -374,6 +414,30 @@ function loaddata(){
             }
         }
     });
+}
+
+function weekinput(set,dt){
+    var vweek = 7 * dt;
+    if(set == 1){
+        var isi = $('[name="weeka"]').val();
+        $('[name="week'+ (vweek - 6) +'"]').val(isi);
+        $('[name="week'+ (vweek - 5) +'"]').val(isi);
+        $('[name="week'+ (vweek - 4) +'"]').val(isi);
+        $('[name="week'+ (vweek - 3) +'"]').val(isi);
+        $('[name="week'+ (vweek - 2) +'"]').val(isi);
+        $('[name="week'+ (vweek - 1) +'"]').val(isi);
+        $('[name="week'+ vweek +'"]').val(isi);
+    }
+    if(set == 2){
+        var isi = $('[name="mxweeka"]').val();
+        $('[name="mxweek'+ (vweek - 6) +'"]').val(isi);
+        $('[name="mxweek'+ (vweek - 5) +'"]').val(isi);
+        $('[name="mxweek'+ (vweek - 4) +'"]').val(isi);
+        $('[name="mxweek'+ (vweek - 3) +'"]').val(isi);
+        $('[name="mxweek'+ (vweek - 2) +'"]').val(isi);
+        $('[name="mxweek'+ (vweek - 1) +'"]').val(isi);
+        $('[name="mxweek'+ vweek +'"]').val(isi);
+    }
 }
 
 function save(){
