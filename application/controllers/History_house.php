@@ -236,13 +236,13 @@ class History_house extends CI_Controller {
 
         $date = strtotime($settgl);
         if($settime >= $resettime){
-            $date = strtotime("+1 day", $date);
-            $settgl1 = $settgl;
-            $settgl2 = date('Y-m-d', $date);
-        }else{
             $date = strtotime("-1 day", $date);
             $settgl1 = date('Y-m-d', $date);
             $settgl2 = $settgl;
+        }else{
+            $date = strtotime("+1 day", $date);
+            $settgl1 = $settgl;
+            $settgl2 = date('Y-m-d', $date);
         }
 
 
