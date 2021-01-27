@@ -294,10 +294,10 @@ class History_house extends CI_Controller {
         $date = strtotime($date);
         $date = strtotime(($difftgl1->format("%R%a") + 1)." day", $date);
         $growawaltgl = date('Y-m-d', $date);
-        $growawalgrow = $growawal + 1;
+        $growawalgrow = $growawal;
 
-        if($urut == 1){
-            $growawal = $growawal + 1;
+        if($urut == 2){
+            $growawal = $growawal - 1;
         }
 
         if($cekdb > 0 AND $startgl != ''){
@@ -331,10 +331,11 @@ class History_house extends CI_Controller {
         $date = date_format(date_create($isidb1['date_record']),"Y-m-d");
         $date = strtotime($date);
         $date = strtotime($diffgrow1." day", $date);
-        $growawaltgl = date('Y-m-d', $date);
+        $growawaltgl = strtotime("+1 day", $date);
+        $growawaltgl = date('Y-m-d', $growawaltgl);
 
-        if($urut == 1){
-            $date = strtotime("-1 day", $date);
+        if($urut == 2){
+            $date = strtotime("+1 day", $date);
         }
         $growawal = date('Y-m-d', $date);
 
