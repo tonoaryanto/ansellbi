@@ -207,7 +207,7 @@ class History_house extends CI_Controller {
         if($sensor == 'fan'){$urljs = 'history_house-farm-fanjs.js';}
 
         $inidatafarm = $this->umum_model->get('data_kandang',"id = '".$idfarm."' AND kode_perusahaan = '".$id_user."'")->row_array();
-        $iniperiode = $this->umum_model->get("(SELECT periode,growday,date_record FROM data_record WHERE keterangan = 'ok' AND kode_kandang = '".$idfarm."' AND kode_perusahaan = '".$id_user."' ORDER BY date_record DESC LIMIT 1) as data")->row_array();
+        $iniperiode = $this->umum_model->get("(SELECT periode,growday,date_record,reset_time FROM data_record WHERE keterangan = 'ok' AND kode_kandang = '".$idfarm."' AND kode_perusahaan = '".$id_user."' ORDER BY date_record DESC LIMIT 1) as data")->row_array();
         if ($inidatafarm['nama_kandang'] == '') {echo 'Silent is gold';return;}
 
         $hgrowchange = $this->umum_model->get("(SELECT periode,growday FROM data_record WHERE keterangan = 'growchange' AND kode_kandang = '".$idfarm."' AND kode_perusahaan = '".$id_user."' ORDER BY periode DESC,growday DESC LIMIT 1) as data")->num_rows();
