@@ -226,14 +226,25 @@ class History_house extends CI_Controller {
 
         if($iniperiode['date_record'] != ''){
             $settgl = date_format(date_create($iniperiode['date_record']),"Y-m-d");
+            $settime = date_format(date_create($iniperiode['date_record']),"H");
+            $resettime = date_format(date_create($iniperiode['reset_time']),"H");
         }else{
             $settgl = date_format(date_create(date('Y-m-d')),"Y-m-d");
+            $settime = date_format(date_create("00:00:00"),"H");
+            $resettime = date_format(date_create("01:00:00"),"H");
         }
 
         $date = strtotime($settgl);
-        $date = strtotime("-1 day", $date);
-        $settgl1 = date('Y-m-d', $date);
-        $settgl2 = $settgl;
+        if($settime >= $resettime){
+            $date = strtotime("-1 day", $date);
+            $settgl1 = date('Y-m-d', $date);
+            $settgl2 = $settgl;
+        }else{
+            $date = strtotime("+1 day", $date);
+            $settgl1 = $settgl;
+            $settgl2 = date('Y-m-d', $date);
+        }
+
 
         $data = [
             'txthead1'     => 'History House - '.$inidatafarm['nama_kandang'],
