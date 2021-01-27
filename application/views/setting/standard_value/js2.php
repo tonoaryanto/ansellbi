@@ -199,13 +199,13 @@ function loaddata(){
                     htm += '<div class="col-lg-3">';
                     htm += '<div class="input-group">';
                     htm += '<span class="input-group-addon">Min</span>';
-                    htm += '<input name="weeka" onkeyup="weekinput(1,'+a+');" type="text" class="form-control" value="">';
+                    htm += '<input name="weeka" onkeyup="weekinput(1,'+a+');" placeholder="--Optional--" type="text" class="form-control" value="">';
                     htm += '</div>';
                     htm += '</div>';
                     htm += '<div class="col-lg-3">';
                     htm += '<div class="input-group">';
                     htm += '<span class="input-group-addon">Max</span>';
-                    htm += '<input name="mxweeka" onkeyup="weekinput(2,'+a+');" type="text" class="form-control" value="">';
+                    htm += '<input name="mxweeka" onkeyup="weekinput(2,'+a+');" placeholder="--Optional--" type="text" class="form-control" value="">';
                     htm += '</div>';
                     htm += '</div>';
                     htm += '</div>';
