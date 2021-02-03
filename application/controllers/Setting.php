@@ -485,6 +485,8 @@ class Setting extends CI_Controller {
             $data2['reset'] = $jamreset;
         }
         
+        $this->db->update('data_kandang',['flock' => $flock],['id' => $kode_kandang,'kode_perusahaan' => $id_farm]);
+
         $cekdb = $this->db->query("SELECT growday FROM data_record WHERE ".$addwhere." AND keterangan = 'growchange' LIMIT 1")->num_rows();
         $cekdb2 = $this->db->query("SELECT growday FROM data_record WHERE kode_perusahaan = '".$id_farm."' AND keterangan = 'growchange' LIMIT 1")->num_rows();
 
