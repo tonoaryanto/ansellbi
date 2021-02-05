@@ -280,6 +280,7 @@ class Setting extends CI_Controller {
         $id_farm = $this->session->userdata('id_user');
         $kode_kandang = $this->input->post('nama_kandang');
 
+        $house = $this->db->query("SELECT * FROM data_kandang WHERE kode_perusahaan = '".$id_farm."' AND id = '".$kode_kandang."'")->row_array();
         $rawsql = "SELECT periode,growday,date_record,reset_time FROM data_record WHERE kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ";
         $esql1 = $rawsql."AND keterangan = 'ok' ORDER BY growday DESC, date_record DESC LIMIT 1";
         $esql2 = $rawsql."AND keterangan = 'growchange' ORDER BY growday ASC, date_record ASC LIMIT 1";
@@ -306,24 +307,26 @@ class Setting extends CI_Controller {
         $tgl2 = date_create(date_format(date_create($isidb2['date_record']),"Y-m-d H:i:s"));
         $tgl3 = date_create(date_format(date_create($isidb3['date_record']),"Y-m-d H:i:s"));
 
-        $difftgl1 = date_diff($tgl1,$tgl2);
-        $difftgl2 = date_diff($tgl1,$tgl3);
+        $date_in = date_create(date_format(date_create($house['date_in']),"Y-m-d")." ".date_format(date_create($house['reset_time']),"H:i:s"));
 
-        $growawal = (int)$isidb1['growday'] + (int)$difftgl1->format("%R%a");
-        $growakhir = (int)$isidb1['growday'] + (int)$difftgl2->format("%R%a");
+        $difftgl1 = date_diff($date_in,$tgl2);
+        $difftgl2 = date_diff($date_in,$tgl3);
 
-        $timeakhir = date_format(date_create($isidb3['date_record']),"H");
-        $resetakhir = date_format(date_create($isidb3['reset_time']),"H");
+        $growawal = (int)$house['star_growday'] + (int)$difftgl1->format("%R%a");
+        $growakhir = (int)$house['star_growday'] + (int)$difftgl2->format("%R%a");
 
-        if((int)$timeakhir >= (int)$resetakhir){
-            (int)$growakhir = (int)$growakhir + 1;
-        }
+        // $timeakhir = date_format(date_create($isidb3['date_record']),"H");
+        // $resetakhir = date_format(date_create($house['reset_time']),"H");
 
-        $dataini['real_date'] = "00:00:00 ".date_format(date_create($isidb2['date_record']),"d F Y")." to ".date_format(date_create($isidb3['date_record']),"H:i:s d F Y");
+        // if((int)$timeakhir >= (int)$resetakhir){
+        //     (int)$growakhir = (int)$growakhir + 1;
+        // }
+
+        $dataini['real_date'] = date_format(date_create($isidb2['date_record']),"H:i:s")." ".date_format(date_create($isidb2['date_record']),"d F Y")." to ".date_format(date_create($isidb3['date_record']),"H:i:s d F Y");
         $dataini['real_growday'] = $growawal." to ".$growakhir ;
         $dataini['real_flock'] = $isidb1['periode'];
         $dataini['startgl'] = date_format(date_create($isidb2['date_record']),"Y-m-d");
-        $dataini['startime'] = date_format(date_create("00:00"),"H:i");
+        $dataini['startime'] = date_format(date_create($isidb2['date_record']),"H:i");
         $dataini['endtgl'] = date_format(date_create($isidb3['date_record']),"Y-m-d");
         $dataini['endtime'] = date_format(date_create($isidb3['date_record']),"H:i");
         $dataini['stargrow'] = $growawal;
@@ -344,28 +347,38 @@ class Setting extends CI_Controller {
         $kode_kandang = $this->input->post('nama_kandang');
         $startgl = $this->input->post('startgl');
         $endtgl = $this->input->post('endtgl');
-        $rawsql = "SELECT periode,growday,date_record,reset_time FROM data_record WHERE kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ";
-        $esql1 = $rawsql."AND date_record like '".$startgl."%' AND keterangan = 'ok' ORDER BY growday ASC, date_record ASC LIMIT 1";
-        $esql2 = $rawsql."AND date_record like '".$endtgl."%' AND keterangan = 'growchange' ORDER BY growday DESC, date_record DESC LIMIT 1";
-        $inidb1 = $this->db->query($esql1)->row_array();
-        $inidb2 = $this->db->query($esql2)->row_array();
-        $cekdb = $this->db->query($esql1)->num_rows();
+        $startime = $this->input->post('startime').':00';
+        $endtime = $this->input->post('endtime').':00';
 
-        $difftgl1 = date_diff(date_create($startgl),date_create($endtgl));
-        $growawal = (int)$inidb1['growday'] + (int)$difftgl1->format("%R%a");
-        $timeakhir = date_format(date_create($inidb2['date_record']),"H");
-        $resetakhir = date_format(date_create($inidb2['reset_time']),"H");
+        $house = $this->db->query("SELECT * FROM data_kandang WHERE kode_perusahaan = '".$id_farm."' AND id = '".$kode_kandang."'")->row_array();
+        // $rawsql = "SELECT periode,growday,date_record,reset_time FROM data_record WHERE kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ";
+        // $esql1 = $rawsql."AND date_record >= '".$startgl." ".$startime."' ORDER BY date_record ASC LIMIT 1";
+        // $esql2 = $rawsql."AND date_record <= '".$endtgl." ".$endtime."' ORDER BY date_record DESC LIMIT 1";
+        // $inidb1 = $this->db->query($esql1)->row_array();
+        // $inidb2 = $this->db->query($esql2)->row_array();
+        // $cekdb = $this->db->query($esql1)->num_rows();
 
-        if($timeakhir >= $resetakhir){
-            $growawal = (int)$growawal + 1;
-        }
-        
-        $dataini['stargrow'] = $inidb1['growday'];
-        $dataini['endgrow'] = strval($growawal);
-        $dataini['startime'] = date_format(date_create($inidb1['date_record']),"H:i");
-        $dataini['endtime'] = date_format(date_create($inidb2['date_record']),"H:i");
+        $tgl1 = date_create(date_format(date_create($startgl." ".$startime),"Y-m-d H:i:s"));
+        $tgl2 = date_create(date_format(date_create($endtgl." ".$endtime),"Y-m-d H:i:s"));
+        $date_in = date_create(date_format(date_create($house['date_in']),"Y-m-d")." ".date_format(date_create($house['reset_time']),"H:i:s"));
 
-        if($cekdb > 0){
+        $difftgl1 = date_diff($date_in,$tgl1);
+        $difftgl2 = date_diff($date_in,$tgl2);
+        $growawal = (int)$house['star_growday'] + (int)$difftgl1->format("%R%a");
+        $growakhir = (int)$house['star_growday'] + (int)$difftgl2->format("%R%a");
+        // $timeakhir = date_format(date_create($inidb2['date_record']),"H");
+        // $resetakhir = date_format(date_create($inidb2['reset_time']),"H");
+
+        // if($timeakhir >= $resetakhir){
+        //     $growawal = (int)$growawal + 1;
+        // }
+
+        $dataini['stargrow'] = strval($growawal);
+        $dataini['endgrow'] = strval($growakhir);
+        $dataini['startime'] = date_format(date_create($startime),"H:i");
+        $dataini['endtime'] = date_format(date_create($endtime),"H:i");
+
+        if($growakhir > $growawal){
             echo json_encode(['status' => true, 'dataset' => $dataini]);
         }else{
             echo json_encode(['status' => false]);

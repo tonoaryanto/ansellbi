@@ -47,10 +47,16 @@ function loaddata(){
     $('#real_growday').text('');
     $('#real_flock').text('');
     $('[name="startgl"]').val('');
-    $('[name="startime"]').val('');
+    $('[name="startime"]').val('00:00');
+    $('[id^=select2-startime]')
+    .attr('title','00:00')
+    .text('00:00');
     $('[name="stargrow"]').val('');
     $('[name="endtgl"]').val('');
-    $('[name="endtime"]').val('');
+    $('[name="endtime"]').val('00:00');
+    $('[id^=select2-endtime]')
+    .attr('title','00:00')
+    .text('00:00');
     $('[name="endgrow"]').val('');
     $('[name="flock"]').val('');
 
@@ -74,9 +80,15 @@ function loaddata(){
                 $('#real_flock').text(data.dataset['real_flock']);
                 $('[name="startgl"]').val(data.dataset['startgl']);
                 $('[name="startime"]').val(data.dataset['startime']);
+                $('[id^=select2-startime]')
+                .attr('title',data.dataset['startime'])
+                .text(data.dataset['startime']);
                 $('[name="stargrow"]').val(data.dataset['stargrow']);
                 $('[name="endtgl"]').val(data.dataset['endtgl']);
                 $('[name="endtime"]').val(data.dataset['endtime']);
+                $('[id^=select2-endtime]')
+                .attr('title',data.dataset['endtime'])
+                .text(data.dataset['endtime']);
                 $('[name="endgrow"]').val(data.dataset['endgrow']);
                 $('[name="flock"]').val(data.dataset['real_flock']);
             }
@@ -86,13 +98,17 @@ function loaddata(){
 
 function changedate(){
     var startgl = $('[name="startgl"]').val();
+    var startime = $('[name="startime"]').val();
     var endtgl = $('[name="endtgl"]').val();
+    var endtime = $('[name="endtime"]').val();
 
     var ling = '<?php echo base_url('setting/load_inputchange'); ?>';
     var isidata = {
         'nama_kandang' : $('[name="kandang"]').val(),
         'startgl' : startgl,
-        'endtgl' : endtgl
+        'endtgl' : endtgl,
+        'startime' : startime,
+        'endtime' : endtime
     };
 
     $('[name="stargrow"]').val('');
@@ -111,7 +127,16 @@ function changedate(){
                 $('[name="stargrow"]').val(data.dataset['stargrow']);
                 $('[name="endgrow"]').val(data.dataset['endgrow']);
                 $('[name="startime"]').val(data.dataset['startime']);
+                $('[id^=select2-startime]')
+                .attr('title',data.dataset['startime'])
+                .text(data.dataset['startime']);
                 $('[name="endtime"]').val(data.dataset['endtime']);
+                $('[id^=select2-endtime]')
+                .attr('title',data.dataset['endtime'])
+                .text(data.dataset['endtime']);
+                $('[name="endgrow"]').val(data.dataset['endgrow']);
+                $('[name="flock"]').val(data.dataset['real_flock']);
+
             }
         }
     });
