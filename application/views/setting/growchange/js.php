@@ -135,39 +135,6 @@ function changedate(){
                 .attr('title',data.dataset['endtime'])
                 .text(data.dataset['endtime']);
                 $('[name="endgrow"]').val(data.dataset['endgrow']);
-                $('[name="flock"]').val(data.dataset['real_flock']);
-
-            }
-        }
-    });
-}
-
-function changedate_end(){
-    var startgl = $('[name="startgl"]').val();
-    var stargrow = $('[name="stargrow"]').val();
-    var endtgl = $('[name="endtgl"]').val();
-
-    var ling = '<?php echo base_url('setting/load_inputchangeend'); ?>';
-    var isidata = {
-        'nama_kandang' : $('[name="kandang"]').val(),
-        'startgl' : startgl,
-        'stargrow' : stargrow,
-        'endtgl' : endtgl
-    };
-
-    $('[name="endgrow"]').val('');
-
-    $.ajax({
-        url : ling,
-        type: "POST",
-        data: isidata,
-        dataType: "JSON",
-        success : function(data)
-        {
-            get_sess(data.sess);
-            if( data.status == true){
-                $('[name="endgrow"]').val(data.dataset['endgrow']);
-                $('[name="endtime"]').val(data.dataset['endtime']);
             }
         }
     });
@@ -178,8 +145,10 @@ var ling = '<?php echo base_url('setting/save_growchange'); ?>';
 var isidata = {
     'nama_kandang' : $('[name="kandang"]').val(),
     'startgl' : $('[name="startgl"]').val(),
+    'startime' : $('[name="startime"]').val(),
     'stargrow' : $('[name="stargrow"]').val(),
     'endtgl' : $('[name="endtgl"]').val(),
+    'endtime' : $('[name="endtime"]').val(),
     'endgrow' : $('[name="endgrow"]').val(),
     'flock' : $('[name="flock"]').val()
 };

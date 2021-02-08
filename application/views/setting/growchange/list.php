@@ -65,7 +65,7 @@
               </div>
               <div class="form-group col-sm-3">
                 <label>&nbsp;</label>
-                <select name="endtime" class="form-control select2" style="width: 100%;line-height:unset;border-radius:5px;">
+                <select onchange="changedate()" name="endtime" class="form-control select2" style="width: 100%;line-height:unset;border-radius:5px;">
                   <option value="00:00">00:00</option>
                   <option value="01:00">01:00</option>
                   <option value="02:00">02:00</option>
@@ -132,7 +132,7 @@
                   <td id="last_flock"></td></tr>
                   <tr><td style="width:30%;">&nbsp;</td><td style="width:1%;"></td>
                   <td id=""></td></tr>
-                  <tr><td style="width:30%;"><u>Change Growday Start</u></td><td style="width:1%;"></td>
+                  <tr><td style="width:30%;"><u>Change Growday</u></td><td style="width:1%;"></td>
                   <td id=""></td></tr>
                   <tr><td style="width:30%;">Date Time</td><td style="width:1%;">:</td>
                   <td id="change_date"></td></tr>
