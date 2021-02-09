@@ -132,6 +132,19 @@ class Population extends CI_Controller {
                 $this->umum_model->insert('population',$data);
                 $message = 'Data has been saved';
             }
+
+            $loopdb = $this->db->query("SELECT * FROM population WHERE tanggal > '".$tanggal."' AND id_farm = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ")->result();
+
+            $nwpopulation = $newjml;
+            foreach ($loopdb as $value) {
+                $datanw['population'] = $nwpopulation;
+                $datanw['mortality'] = $value->mortality;
+                $datanw['selection'] = $value->selection;
+                $nwpopulation = (int)$datanw['population'] - (int)$datanw['mortality'] - (int)$datanw['selection'];
+                $datanw['afterpopulation'] = $nwpopulation;
+                $this->umum_model->update('population',$datanw,['id'=>$value->id]);
+            }
+
             echo json_encode(['status' => true,'message' => $message]);
         }
     }
@@ -158,7 +171,7 @@ class Population extends CI_Controller {
         $tanggal = $this->input->post('tanggal');
         $periode = $this->input->post('periode');
 
-        $esql2 = "SELECT periode,growday,birdin,population,keterangan,mortality,selection FROM population WHERE periode = '".$periode."' AND tanggal = '".$tanggal."' AND id_farm = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY growday DESC LIMIT 1";
+        $esql2 = "SELECT periode,growday,birdin,population,keterangan,mortality,selection,tanggal FROM population WHERE periode = '".$periode."' AND tanggal = '".$tanggal."' AND id_farm = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY growday DESC LIMIT 1";
         $cekdb2 = $this->db->query($esql2);
         $isidb21 = $cekdb2->row_array();
 
@@ -167,11 +180,16 @@ class Population extends CI_Controller {
             $hasilgrow = $isidb21['growday'];
             $hasilperiode = $isidb21['periode'];
             if($isidb21['keterangan'] == 'birdin'){
+                $tglset = '';
                 $pp = [false,$isidb21['birdin'],$isidb21['mortality'],$isidb21['selection']];
             }else{
+                $esql3 = "SELECT tanggal FROM population WHERE tanggal < '".$tanggal."' AND periode = '".$periode."' AND id_farm = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY tanggal DESC, growday DESC LIMIT 1";
+                $cekdb3 = $this->db->query($esql3);
+                $isidb3 = $cekdb3->row_array();
+                $tglset = date_format(date_create($isidb3['tanggal']),"Y-m-d");
                 $pp = [true,$isidb21['population'],$isidb21['mortality'],$isidb21['selection']];
             }
-            echo json_encode(['status'=>true,'growday'=>$hasilgrow,'periode'=>$hasilperiode,'pp'=>$pp]);
+            echo json_encode(['status'=>true,'growday'=>$hasilgrow,'tglset'=>$tglset,'periode'=>$hasilperiode,'pp'=>$pp]);
         }else{
             $esql3 = "SELECT periode,growday,birdin,population,afterpopulation,keterangan,mortality,selection,tanggal FROM population WHERE tanggal <= '".$tanggal."' AND periode = '".$periode."' AND id_farm = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY tanggal DESC, growday DESC LIMIT 1";
             $cekdb3 = $this->db->query($esql3);
@@ -180,6 +198,7 @@ class Population extends CI_Controller {
             $ttg2  = date_format(date_create($tanggal),"Y-m-d");
 
             if($cekdb3->num_rows() > 0){
+                $tglset = date_format(date_create($isidb3['tanggal']),"Y-m-d");
                 $diff2 = date_diff(date_create($ttg1),date_create($ttg2));
                 $difgrow2 = (int)$isidb3['growday'] + (int)$diff2->format("%R%a");
                 $pp = [true,$isidb3['afterpopulation'],'',''];
@@ -190,33 +209,26 @@ class Population extends CI_Controller {
             }
 
             if($ck == 1){
-                $esql = "SELECT periode,growday,date_record FROM `data_record` WHERE keterangan = 'ok' AND periode = '".$periode."' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY date_record DESC, growday DESC LIMIT 1";
-                $cekdb = $this->db->query($esql);
-                $isidb = $cekdb->row_array();
-    
-                if($cekdb->num_rows() > 0){
-                    $diff=date_diff(date_create($isidb['date_record']),date_create($tanggal));
-                    $difgrow = (int)$isidb['growday'] + (int)$diff->format("%R%a");
-                    $hasilperiode = $isidb['periode'];
+                $tglset = '';
+                $house = $this->db->query("SELECT * FROM data_kandang WHERE id = '".$kode_kandang."' AND kode_perusahaan = '".$id_farm."'")->row_array();
+                $date_in = date_format(date_create($house['date_in']),"Y-m-d")." ".date_format(date_create($house['reset_time']),"H:i:s");
+                $date_now = date_format(date_create($tanggal),"Y-m-d")." ".date_format(date_create($house['reset_time']),"H:i:s");
+                $difftgl1 = date_diff(date_create($date_in),date_create($date_now));
+                $data['reset_time'] = $house['reset_time'];
+        
+                $hasilgrow = (int)$house['star_growday'] + (int)$difftgl1->format("%R%a");
+                $hasilperiode = $house['flock'];
 
+                $pp = [false,'','',''];
+
+                if($hasilgrow < 1){
                     $pp = [false,'','',''];
-                    if($difgrow < 1){
-                        $hasilgrow = '';
-                    }else{
-                        $hasilgrow = $difgrow;
-                    }
-                }else{
-                    $dk = 1;
+                    $hasilgrow = '';
+                    $hasilperiode = '';    
                 }
             }
 
-            if($dk == 1){
-                $pp = [false,'','',''];
-                $hasilgrow = '';
-                $hasilperiode = $periode;
-            }
-
-            echo json_encode(['status'=>true,'growday'=>$hasilgrow,'periode'=>$hasilperiode,'pp'=>$pp]);
+            echo json_encode(['status'=>true,'growday'=>$hasilgrow,'tglset'=>$tglset,'periode'=>$hasilperiode,'pp'=>$pp]);
         }
 
         /*

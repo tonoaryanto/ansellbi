@@ -135,7 +135,7 @@ function getgrow(period=null){
       {
         get_sess(data.sess);
         $('[name="growday"]').val(data.growday);
-        $('[name="growday"]').removeAttr('disabled');
+        $('[name="perpopulation"]').val(data.tglset);
         if(data.pp[0] == true){
           $('[name="cekbirdin"]').iCheck('uncheck');
           $('#inputpopulation').show();

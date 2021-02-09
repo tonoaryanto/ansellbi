@@ -22,7 +22,7 @@
                         <div class="form-group col-sm-12">
                                 <label>Flock</label>
                                 <div class="input-group col-lg-5">
-                                    <input type="text" class="form-control pull-right" onchange="getgrow()" name="periode" disabled>
+                                    <input readonly type="text" class="form-control pull-right" onchange="getgrow()" name="periode" disabled>
                                 </div>
                         </div>
                         <div class="form-group col-md-12">
@@ -37,7 +37,7 @@
                         <div class="form-group col-sm-12">
                                 <label>Growday</label>
                                 <div class="input-group col-lg-5">
-                                    <input type="text" class="form-control pull-right" name="growday" disabled>
+                                    <input type="text" class="form-control pull-right" name="growday" readonly>
                                 </div>
                         </div>
                     </div>
@@ -53,16 +53,19 @@
                             <div class="input-group col-lg-8">
                                 <input type="text" class="form-control pull-right" name="population">
                                 <input type="hidden" class="form-control pull-right" name="stpopulation" value="false">
+                                <span class="input-group-addon" style="padding:0px;">
+                                <input readonly name="perpopulation" type="date" class="form-control" style="min-width:90px;line-height: normal;border: none;height: 32px;">
+                                </span>
                             </div>
                         </div>
                         <div class="form-group col-sm-12" id="inputmortality" style="display:none;">
-                            <label>Mortality</label>
+                            <label>Death</label>
                             <div class="input-group col-lg-8">
                                 <input type="text" class="form-control pull-right" name="mortality">
                             </div>
                         </div>
                         <div class="form-group col-sm-12" id="inputselection" style="display:none;">
-                            <label>Selection</label>
+                            <label>Culling</label>
                             <div class="input-group col-lg-8">
                                 <input type="text" class="form-control pull-right" name="selection">
                             </div>
@@ -73,7 +76,7 @@
             </div>
             <!-- /.box-body -->
             <div class="box-footer">
-            <a href="<?php echo base_url('egg_weight'); ?>" class="btn btn-default">Back</a>
+            <a href="<?php echo base_url('population'); ?>" class="btn btn-default">Back</a>
             <button class="btn btn-primary" onclick="save();">Submit</button>
             </div>
         </div>
