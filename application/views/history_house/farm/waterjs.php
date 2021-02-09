@@ -10,14 +10,15 @@ var dataini = {
 };
 
 $(document).ready(function(){
- reload_grafik();
-  // selectdata_kandang();
+  $('.select2').select2();
+  reload_grafik();
 });
 
 function changetgl(dt){
   data_json = {
     'dt' : dt,
     'tgl' : $('[name="tgl'+dt+'"]').val(),
+    'time' : $('[name="time'+dt+'"]').val(),
     'periode' : $('#inputperiode').val(),
   };
 
@@ -29,11 +30,11 @@ function changetgl(dt){
       success : function(isi){
         get_sess(isi.sess);
         if(isi.status == true){
+          $('[name="time'+dt+'"]').val(isi.timeset);
+          $('[id^=select2-time'+dt+']')
+          .attr('title',isi.timeset)
+          .text(isi.timeset);
           $('[name="growval'+dt+'"]').val(isi.dataset);
-          if(dt == 1){
-            $('[name="tgl2"]').val(isi.datasettgl);
-            $('[name="growval2"]').val(isi.datasetgrow);
-          }
         }
       }
   });
@@ -55,10 +56,10 @@ function changegrow(dt){
         get_sess(isi.sess);
         if(isi.status == true){
           $('[name="tgl'+dt+'"]').val(isi.dataset);
-          if(dt == 1){
-            $('[name="tgl2"]').val(isi.datasettgl);
-            $('[name="growval2"]').val(isi.datasetgrow);
-          }
+          $('[name="time'+dt+'"]').val(isi.timeset);
+          $('[id^=select2-time'+dt+']')
+          .attr('title',isi.timeset)
+          .text(isi.timeset);
         }
       }
   });

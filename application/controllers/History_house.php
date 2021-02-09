@@ -224,27 +224,9 @@ class History_house extends CI_Controller {
             $setgrow = '1';
         }
 
-        if($iniperiode['date_record'] != ''){
-            $settgl = date_format(date_create($iniperiode['date_record']),"Y-m-d");
-            $settime = date_format(date_create($iniperiode['date_record']),"H");
-            $resettime = date_format(date_create($iniperiode['reset_time']),"H");
-        }else{
-            $settgl = date_format(date_create(date('Y-m-d')),"Y-m-d");
-            $settime = date_format(date_create("00:00:00"),"H");
-            $resettime = date_format(date_create("01:00:00"),"H");
-        }
-
-        $date = strtotime($settgl);
-        if($settime >= $resettime){
-            $date = strtotime("+1 day", $date);
-            $settgl1 = $settgl;
-            $settgl2 = date('Y-m-d', $date);
-        }else{
-            $date = strtotime("-1 day", $date);
-            $settgl1 = date('Y-m-d', $date);
-            $settgl2 = $settgl;
-        }
-
+        $Wherefortgl = "periode = '".$setperiode."' AND growday = '".$setgrow."' AND keterangan = 'ok' AND kode_kandang = '".$idfarm."' AND kode_perusahaan = '".$id_user."'";
+        $settgl1 = $this->db->query("SELECT date_record FROM data_record WHERE ".$Wherefortgl." ORDER BY date_record ASC LIMIT 1")->row_array()['date_record'];
+        $settgl2 = $this->db->query("SELECT date_record FROM data_record WHERE ".$Wherefortgl." ORDER BY date_record DESC LIMIT 1")->row_array()['date_record'];
 
         $data = [
             'txthead1'     => 'History House - '.$inidatafarm['nama_kandang'],
@@ -274,34 +256,24 @@ class History_house extends CI_Controller {
         $kode_kandang = $this->session->userdata('idfarm');
         $periode = $this->input->post('periode');
         $startgl = $this->input->post('tgl');
+        $startime = $this->input->post('time').":00";
         $urut = $this->input->post('dt');
 
-        $rawsql = "SELECT growday,date_record FROM data_record WHERE periode = '".$periode."' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ";
-        $esql1 = $rawsql."AND keterangan = 'ok' ORDER BY growday DESC, date_record DESC LIMIT 1";
-
-        $inidb1 = $this->db->query($esql1);
-
-        $cekdb = $inidb1->num_rows();
-        $isidb1 = $inidb1->row_array();
-
-        $tgl1 = date_create(date_format(date_create($isidb1['date_record']),"Y-m-d"));
-        $tgl2 = date_create(date_format(date_create($startgl),"Y-m-d"));
-
-        $difftgl1 = date_diff($tgl1,$tgl2);
-        $growawal = (int)$isidb1['growday'] + (int)$difftgl1->format("%R%a");
-
-        $date = date_format(date_create($isidb1['date_record']),"Y-m-d");
-        $date = strtotime($date);
-        $date = strtotime(($difftgl1->format("%R%a") + 1)." day", $date);
-        $growawaltgl = date('Y-m-d', $date);
-        $growawalgrow = $growawal;
-
-        if($urut == 2){
-            $growawal = $growawal - 1;
+        $diff2 = date_format(date_create($startgl." ".$startime),"Y-m-d H:i:s");
+        $where = "periode = '".$periode."' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' AND keterangan = 'ok'";
+        if($urut == 1){
+            $house = $this->db->query("SELECT growday,date_record,reset_time FROM data_record WHERE date_record >= '".$diff2."' AND ".$where." ORDER BY date_record ASC LIMIT 1")->row_array();
+        }else if($urut == 2){
+            $house = $this->db->query("SELECT growday,date_record,reset_time FROM data_record WHERE date_record <= '".$diff2."' AND ".$where."  ORDER BY date_record DESC LIMIT 1")->row_array();
         }
+        $date_in = date_create(date_format(date_create($house['date_record']),"Y-m-d")." ".date_format(date_create($house['reset_time']),"H:i:s"));
 
-        if($cekdb > 0 AND $startgl != ''){
-            echo json_encode(['status' => true, 'dataset' => $growawal, 'datasettgl' => $growawaltgl, 'datasetgrow' => $growawalgrow]);
+        $difftgl1 = date_diff($date_in,date_create($diff2));
+        $growset = (int)$house['growday'] + (int)$difftgl1->format("%R%a");
+        $timeset = date_format(date_create($house['date_record']),"H:i");
+
+        if($house['growday'] != ''){
+            echo json_encode(['status' => true, 'dataset' => $growset,'timeset' => $timeset]);
         }else{
             echo json_encode(['status' => false]);
         }
@@ -317,32 +289,18 @@ class History_house extends CI_Controller {
         $grow1 = $this->input->post('grow');
         $urut = $this->input->post('dt');
 
-        $rawsql = "SELECT growday,date_record FROM data_record WHERE periode = '".$periode."' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ";
-        $esql1 = $rawsql."AND keterangan = 'ok' ORDER BY growday DESC, date_record DESC LIMIT 1";
-
-        $inidb1 = $this->db->query($esql1);
-
-        $cekdb = $inidb1->num_rows();
-        $isidb1 = $inidb1->row_array();
-
-        $grow2 = $isidb1['growday'];
-        $diffgrow1 = $grow1 - $grow2;
-
-        $date = date_format(date_create($isidb1['date_record']),"Y-m-d");
-        $date = strtotime($date);
-        $date = strtotime($diffgrow1." day", $date);
-        $growawaltgl = strtotime("+1 day", $date);
-        $growawaltgl = date('Y-m-d', $growawaltgl);
-
-        if($urut == 2){
-            $date = strtotime("+1 day", $date);
+        $where = "periode = '".$periode."' AND growday = '".$grow1."' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' AND keterangan = 'ok'";
+        if($urut == 1){
+            $house = $this->db->query("SELECT date_record FROM data_record WHERE ".$where." ORDER BY date_record ASC LIMIT 1")->row_array();
+        }else if($urut == 2){
+            $house = $this->db->query("SELECT date_record FROM data_record WHERE ".$where."  ORDER BY date_record DESC LIMIT 1")->row_array();
         }
-        $growawal = date('Y-m-d', $date);
 
-        $growawalgrow = $grow1;
+        $tglset = date_format(date_create($house['date_record']),"Y-m-d");
+        $timeset = date_format(date_create($house['date_record']),"H:i");
 
-        if($cekdb > 0 AND $grow1 != ''){
-            echo json_encode(['status' => true, 'dataset' => $growawal, 'datasettgl' => $growawaltgl, 'datasetgrow' => $growawalgrow]);
+        if($house['date_record'] != ''){
+            echo json_encode(['status' => true, 'dataset' => $tglset,'timeset'=>$timeset]);
         }else{
             echo json_encode(['status' => false]);
         }
