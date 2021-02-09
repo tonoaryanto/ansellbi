@@ -321,6 +321,8 @@ class History_house extends CI_Controller {
         $growval2 = $this->input->post('growval2');
         $tgl = $this->input->post('tgl');
         $tgl2 = $this->input->post('tgl2');
+        $time = $this->input->post('time');
+        $time2 = $this->input->post('time2');
         $periode = $this->input->post('periode');
 
         if ($radio == 'grow') {
@@ -342,6 +344,8 @@ class History_house extends CI_Controller {
         $reqdata['growval2'] = $growval2;
         $reqdata['tgl'] = $tgl;
         $reqdata['tgl2'] = $tgl2;
+        $reqdata['time'] = $time;
+        $reqdata['time2'] = $time2;
 
         $hasildata = $this->grafik_model->grafik_temperature($reqdata);
 
@@ -378,6 +382,9 @@ class History_house extends CI_Controller {
         $inidata = $this->input->post('inidata');
         $tgl = $this->input->post('tgl');
         $tgl2 = $this->input->post('tgl2');
+        $time = $this->input->post('time');
+        $time2 = $this->input->post('time2');
+        $periode = $this->input->post('periode');
         $growval = $this->input->post('growval');
         $growval2 = $this->input->post('growval2');
         $periode = $this->input->post('periode');
@@ -400,6 +407,8 @@ class History_house extends CI_Controller {
         $reqdata['esqlgrow'] = $esqlgrow;
         $reqdata['tgl'] = $tgl;
         $reqdata['tgl2'] = $tgl2;
+        $reqdata['time'] = $time;
+        $reqdata['time2'] = $time2;
         $reqdata['growval'] = $growval;
         $reqdata['growval2'] = $growval2;
 
@@ -428,6 +437,9 @@ class History_house extends CI_Controller {
         $inidata = $this->input->post('inidata');
         $tgl = $this->input->post('tgl');
         $tgl2 = $this->input->post('tgl2');
+        $time = $this->input->post('time');
+        $time2 = $this->input->post('time2');
+        $periode = $this->input->post('periode');
         $growval = $this->input->post('growval');
         $growval2 = $this->input->post('growval2');
         $periode = $this->input->post('periode');
@@ -450,6 +462,8 @@ class History_house extends CI_Controller {
         $reqdata['esqlgrow'] = $esqlgrow;
         $reqdata['tgl'] = $tgl;
         $reqdata['tgl2'] = $tgl2;
+        $reqdata['time'] = $time;
+        $reqdata['time2'] = $time2;
         $reqdata['growval'] = $growval;
         $reqdata['growval2'] = $growval2;
         
@@ -516,32 +530,32 @@ class History_house extends CI_Controller {
         }
     }
 
-    public function datatabel(){
-        $fil1 = $this->input->post('value1');
-        $fil2 = $this->input->post('value2');
-        $fil3 = $this->input->post('value3');
-        $id_user   = $this->session->userdata('id_user');
-        $fildari   = $this->input->post('value4');
-        $filsampai = $this->input->post('value5');
-        $filhour = $this->input->post('value6');
-        $filperiode = $this->input->post('value7');
+    // public function datatabel(){
+    //     $fil1 = $this->input->post('value1');
+    //     $fil2 = $this->input->post('value2');
+    //     $fil3 = $this->input->post('value3');
+    //     $id_user   = $this->session->userdata('id_user');
+    //     $fildari   = $this->input->post('value4');
+    //     $filsampai = $this->input->post('value5');
+    //     $filhour = $this->input->post('value6');
+    //     $filperiode = $this->input->post('value7');
 
-        if($fil1 == 'DAY_1'){
-            if (($fildari == '-1' AND $filsampai == '-1') OR $fildari == '-1' OR $filsampai == '-1') {
-                $fildari = $this->db->query("SELECT ((SELECT grow_value FROM image2 WHERE kategori = '".$fil1."' AND nama_data = '".$fil2."' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$fil3."' AND periode = '".$filperiode."' ORDER BY grow_value DESC LIMIT 1) - 6) AS grow_value")->row_array()['grow_value'];
-                $filsampai = $this->db->query("SELECT grow_value FROM image2 WHERE kategori = '".$fil1."' AND nama_data = '".$fil2."' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$fil3."' AND periode = '".$filperiode."' ORDER BY grow_value DESC LIMIT 1")->row_array()['grow_value'];
-            }
-        }
-        if($fil1 == 'HOUR_1'){
-            if($filhour == '-1'){
-                $filhour = $this->db->query("SELECT grow_value FROM image2 WHERE kategori = '".$fil1."' AND nama_data = '".$fil2."' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$fil3."' AND periode = '".$filperiode."' ORDER BY grow_value DESC LIMIT 1")->row_array()['grow_value'];
-            }
-        }
+    //     if($fil1 == 'DAY_1'){
+    //         if (($fildari == '-1' AND $filsampai == '-1') OR $fildari == '-1' OR $filsampai == '-1') {
+    //             $fildari = $this->db->query("SELECT ((SELECT grow_value FROM image2 WHERE kategori = '".$fil1."' AND nama_data = '".$fil2."' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$fil3."' AND periode = '".$filperiode."' ORDER BY grow_value DESC LIMIT 1) - 6) AS grow_value")->row_array()['grow_value'];
+    //             $filsampai = $this->db->query("SELECT grow_value FROM image2 WHERE kategori = '".$fil1."' AND nama_data = '".$fil2."' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$fil3."' AND periode = '".$filperiode."' ORDER BY grow_value DESC LIMIT 1")->row_array()['grow_value'];
+    //         }
+    //     }
+    //     if($fil1 == 'HOUR_1'){
+    //         if($filhour == '-1'){
+    //             $filhour = $this->db->query("SELECT grow_value FROM image2 WHERE kategori = '".$fil1."' AND nama_data = '".$fil2."' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$fil3."' AND periode = '".$filperiode."' ORDER BY grow_value DESC LIMIT 1")->row_array()['grow_value'];
+    //         }
+    //     }
 
-        header('Content-Type: application/json');
-        if ($fil1 == 'DAY_1') {echo $this->grafik_model->json_day($fil1,$fil2,$fil3,$id_user,$fildari,$filsampai,$filperiode);}
-        if ($fil1 == 'HOUR_1') {echo $this->grafik_model->json_hour($fil1,$fil2,$fil3,$id_user,$filhour,$filperiode);}
-    }
+    //     header('Content-Type: application/json');
+    //     if ($fil1 == 'DAY_1') {echo $this->grafik_model->json_day($fil1,$fil2,$fil3,$id_user,$fildari,$filsampai,$filperiode);}
+    //     if ($fil1 == 'HOUR_1') {echo $this->grafik_model->json_hour($fil1,$fil2,$fil3,$id_user,$filhour,$filperiode);}
+    // }
 
     public function datatable(){
         //Cek Seesion
@@ -553,6 +567,15 @@ class History_house extends CI_Controller {
         $id_user   = $this->session->userdata('id_user');
         $id_farm   = $this->session->userdata('idfarm');
         $inidata = $this->input->post('inidata');
+        $tgl = $this->input->post('tgl');
+        $tgl2 = $this->input->post('tgl2');
+        $time = $this->input->post('time').":00";
+        $time2 = $this->input->post('time2').":00";
+
+        $dates1 = date_format(date_create($tgl." ".$time), "Y-m-d H:i:s");
+        $dates2 = date_format(date_create($tgl2." ".$time2), "Y-m-d H:i:s");
+        $dates['dates1'] = $dates1;
+        $dates['dates2'] = $dates2;
 
         if ($radio = 'grow') {
             $growval = $this->input->post('growval');
@@ -567,18 +590,18 @@ class History_house extends CI_Controller {
         }
 
         $adata = [];
-        if($this->input->post('kateg') == 'temp'){$adata = $this->tabeltemperature($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
-        if($this->input->post('kateg') == 'hum'){$adata = $this->tabelsatukolom($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
-        if($this->input->post('kateg') == 'wind'){$adata = $this->tabelwind($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata[0][0],$inidata[0][1]);}
-        if($this->input->post('kateg') == 'feed'){$adata = $this->tabelsatukolom($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
-        if($this->input->post('kateg') == 'water'){$adata = $this->tabelsatukolom($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
-        if($this->input->post('kateg') == 'press'){$adata = $this->tabelsatukolom($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
-        if($this->input->post('kateg') == 'fan'){$adata = $this->tabelsatukolom($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
+        if($this->input->post('kateg') == 'temp'){$adata = $this->tabeltemperature($dates,$id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
+        if($this->input->post('kateg') == 'hum'){$adata = $this->tabelsatukolom($dates,$id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
+        if($this->input->post('kateg') == 'wind'){$adata = $this->tabelwind($dates,$id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata[0][0],$inidata[0][1]);}
+        if($this->input->post('kateg') == 'feed'){$adata = $this->tabelsatukolom($dates,$id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
+        if($this->input->post('kateg') == 'water'){$adata = $this->tabelsatukolom($dates,$id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
+        if($this->input->post('kateg') == 'press'){$adata = $this->tabelsatukolom($dates,$id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
+        if($this->input->post('kateg') == 'fan'){$adata = $this->tabelsatukolom($dates,$id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
 
         echo json_encode(['status' => true, 'dataSet' => $adata]);
     }
 
-    private function tabeltemperature($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata)
+    private function tabeltemperature($dates,$id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata)
     {
 
         $datsql1  = "SELECT id,growday, date_record";
@@ -586,6 +609,7 @@ class History_house extends CI_Controller {
         $datsql1 .= " FROM data_record WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
         $datsql1 .= $esqlperiode;
         $datsql1 .= $esqlgrow;
+        $datsql1 .= "AND date_record >= '".$dates['dates1']."' AND date_record <= '".$dates['dates2']."'";
         $datsql1 .= "ORDER BY date_record ASC";
 
         //Data Utama
@@ -641,13 +665,14 @@ class History_house extends CI_Controller {
         return $adata;
     }
 
-    private function tabelsatukolom($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata)
+    private function tabelsatukolom($dates,$id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata)
     {
         $datsql1  = "SELECT id,growday, date_record,";
         $datsql1 .= $inidata[0];
         $datsql1 .= " FROM data_record WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
         $datsql1 .= $esqlperiode;
         $datsql1 .= $esqlgrow;
+        $datsql1 .= "AND date_record >= '".$dates['dates1']."' AND date_record <= '".$dates['dates2']."'";
         $datsql1 .= "ORDER BY date_record ASC";
 
         //Data Utama
@@ -724,7 +749,7 @@ class History_house extends CI_Controller {
         return $adata;
     }
 
-    private function tabelwind($id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata1,$inidata2)
+    private function tabelwind($dates,$id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata1,$inidata2)
     {
 
         $datsql1  = "SELECT id,growday, date_record,";
@@ -732,6 +757,7 @@ class History_house extends CI_Controller {
         $datsql1 .= " FROM data_record WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
         $datsql1 .= $esqlperiode;
         $datsql1 .= $esqlgrow;
+        $datsql1 .= "AND date_record >= '".$dates['dates1']."' AND date_record <= '".$dates['dates2']."'";
         $datsql1 .= "ORDER BY date_record ASC";
 
         //Data Utama

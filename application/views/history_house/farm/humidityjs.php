@@ -106,6 +106,8 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
         'growval2' : $('[name="growval2"]').val(),
         'tgl' : $('[name="tgl1"]').val(),
         'tgl2' : $('[name="tgl2"]').val(),
+        'time' : $('[name="time1"]').val(),
+        'time2' : $('[name="time2"]').val(),
         'periode' : $('#inputperiode').val(),
       };
     }
@@ -274,7 +276,11 @@ function loadtabel() {
       'kateg' : 'hum',
       'growval' : $('[name="growval1"]').val(),
       'growval2' : $('[name="growval2"]').val(),
-      'periode' : $('#inputperiode').val(),
+      'tgl' : $('[name="tgl1"]').val(),
+      'tgl2' : $('[name="tgl2"]').val(),
+      'time' : $('[name="time1"]').val(),
+      'time2' : $('[name="time2"]').val(),
+      'periode' : $('#inputperiode').val()
     };
   }
   data_json['inidata'] = dataini[0];

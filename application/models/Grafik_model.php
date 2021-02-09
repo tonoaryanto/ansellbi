@@ -191,6 +191,10 @@ class Grafik_model extends CI_Model {
         $growval2 = $reqdata['growval2'];
         $tgl = date_format(date_create($reqdata['tgl']),"d/m/Y");
         $tgl2 = date_format(date_create($reqdata['tgl2']),"d/m/Y");
+        $time = date_format(date_create($reqdata['time'].":00"),"H:i:s");
+        $time2 = date_format(date_create($reqdata['time2'].":00"),"H:i:s");
+        $tglaw = date_format(date_create($reqdata['tgl']." ".$time),"Y-m-d H:i:s");
+        $tglen = date_format(date_create($reqdata['tgl2']." ".$time2),"Y-m-d H:i:s");
 
             $esql  = "SELECT id,growday, date_record,";
             if($inidata == 'alltemp'){
@@ -201,6 +205,7 @@ class Grafik_model extends CI_Model {
             $esql .= " FROM data_record WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
             $esql .= $esqlperiode;
             $esql .= $esqlgrow;
+            $esql .= "AND date_record >= '".$tglaw."' AND date_record <= '".$tglen."'";
             $esql .= "ORDER BY date_record ASC";
 
         $label = [
@@ -383,12 +388,17 @@ class Grafik_model extends CI_Model {
         $growval2 = $reqdata['growval2'];
         $tgl = date_format(date_create($reqdata['tgl']),"d/m/Y");
         $tgl2 = date_format(date_create($reqdata['tgl2']),"d/m/Y");
+        $time = date_format(date_create($reqdata['time'].":00"),"H:i:s");
+        $time2 = date_format(date_create($reqdata['time2'].":00"),"H:i:s");
+        $tglaw = date_format(date_create($reqdata['tgl']." ".$time),"Y-m-d H:i:s");
+        $tglen = date_format(date_create($reqdata['tgl2']." ".$time2),"Y-m-d H:i:s");
 
         $esql  = "SELECT id,growday, date_record,";
         $esql .= $inidata." AS isidata";
         $esql .= " FROM data_record WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
         $esql .= $esqlperiode;
         $esql .= $esqlgrow;
+        $esql .= "AND date_record >= '".$tglaw."' AND date_record <= '".$tglen."'";
         $esql .= "ORDER BY date_record ASC";        
 
         $label = [
@@ -554,12 +564,17 @@ class Grafik_model extends CI_Model {
         $growval2 = $reqdata['growval2'];
         $tgl = date_format(date_create($reqdata['tgl']),"d/m/Y");
         $tgl2 = date_format(date_create($reqdata['tgl2']),"d/m/Y");
+        $time = date_format(date_create($reqdata['time'].":00"),"H:i:s");
+        $time2 = date_format(date_create($reqdata['time2'].":00"),"H:i:s");
+        $tglaw = date_format(date_create($reqdata['tgl']." ".$time),"Y-m-d H:i:s");
+        $tglen = date_format(date_create($reqdata['tgl2']." ".$time2),"Y-m-d H:i:s");
 
         $esql  = "SELECT id,growday, date_record,";
         $esql .= $inidata[0][0]." AS isidata, ".$inidata[0][1]." AS isidata2";
         $esql .= " FROM data_record WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
         $esql .= $esqlperiode;
         $esql .= $esqlgrow;
+        $esql .= "AND date_record >= '".$tglaw."' AND date_record <= '".$tglen."'";
         $esql .= "ORDER BY date_record ASC";
 
         $label = [
