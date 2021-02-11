@@ -58,33 +58,33 @@
                     <div class="input-group">
                       <input name="tgl1" onchange="changetgl(1);" class="form-control" value="<?php echo date_format(date_create($initgl1),"Y-m-d"); ?>" type="date" style="border-top-left-radius:4px;border-bottom-left-radius:4px;line-height:unset;">
                       <span class="input-group-addon" style="padding:0px;">
-                      <?php $t1 = date_format(date_create($initgl1),"H:i");?>
-                      <select onchange="changetgl(1);" name="time1" class="form-control select2" style="min-width: 90px;height:34px;border-radius:5px;">
-                        <option <?php if($t1 == "00:00"){echo "selected";} ?> value="00:00">00:00</option>
-                        <option <?php if($t1 == "01:00"){echo "selected";} ?> value="01:00">01:00</option>
-                        <option <?php if($t1 == "02:00"){echo "selected";} ?> value="02:00">02:00</option>
-                        <option <?php if($t1 == "03:00"){echo "selected";} ?> value="03:00">03:00</option>
-                        <option <?php if($t1 == "04:00"){echo "selected";} ?> value="04:00">04:00</option>
-                        <option <?php if($t1 == "05:00"){echo "selected";} ?> value="05:00">05:00</option>
-                        <option <?php if($t1 == "06:00"){echo "selected";} ?> value="06:00">06:00</option>
-                        <option <?php if($t1 == "07:00"){echo "selected";} ?> value="07:00">07:00</option>
-                        <option <?php if($t1 == "08:00"){echo "selected";} ?> value="08:00">08:00</option>
-                        <option <?php if($t1 == "09:00"){echo "selected";} ?> value="09:00">09:00</option>
-                        <option <?php if($t1 == "10:00"){echo "selected";} ?> value="10:00">10:00</option>
-                        <option <?php if($t1 == "11:00"){echo "selected";} ?> value="11:00">11:00</option>
-                        <option <?php if($t1 == "12:00"){echo "selected";} ?> value="12:00">12:00</option>
-                        <option <?php if($t1 == "13:00"){echo "selected";} ?> value="13:00">13:00</option>
-                        <option <?php if($t1 == "14:00"){echo "selected";} ?> value="14:00">14:00</option>
-                        <option <?php if($t1 == "15:00"){echo "selected";} ?> value="15:00">15:00</option>
-                        <option <?php if($t1 == "16:00"){echo "selected";} ?> value="16:00">16:00</option>
-                        <option <?php if($t1 == "17:00"){echo "selected";} ?> value="17:00">17:00</option>
-                        <option <?php if($t1 == "18:00"){echo "selected";} ?> value="18:00">18:00</option>
-                        <option <?php if($t1 == "19:00"){echo "selected";} ?> value="19:00">19:00</option>
-                        <option <?php if($t1 == "20:00"){echo "selected";} ?> value="20:00">20:00</option>
-                        <option <?php if($t1 == "21:00"){echo "selected";} ?> value="21:00">21:00</option>
-                        <option <?php if($t1 == "22:00"){echo "selected";} ?> value="22:00">22:00</option>
-                        <option <?php if($t1 == "23:00"){echo "selected";} ?> value="23:00">23:00</option>
-                      </select>
+                        <?php $t1 = date_format(date_create($initgl1),"H:i");?>
+                        <select onchange="changetgl(1);" name="time1" class="form-control select2" style="min-width: 90px;height:34px;border-radius:5px;">
+                          <option <?php if($t1 == "00:00"){echo "selected";} ?> value="00:00">00:00</option>
+                          <option <?php if($t1 == "01:00"){echo "selected";} ?> value="01:00">01:00</option>
+                          <option <?php if($t1 == "02:00"){echo "selected";} ?> value="02:00">02:00</option>
+                          <option <?php if($t1 == "03:00"){echo "selected";} ?> value="03:00">03:00</option>
+                          <option <?php if($t1 == "04:00"){echo "selected";} ?> value="04:00">04:00</option>
+                          <option <?php if($t1 == "05:00"){echo "selected";} ?> value="05:00">05:00</option>
+                          <option <?php if($t1 == "06:00"){echo "selected";} ?> value="06:00">06:00</option>
+                          <option <?php if($t1 == "07:00"){echo "selected";} ?> value="07:00">07:00</option>
+                          <option <?php if($t1 == "08:00"){echo "selected";} ?> value="08:00">08:00</option>
+                          <option <?php if($t1 == "09:00"){echo "selected";} ?> value="09:00">09:00</option>
+                          <option <?php if($t1 == "10:00"){echo "selected";} ?> value="10:00">10:00</option>
+                          <option <?php if($t1 == "11:00"){echo "selected";} ?> value="11:00">11:00</option>
+                          <option <?php if($t1 == "12:00"){echo "selected";} ?> value="12:00">12:00</option>
+                          <option <?php if($t1 == "13:00"){echo "selected";} ?> value="13:00">13:00</option>
+                          <option <?php if($t1 == "14:00"){echo "selected";} ?> value="14:00">14:00</option>
+                          <option <?php if($t1 == "15:00"){echo "selected";} ?> value="15:00">15:00</option>
+                          <option <?php if($t1 == "16:00"){echo "selected";} ?> value="16:00">16:00</option>
+                          <option <?php if($t1 == "17:00"){echo "selected";} ?> value="17:00">17:00</option>
+                          <option <?php if($t1 == "18:00"){echo "selected";} ?> value="18:00">18:00</option>
+                          <option <?php if($t1 == "19:00"){echo "selected";} ?> value="19:00">19:00</option>
+                          <option <?php if($t1 == "20:00"){echo "selected";} ?> value="20:00">20:00</option>
+                          <option <?php if($t1 == "21:00"){echo "selected";} ?> value="21:00">21:00</option>
+                          <option <?php if($t1 == "22:00"){echo "selected";} ?> value="22:00">22:00</option>
+                          <option <?php if($t1 == "23:00"){echo "selected";} ?> value="23:00">23:00</option>
+                        </select>
                       </span>
                       <span class="input-group-addon" style="border-top-right-radius:4px;border-bottom-right-radius:4px;padding:0px;">
                       <input onchange="changegrow(1);" min="-1" name="growval1" value="<?php echo $inigrow; ?>" type="number" class="form-control" style="border-style:none;height: 32px;border-radius: 4px;min-width: 90px;">
@@ -96,33 +96,33 @@
                     <div class="input-group">
                       <input name="tgl2" onchange="changetgl(2);" class="form-control" value="<?php echo date_format(date_create($initgl2),"Y-m-d"); ?>" type="date" style="border-top-left-radius:4px;border-bottom-left-radius:4px;line-height:unset;">
                       <span class="input-group-addon" style="padding:0px;">
-                      <?php $t2 = date_format(date_create($initgl2),"H:i");?>
-                      <select onchange="changetgl(2);" name="time2" class="form-control select2" style="min-width: 90px;height:34px;border-radius:5px;">
-                        <option <?php if($t2 == "00:00"){echo "selected";} ?> value="00:00">00:00</option>
-                        <option <?php if($t2 == "01:00"){echo "selected";} ?> value="01:00">01:00</option>
-                        <option <?php if($t2 == "02:00"){echo "selected";} ?> value="02:00">02:00</option>
-                        <option <?php if($t2 == "03:00"){echo "selected";} ?> value="03:00">03:00</option>
-                        <option <?php if($t2 == "04:00"){echo "selected";} ?> value="04:00">04:00</option>
-                        <option <?php if($t2 == "05:00"){echo "selected";} ?> value="05:00">05:00</option>
-                        <option <?php if($t2 == "06:00"){echo "selected";} ?> value="06:00">06:00</option>
-                        <option <?php if($t2 == "07:00"){echo "selected";} ?> value="07:00">07:00</option>
-                        <option <?php if($t2 == "08:00"){echo "selected";} ?> value="08:00">08:00</option>
-                        <option <?php if($t2 == "09:00"){echo "selected";} ?> value="09:00">09:00</option>
-                        <option <?php if($t2 == "10:00"){echo "selected";} ?> value="10:00">10:00</option>
-                        <option <?php if($t2 == "11:00"){echo "selected";} ?> value="11:00">11:00</option>
-                        <option <?php if($t2 == "12:00"){echo "selected";} ?> value="12:00">12:00</option>
-                        <option <?php if($t2 == "13:00"){echo "selected";} ?> value="13:00">13:00</option>
-                        <option <?php if($t2 == "14:00"){echo "selected";} ?> value="14:00">14:00</option>
-                        <option <?php if($t2 == "15:00"){echo "selected";} ?> value="15:00">15:00</option>
-                        <option <?php if($t2 == "16:00"){echo "selected";} ?> value="16:00">16:00</option>
-                        <option <?php if($t2 == "17:00"){echo "selected";} ?> value="17:00">17:00</option>
-                        <option <?php if($t2 == "18:00"){echo "selected";} ?> value="18:00">18:00</option>
-                        <option <?php if($t2 == "19:00"){echo "selected";} ?> value="19:00">19:00</option>
-                        <option <?php if($t2 == "20:00"){echo "selected";} ?> value="20:00">20:00</option>
-                        <option <?php if($t2 == "21:00"){echo "selected";} ?> value="21:00">21:00</option>
-                        <option <?php if($t2 == "22:00"){echo "selected";} ?> value="22:00">22:00</option>
-                        <option <?php if($t2 == "23:00"){echo "selected";} ?> value="23:00">23:00</option>
-                      </select>
+                        <?php $t2 = date_format(date_create($initgl2),"H:i");?>
+                        <select onchange="changetgl(2);" name="time2" class="form-control select2" style="min-width: 90px;height:34px;border-radius:5px;">
+                          <option <?php if($t2 == "00:00"){echo "selected";} ?> value="00:00">00:00</option>
+                          <option <?php if($t2 == "01:00"){echo "selected";} ?> value="01:00">01:00</option>
+                          <option <?php if($t2 == "02:00"){echo "selected";} ?> value="02:00">02:00</option>
+                          <option <?php if($t2 == "03:00"){echo "selected";} ?> value="03:00">03:00</option>
+                          <option <?php if($t2 == "04:00"){echo "selected";} ?> value="04:00">04:00</option>
+                          <option <?php if($t2 == "05:00"){echo "selected";} ?> value="05:00">05:00</option>
+                          <option <?php if($t2 == "06:00"){echo "selected";} ?> value="06:00">06:00</option>
+                          <option <?php if($t2 == "07:00"){echo "selected";} ?> value="07:00">07:00</option>
+                          <option <?php if($t2 == "08:00"){echo "selected";} ?> value="08:00">08:00</option>
+                          <option <?php if($t2 == "09:00"){echo "selected";} ?> value="09:00">09:00</option>
+                          <option <?php if($t2 == "10:00"){echo "selected";} ?> value="10:00">10:00</option>
+                          <option <?php if($t2 == "11:00"){echo "selected";} ?> value="11:00">11:00</option>
+                          <option <?php if($t2 == "12:00"){echo "selected";} ?> value="12:00">12:00</option>
+                          <option <?php if($t2 == "13:00"){echo "selected";} ?> value="13:00">13:00</option>
+                          <option <?php if($t2 == "14:00"){echo "selected";} ?> value="14:00">14:00</option>
+                          <option <?php if($t2 == "15:00"){echo "selected";} ?> value="15:00">15:00</option>
+                          <option <?php if($t2 == "16:00"){echo "selected";} ?> value="16:00">16:00</option>
+                          <option <?php if($t2 == "17:00"){echo "selected";} ?> value="17:00">17:00</option>
+                          <option <?php if($t2 == "18:00"){echo "selected";} ?> value="18:00">18:00</option>
+                          <option <?php if($t2 == "19:00"){echo "selected";} ?> value="19:00">19:00</option>
+                          <option <?php if($t2 == "20:00"){echo "selected";} ?> value="20:00">20:00</option>
+                          <option <?php if($t2 == "21:00"){echo "selected";} ?> value="21:00">21:00</option>
+                          <option <?php if($t2 == "22:00"){echo "selected";} ?> value="22:00">22:00</option>
+                          <option <?php if($t2 == "23:00"){echo "selected";} ?> value="23:00">23:00</option>
+                        </select>
                       </span>
                       <span class="input-group-addon" style="border-top-right-radius:4px;border-bottom-right-radius:4px;padding:0px;">
                       <input onchange="changegrow(2);" min="-1" name="growval2" value="<?php echo $inigrow; ?>" type="number" class="form-control" style="border-style:none;height: 32px;border-radius: 4px;min-width: 90px;">

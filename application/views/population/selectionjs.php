@@ -3,6 +3,7 @@
 var urlimage1;
 
 $(document).ready(function(){
+    $('.select2').select2();
     selectdata_kandang();
 });
 
@@ -31,15 +32,81 @@ function isiselect_kandang(inidata){
   }).on("change", function () {
     $('#boxteks').hide();
     $('#boxdate').show();
+    $('#boxdate2').show();
     $('[id="boxperiod"]').show();
     $('[id="boxtabel"]').show();
-    grafik();
+    dtdate();
+  });
+}
+
+function changetgl(dt){
+  data_json = {
+    'tgl' : $('[name="tgl'+dt+'"]').val(),
+    'kandang' : $('#optionselect_kandang').val(),
+    'periode' : $('[name="periode"]').val(),
+  };
+
+  $.ajax({
+      type: "POST",
+      url : "<?php echo base_url('population/changetgl'); ?>",
+      data : data_json,
+      dataType : "JSON",
+      success : function(isi){
+        get_sess(isi.sess);
+        if(isi.status == true){
+          $('[name="tanggal_'+dt+'"]').val(isi.dataset);
+        }
+      }
+  });
+}
+
+function changegrow(dt){
+  data_json = {
+    'grow' : $('[name="tanggal_'+dt+'"]').val(),
+    'kandang' : $('#optionselect_kandang').val(),
+    'periode' : $('[name="periode"]').val(),
+  };
+
+  $.ajax({
+      type: "POST",
+      url : "<?php echo base_url('population/changegrow'); ?>",
+      data : data_json,
+      dataType : "JSON",
+      success : function(isi){
+        get_sess(isi.sess);
+        if(isi.status == true){
+          $('[name="tgl'+dt+'"]').val(isi.dataset);
+        }
+      }
+  });
+}
+
+function dtdate(){
+  data_json = {
+    'kandang' : $('#optionselect_kandang').val(),
+  };
+
+  $.ajax({
+    type: "POST",
+    url : "<?php echo base_url('population/dtdate'); ?>",
+    data : data_json,
+    dataType: "JSON",
+    success: function(data){
+      get_sess(data.sess);
+      var isi = data.dataset;
+      $('[name="periode"]').val(isi.periode);
+      $('[name="tgl1"]').val(isi.tgl1);
+      $('[name="tgl2"]').val(isi.tgl2);
+      $('[name="tanggal_1"]').val(isi.tanggal_dari);
+      $('[name="tanggal_2"]').val(isi.tanggal_sampai);
+      grafik();
+    }
   });
 }
 
 function grafik(){
   if ($('#optionselect_kandang').val() == '') {return;}
-  if ($('[name="tanggal_dari"]').val() > $('[name="tanggal_sampai"]').val()) {
+  if ($('[name="tanggal_1"]').val() > $('[name="tanggal_2"]').val()) {
         swal.fire({
           title: "Warning!",
           html : '<p style="font-size: 14px">Date is incorrect!</p>',
@@ -68,8 +135,8 @@ function grafik(){
       data_json = {
         'kandang' : $('#optionselect_kandang').val(),
         'periode' : $('[name="periode"]').val(),
-        'growval' : $('[name="tanggal_dari"]').val(),
-        'growval2' : $('[name="tanggal_sampai"]').val(),
+        'growval' : $('[name="tanggal_1"]').val(),
+        'growval2' : $('[name="tanggal_2"]').val(),
         'inidata' : {'0':'selection'}
       };
 
@@ -193,9 +260,6 @@ function grafik(){
           });
 
           swal.close();
-          document.getElementById("periode").value = isi.periode;
-          document.getElementById("tanggal_dari").value = isi.hourdari;
-          document.getElementById("tanggal_sampai").value = isi.hoursampai;
           $('#titlegrafik'+id).html(isi.glabel);
           loadtabel();
         }else{
@@ -224,11 +288,11 @@ function loadtabel() {
   data_json = {
       'kandang' : $('#optionselect_kandang').val(),
       'periode' : $('[name="periode"]').val(),
-      'growval' : $('[name="tanggal_dari"]').val(),
-      'growval2' : $('[name="tanggal_sampai"]').val(),
+      'growval' : $('[name="tanggal_1"]').val(),
+      'growval2' : $('[name="tanggal_2"]').val(),
       'inidata' : {'0':'selection'}
   };
- 
+
     $.ajax({
       type: "POST",
       url : "<?php echo base_url('population/datatable'); ?>",
@@ -286,10 +350,6 @@ function loadtabel() {
                 },
                 {
                     title: "GROW DAY",
-                    orderable: false
-                },
-                {
-                    title: "BIRD IN",
                     orderable: false
                 },
                 {
