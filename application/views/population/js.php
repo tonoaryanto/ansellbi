@@ -135,6 +135,8 @@ function grafik(){
       data_json = {
         'kandang' : $('#optionselect_kandang').val(),
         'periode' : $('[name="periode"]').val(),
+        'tgl1' : $('[name="tgl1"]').val(),
+        'tgl2' : $('[name="tgl2"]').val(),
         'growval' : $('[name="tanggal_1"]').val(),
         'growval2' : $('[name="tanggal_2"]').val(),
         'inidata' : {'0':'afterpopulation','1':'mortality','2':'selection'}

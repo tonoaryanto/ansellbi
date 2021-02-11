@@ -421,6 +421,8 @@ class Population extends CI_Controller {
         $inidata = $this->input->post('inidata');
 
         $periode = $this->input->post('periode');
+        $tgl1 = $this->input->post('tgl1');
+        $tgl2 = $this->input->post('tgl2');
         $growval = $this->input->post('growval');
         $growval2 = $this->input->post('growval2');
  
@@ -469,10 +471,12 @@ class Population extends CI_Controller {
 
         if($growval == $growval2){
             $addlabel = ' : Growday '.$growval.' ';
+            $addtgl = " | Date ".date_format(date_create($tgl1),"d F Y");
         }else{
             $addlabel = ' : Growday '.$growval.' - '.$growval2;
+            $addtgl = " | Date ".date_format(date_create($tgl1),"d F Y").' - '.date_format(date_create($tgl2),"d F Y");
         }
-        $glabel = $label[$inidata[0]].$addlabel;
+        $glabel = $label[$inidata[0]].$addlabel.$addtgl;
         $linelabel[0] = $label[$inidata[0]];
 
         if($inidata[0] != 'afterpopulation'){
@@ -507,7 +511,8 @@ class Population extends CI_Controller {
         }
 
         foreach ($dataprimary1 as $value) {
-            $adata[] = ''.$value->growday;
+            $stttgl = date_format(date_create($value->tanggal),"d").date_format(date_create($value->tanggal),"m").date_format(date_create($value->tanggal),"y");
+            $adata[] = $stttgl.' - ('.$value->growday.')';
 
             if($inidata[0] != 'afterpopulation'){
                 $noarray = (int)$value->growday - 1;
