@@ -35,10 +35,10 @@
                             </div>
                         </div>
                         <div class="form-group col-sm-12">
-                                <label>Growday</label>
-                                <div class="input-group col-lg-5">
-                                    <input type="text" class="form-control pull-right" name="growday" readonly>
-                                </div>
+                            <label>Growday</label>
+                            <div class="input-group col-lg-5">
+                                <input type="text" class="form-control pull-right" name="growday" readonly>
+                            </div>
                         </div>
                     </div>
                     <div class="col-lg-4">
