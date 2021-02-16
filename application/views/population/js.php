@@ -345,7 +345,7 @@ function loadtabel() {
                             objLayout['paddingLeft'] = function(i) { return 4; };
                             objLayout['paddingRight'] = function(i) { return 4; };
                             doc.content[1].layout = objLayout;
-                            doc.content[1].table.widths = [ '5%', '20%', '15%', '20%', '20%', '20%'];
+                            doc.content[1].table.widths = [ '5%', '10%', '10%', '15%', '20%', '20%', '20%'];
                       }
                 }
               ],

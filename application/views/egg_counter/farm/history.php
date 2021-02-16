@@ -43,6 +43,48 @@ function swipegf(ul){
   reload_grafik();
 }
 
+function changetgl(dt){
+  data_json = {
+    'tgl' : $('[name="tgl'+dt+'"]').val(),
+    'kandang' : $('#optionselect_kandang').val(),
+    'periode' : $('[name="val_periode"]').val(),
+  };
+
+  $.ajax({
+      type: "POST",
+      url : "<?php echo base_url('egg_counter/changetgl'); ?>",
+      data : data_json,
+      dataType : "JSON",
+      success : function(isi){
+        get_sess(isi.sess);
+        if(isi.status == true){
+          $('[name="growval'+dt+'"]').val(isi.dataset);
+        }
+      }
+  });
+}
+
+function changegrow(dt){
+  data_json = {
+    'grow' : $('[name="growval'+dt+'"]').val(),
+    'kandang' : $('#optionselect_kandang').val(),
+    'periode' : $('[name="val_periode"]').val(),
+  };
+
+  $.ajax({
+      type: "POST",
+      url : "<?php echo base_url('egg_counter/changegrow'); ?>",
+      data : data_json,
+      dataType : "JSON",
+      success : function(isi){
+        get_sess(isi.sess);
+        if(isi.status == true){
+          $('[name="tgl'+dt+'"]').val(isi.dataset);
+        }
+      }
+  });
+}
+
 function grafik(inidata,id,lebar,dtrow,count,ul){
   if(ul <= count){
     var datperiode = $('#inputperiode').val();
@@ -56,7 +98,7 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
         });
         return;
       }
-      if (parseInt($('[name="growval"]').val()) > parseInt($('[name="growval2"]').val())) {
+      if (parseInt($('[name="growval1"]').val()) > parseInt($('[name="growval2"]').val())) {
         swal.fire({
           title: "Warning!",
           html : '<p style="font-size: 14px">Growday is incorrect!</p>',
@@ -66,18 +108,20 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
       }
       data_json = {
         'radio' : 'grow',
-        'growval' : $('[name="growval"]').val(),
+        'tgl1' : $('[name="tgl1"]').val(),
+        'tgl2' : $('[name="tgl2"]').val(),
+        'growval' : $('[name="growval1"]').val(),
         'growval2' : $('[name="growval2"]').val(),
         'periode' : $('#inputperiode').val(),
       };
     }
       data_json['inidata'] = inidata;
 
-      var rangegd =  parseInt($('[name="growval2"]').val()) - parseInt($('[name="growval"]').val());
+      var rangegd =  parseInt($('[name="growval2"]').val()) - parseInt($('[name="growval1"]').val());
       var tinggigk = 500;
       var lebargk = 800;
       var tottinggi = (tinggigk + rangegd);
-      if (parseInt($('[name="growval"]').val()) == parseInt($('[name="growval2"]').val())) {
+      if (parseInt($('[name="growval1"]').val()) == parseInt($('[name="growval2"]').val())) {
       var totlebar = (lebargk + rangegd);
       }else{
         var totlebar = (lebargk + rangegd);
@@ -293,7 +337,7 @@ function loadtabel() {
 
   data_json = {
     'kateg' : 'allcounter',
-    'growval' : $('[name="growval"]').val(),
+    'growval' : $('[name="growval1"]').val(),
     'growval2' : $('[name="growval2"]').val(),
     'periode' : $('#inputperiode').val(),
   };
@@ -356,10 +400,6 @@ function loadtabel() {
                 },
                 {
                     title: "DATE",
-                    orderable: false
-                },
-                {
-                    title: "TIME",
                     orderable: false
                 },
                 {

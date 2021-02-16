@@ -96,6 +96,59 @@ class Egg_counter extends CI_Controller {
         echo json_encode($data);
     }
 
+    public function changetgl(){
+        $cek_sess = $this->konfigurasi->cek_js();
+        if ($cek_sess == 0) {echo json_encode(['sess' => $cek_sess]);return;}
+
+        $id_farm = $this->session->userdata('id_user');
+        $kode_kandang = $this->session->userdata('idfarm');
+        $periode = $this->input->post('periode');
+        $startgl = $this->input->post('tgl')." ";
+
+        $diff2 = date_format(date_create($startgl),"Y-m-d");
+        $diff2t = date_format(date_create($startgl),"Y-m-d H:i:s");
+        $where = "date_record <= '".$diff2t."' AND periode = '".$periode."' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' AND keterangan = 'ok'";
+        $house = $this->db->query("SELECT growday,date_record FROM data_eggcounter WHERE ".$where." ORDER BY date_record DESC LIMIT 1")->row_array();
+
+        $date_in = date_format(date_create($house['date_record']),"Y-m-d");
+
+        $difftgl1 = date_diff(date_create($date_in),date_create($diff2));
+
+        if($house['growday'] != ''){
+            $growset = (int)$house['growday'] + (int)$difftgl1->format("%R%a");
+        }else{
+            $growset = '';
+        }
+
+        echo json_encode(['status' => true, 'dataset' => $growset]);
+    }
+
+    public function changegrow(){
+        $cek_sess = $this->konfigurasi->cek_js();
+        if ($cek_sess == 0) {echo json_encode(['sess' => $cek_sess]);return;}
+
+        $id_farm = $this->session->userdata('id_user');
+        $kode_kandang = $this->session->userdata('idfarm');
+        $periode = $this->input->post('periode');
+        $stargrow = $this->input->post('grow');
+
+        $where = "growday <= '".$stargrow."' AND periode = '".$periode."' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' AND keterangan = 'ok'";
+        $house = $this->db->query("SELECT periode,growday,date_record FROM data_eggcounter WHERE ".$where." ORDER BY date_record DESC LIMIT 1")->row_array();
+
+        $diffgrow = (int)$stargrow - (int)$house['growday'];
+
+        $date=date_create($house['date_record']);
+        date_modify($date,$diffgrow." days");
+        $growset = date_format($date,"Y-m-d");
+
+        if($house['growday'] != ''){
+            echo json_encode(['status' => true, 'dataset' => $growset]);
+        }else{
+            echo json_encode(['status' => false]);
+        }
+
+    }
+
     public function farm($idfarm,$sensor=null){
         if ($sensor == null) {redirect('egg_counter/farm/'.$idfarm.'/history');}
         if ($sensor != 'history') {redirect('egg_counter/farm/'.$idfarm.'/history');}
@@ -106,19 +159,25 @@ class Egg_counter extends CI_Controller {
         if($sensor == 'history'){$urljs = 'egg_counter-farm-history.js';}
 
         $inidatafarm = $this->umum_model->get('data_kandang',"id = '".$idfarm."' AND kode_perusahaan = '".$id_user."'")->row_array();
-        $iniperiode = $this->umum_model->get("(SELECT periode,growday FROM data_eggcounter WHERE keterangan = 'ok' AND kode_kandang = '".$idfarm."' AND kode_perusahaan = '".$id_user."' ORDER BY periode DESC,growday DESC LIMIT 1) as data")->row_array();
+        $riniperiode = $this->umum_model->get("(SELECT periode,growday,date_record AS tanggal FROM data_eggcounter WHERE keterangan = 'ok' AND kode_kandang = '".$idfarm."' AND kode_perusahaan = '".$id_user."' ORDER BY periode DESC,growday DESC LIMIT 30) as data");
+        $house = $riniperiode->result();
+        $valcur = current($house);
+        $valend = end($house);
+
         if ($inidatafarm['nama_kandang'] == '') {echo 'Silent is gold';return;}
 
-        if($iniperiode['periode'] != ''){
-            $setperiode = $iniperiode['periode'];
+        if($riniperiode->num_rows() > 0){
+            $setperiode = $valcur->{'periode'};
+            $setgrow1 = $valend->{'growday'};
+            $setgrow2 = $valcur->{'growday'};
+            $settgl1 = date_format(date_create($valend->{'tanggal'}),"Y-m-d");
+            $settgl2 = date_format(date_create($valcur->{'tanggal'}),"Y-m-d");
         }else{
             $setperiode = '1';
-        }
-
-        if($iniperiode['periode'] != ''){
-            $setgrow = $iniperiode['growday'];
-        }else{
-            $setgrow = '1';
+            $setgrow1 = '1';
+            $setgrow2 = '1';
+            $settgl1 = '';
+            $settgl2 = '';
         }
 
         $hgrowchange = $this->umum_model->get("(SELECT periode,growday FROM data_record WHERE keterangan = 'growchange' AND kode_kandang = '".$idfarm."' AND kode_perusahaan = '".$id_user."' ORDER BY periode DESC,growday DESC LIMIT 1) as data")->num_rows();
@@ -134,7 +193,10 @@ class Egg_counter extends CI_Controller {
             'jsadd'     => 'egg_counter/farm/jsadd',
             'idfarm'    => $idfarm,
             'iniperiode' => $setperiode,
-            'inigrow' => $setgrow,
+            'inigrow1' => $setgrow1,
+            'inigrow2' => $setgrow2,
+            'tgl1' => $settgl1,
+            'tgl2' => $settgl2,
             'urljs' => $urljs,
             'cekgrowchange' => $hgrowchange
         ];
@@ -151,6 +213,8 @@ class Egg_counter extends CI_Controller {
         $id_farm   = $this->session->userdata('idfarm');
         $inidata = $this->input->post('inidata');
 
+        $tgl1 = $this->input->post('tgl1');
+        $tgl2 = $this->input->post('tgl2');
         $growval = $this->input->post('growval');
         $growval2 = $this->input->post('growval2');
         $periode = $this->input->post('periode');
@@ -182,10 +246,12 @@ class Egg_counter extends CI_Controller {
 
         if($growval == $growval2){
             $addlabel = ' : Grow Day '.$growval.' ';
+            $addtgl = " | Date ".date_format(date_create($tgl1),"d F Y");
         }else{
             $addlabel = ' : Grow Day '.$growval.' - '.$growval2;
+            $addtgl = " | Date ".date_format(date_create($tgl1),"d F Y").' - '.date_format(date_create($tgl2),"d F Y");
         }
-        $glabel = $label[$inidata].$addlabel;
+        $glabel = $label[$inidata].$addlabel.$addtgl;
 
         if($inidata == 'allcounter'){
             $linelabel[0] = 'Egg Counter 1';
@@ -223,8 +289,10 @@ class Egg_counter extends CI_Controller {
         }
 
         foreach ($dataprimary1 as $value) {
-            $jam = date_format(date_create($value->date_record),"H");
-            $adata[] = ''.$value->growday;
+            $y = date_format(date_create($value->date_record),"Y");
+            $m = date_format(date_create($value->date_record),"m");
+            $d = date_format(date_create($value->date_record),"d");
+            $adata[] = $d.$m.$y.' - ('.$value->growday.')';
 
             if($inidata == 'sumegg'){
                 $noarray = (int)$value->growday - 1;
@@ -310,24 +378,39 @@ class Egg_counter extends CI_Controller {
         $realmax = max($datamax1);
         $realmin = min($datamin1);
 
-        if($realmax < 99){$realmax = $realmax + 2;}
+        if(isset(explode(".",$realmax)[1])){if(explode(".",$realmax)[1] >= 1){$realmax = explode(".",$realmax)[0] + 1;}}
         if($realmin > 1){$realmin = $realmin - 1;}
 
-        $countrange = 10;
+        $countrange = 8;
         $dif1 = $realmax - $realmin;
-        if($dif1 == $realmax){$dif1range = $dif1 / 10;}
-        else{$dif1range = $dif1 / $countrange;}
+        // if($dif1 == $realmax){$dif1range = $dif1 / 10;}else{$dif1range = $dif1 / $countrange;}
+        $dif1range = $dif1 / $countrange;
         if($dif1range < 1){$dif1range = 1;}
         if(isset(explode(".",$dif1range)[1])){
             if(explode(".",$dif1range)[1] >= 1){$dif1range = explode(".",$dif1range)[0] + 1;}
         };
-        $sizeyaxis1[0] = $realmin;
+        $sizeyaxis1[0] = floatval(number_format($realmin,2));
+        if($realmax <= 5){$dif1range = $dif1range / 2;}
+        if($realmax <= 2){$dif1range = $dif1range / 2;}
         for ($i=0; $i < $countrange; $i++) { 
             $realmin = $realmin + $dif1range;
-            $sizeyaxis1[$i+1] = $realmin;
+            if($realmax <= 5){
+                $sizeyaxis1[$i+1] = floatval(number_format($realmin,2));
+            }else{
+                $sizeyaxis1[$i+1] = (int)number_format($realmin,0,",","");
+            }
+            if($sizeyaxis1[$i+1] >= $realmax){break;}
         }
         
-        $difgrow = $growval2 - $growval;
+        if($growval == ''){
+            $difgrow = 1;
+        }else{
+            if(count($isidatagrafik[0]) > 30 ){
+                $difgrow = 2;
+            }else{
+                $difgrow = 1;
+            }
+        }
 
         echo json_encode([
             'status'    => true,
@@ -406,17 +489,16 @@ class Egg_counter extends CI_Controller {
             $kolomdata[0]  = $iz + 1;
             $kolomdata[1]  = $isidata['growday'];
             $kolomdata[2]  = date_format(date_create($isidata['date_record']),"d-m-Y");
-            $kolomdata[3]  = date_format(date_create($isidata['date_record']),"H:i:s");
-            $kolomdata[4]  = (int)$fvstdmin;;
-            $kolomdata[5]  = $isidata['sumegg'];
-            $kolomdata[6]  = $isidata['eggcounter1'];
-            $kolomdata[7]  = $isidata['eggcounter2'];
-            $kolomdata[8]  = $isidata['eggcounter3'];
-            $kolomdata[9]  = $isidata['eggcounter4'];
-            $kolomdata[10]  = $isidata['eggcounter5'];
-            $kolomdata[11]  = $isidata['eggcounter6'];
-            $kolomdata[12]  = $isidata['eggcounter7'];
-            $kolomdata[13]  = $isidata['eggcounter8'];
+            $kolomdata[3]  = (int)$fvstdmin;;
+            $kolomdata[4]  = $isidata['sumegg'];
+            $kolomdata[5]  = $isidata['eggcounter1'];
+            $kolomdata[6]  = $isidata['eggcounter2'];
+            $kolomdata[7]  = $isidata['eggcounter3'];
+            $kolomdata[8]  = $isidata['eggcounter4'];
+            $kolomdata[9]  = $isidata['eggcounter5'];
+            $kolomdata[10]  = $isidata['eggcounter6'];
+            $kolomdata[11]  = $isidata['eggcounter7'];
+            $kolomdata[12]  = $isidata['eggcounter8'];
 
             $adata[$iz] = $kolomdata;
         }

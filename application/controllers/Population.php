@@ -163,17 +163,6 @@ class Population extends CI_Controller {
         }
     }
 
-    public function test(){
-        $where = "id_farm = '1' AND kode_kandang = '1'";
-        $house = $this->db->query("SELECT periode,growday,tanggal FROM population WHERE ".$where." ORDER BY tanggal DESC LIMIT 30")->result();
-
-        print_r(current($house));
-
-        $t = current($house);
-        
-        echo $t->{'periode'};
-    }
-
     public function dtdate(){
         //Cek Seesion
         $cek_sess = $this->konfigurasi->cek_js();
@@ -183,17 +172,17 @@ class Population extends CI_Controller {
         $kode_kandang = $this->input->post('kandang');
 
         $where = "id_farm = '".$id_farm."' AND kode_kandang = '".$kode_kandang."'";
-        $rhouse = $this->db->query("SELECT periode,growday,tanggal FROM population WHERE ".$where." ORDER BY tanggal ASC LIMIT 30");
+        $rhouse = $this->db->query("SELECT periode,growday,tanggal FROM population WHERE ".$where." ORDER BY tanggal DESC LIMIT 30");
         $house = $rhouse->result();
         $valcur = current($house);
         $valend = end($house);
 
         if($rhouse->num_rows() > 0){
-            $setperiode = $valend->{'periode'};
-            $setgrow1 = $valcur->{'growday'};
-            $setgrow2 = $valend->{'growday'};
-            $settgl1 = date_format(date_create($valcur->{'tanggal'}),"Y-m-d");
-            $settgl2 = date_format(date_create($valend->{'tanggal'}),"Y-m-d");
+            $setperiode = $valcur->{'periode'};
+            $setgrow1 = $valend->{'growday'};
+            $setgrow2 = $valcur->{'growday'};
+            $settgl1 = date_format(date_create($valend->{'tanggal'}),"Y-m-d");
+            $settgl2 = date_format(date_create($valcur->{'tanggal'}),"Y-m-d");
         }else{
             $setperiode = '1';
             $setgrow1 = '1';
@@ -227,10 +216,9 @@ class Population extends CI_Controller {
 
         $diff2 = date_format(date_create($startgl),"Y-m-d");
         $where = "tanggal <= '".$diff2."' AND periode = '".$periode."' AND id_farm = '".$id_farm."' AND kode_kandang = '".$kode_kandang."'";
-        $house = $this->db->query("SELECT growday,tanggal FROM population WHERE ".$where." LIMIT 1")->row_array();
+        $house = $this->db->query("SELECT growday,tanggal FROM population WHERE ".$where." ORDER BY tanggal DESC LIMIT 1")->row_array();
 
         $date_in = date_format(date_create($house['tanggal']),"Y-m-d");
-
         $difftgl1 = date_diff(date_create($date_in),date_create($diff2));
 
         if($house['growday'] != ''){
@@ -252,7 +240,7 @@ class Population extends CI_Controller {
         $stargrow = $this->input->post('grow');
 
         $where = "growday <= '".$stargrow."' AND periode = '".$periode."' AND id_farm = '".$id_farm."' AND kode_kandang = '".$kode_kandang."'";
-        $house = $this->db->query("SELECT periode,growday,tanggal FROM population WHERE ".$where." LIMIT 1")->row_array();
+        $house = $this->db->query("SELECT periode,growday,tanggal FROM population WHERE ".$where." ORDER BY tanggal DESC LIMIT 1")->row_array();
 
         $diffgrow = (int)$stargrow - (int)$house['growday'];
 
@@ -269,7 +257,7 @@ class Population extends CI_Controller {
     }
 
     public function getgrow(){
-            $ck = 0;
+        $ck = 0;
         $dk = 0;
         $id_farm = $this->session->userdata('id_user');
         $kode_kandang = $this->input->post('kandang');

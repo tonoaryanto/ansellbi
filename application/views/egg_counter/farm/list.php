@@ -33,38 +33,31 @@
       <div id="boxoption_body" class="box-body">
         <div class="row" style="padding-left: 10px;padding-right: 10px">
             <div class="col-sm-12">
-              <p>
-                  <label style="visibility: hidden;">
+              <span style="visibility: hidden;">
                     <input type="radio" name="optiongrow" id="optiongrow" value="option1" checked="">
-                    Filter by Grow Day :
-                  </label>
-              </p>
-
-              <?php if($inigrow < 30){
-                $inigrow2 = $inigrow;
-                $inigrow = 1;
-              }else{
-                $inigrow2 = $inigrow;
-                $inigrow = $inigrow - 30;
-              }
-              ?>
-
-              <div class="form-group col-sm-3">
-                <div class="input-group">
-                  <span class="input-group-addon" style="border-top-left-radius:4px;border-bottom-left-radius:4px;">Flock</span>
-                  <input name="val_periode" class="form-control" id="inputperiode" style="width: 100%;border-top-right-radius:4px;border-bottom-right-radius:4px;" type="number" min="1" placeholder="-Masukan periode-" value="<?php echo $iniperiode; ?>">
+              </span>
+              <div class="col-sm-3">
+                <label>Flock : </label>
+                <div class="form-group">
+                  <input name="val_periode" type="number" class="form-control" id="inputperiode" style="border-radius: 4px;"  value="<?php echo $iniperiode; ?>">
                 </div>
               </div>
               <div class="form-group col-sm-3">
+                <label>Star Growday :</label>
                 <div class="input-group">
-                  <span class="input-group-addon" style="border-top-left-radius:4px;border-bottom-left-radius:4px;">Start Grow Day</span>
-                  <input class="form-control" type="number" min="-1" name="growval" value="<?php echo $inigrow; ?>" style="border-top-right-radius:4px;border-bottom-right-radius:4px;">
+                  <input name="tgl1" onchange="changetgl(1);" class="form-control" value="<?php echo $tgl1; ?>" type="date" style="border-top-left-radius:4px;border-bottom-left-radius:4px;line-height:unset;">
+                  <span class="input-group-addon" style="border-top-right-radius:4px;border-bottom-right-radius:4px;padding:0px;">
+                    <input onchange="changegrow(1);" min="1" type="number" style="line-height: normal;border-top-right-radius:4px;border-bottom-right-radius:4px;min-width: 80px;border: none;height: 32px;" class="form-control pull-right" name="growval1" id="growval1" value="<?php echo $inigrow1; ?>">
+                  </span>
                 </div>
               </div>
               <div class="form-group col-sm-3">
+                <label>End Growday :</label>
                 <div class="input-group">
-                  <span class="input-group-addon" style="border-top-left-radius:4px;border-bottom-left-radius:4px;">End Grow Day</span>
-                  <input class="form-control" type="number" min="-1" name="growval2" value="<?php echo $inigrow2; ?>" style="border-top-right-radius:4px;border-bottom-right-radius:4px;">
+                  <input name="tgl2" onchange="changetgl(2);" class="form-control" value="<?php echo $tgl2; ?>" type="date" style="border-top-left-radius:4px;border-bottom-left-radius:4px;line-height:unset;">
+                  <span class="input-group-addon" style="border-top-right-radius:4px;border-bottom-right-radius:4px;padding:0px;">
+                    <input onchange="changegrow(2);" min="1" type="number" style="line-height: normal;border-top-right-radius:4px;border-bottom-right-radius:4px;min-width: 80px;border: none;height: 32px;" class="form-control pull-right" name="growval2" id="growval2" value="<?php echo $inigrow2; ?>">
+                  </span>
                 </div>
               </div>
               <div class="form-group col-sm-3">
