@@ -39,6 +39,20 @@ class Egg_weight extends CI_Controller {
         $this->load->view('template/wrapper',$data);
     }
 
+    public function getflock(){
+        $id_farm = $this->session->userdata('id_user');
+        $kode_kandang = $this->input->post('kandang');
+        $esql2 = "SELECT flock FROM data_kandang WHERE id = '".$kode_kandang."'";
+        $cekdb2 = $this->db->query($esql2);
+        $isidb21 = $cekdb2->row_array();
+
+        if($cekdb2->num_rows() > 0){
+            echo json_encode(['status'=>true,'periode'=>$isidb21['flock']]);
+        }else{
+            echo json_encode(['status'=>false]);
+        }
+    }
+
     public function save_data(){
         $cek_sess = $this->konfigurasi->cek_js();
         if ($cek_sess == 0) {
@@ -263,42 +277,35 @@ class Egg_weight extends CI_Controller {
     public function getgrow(){
         $id_farm = $this->session->userdata('id_user');
         $kode_kandang = $this->input->post('kandang');
+        $periode = $this->input->post('periode');
         $tanggal = date_format(date_create($this->input->post('tanggal')),"Y-m-d");
 
-
-        $esql = "SELECT periode,growday,date_record FROM `data_record` WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY `data_record`.`periode` DESC,`data_record`.`growday` DESC LIMIT 1";
+        $esql = "SELECT growday,data_egg_weight FROM eggweight WHERE tanggal = '".$tanggal."' AND periode = '".$periode."' AND id_farm = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY tanggal DESC LIMIT 1";
         $cekdb = $this->db->query($esql);
 
         if($cekdb->num_rows() > 0){
             $isidb = $cekdb->row_array();
-            $diff=date_diff(date_create(date_format(date_create($isidb['date_record']),"Y-m-d")),date_create($tanggal));
-            $difgrow = (int)$isidb['growday'] + (int)$diff->format("%R%a");
-            
-            if($difgrow < 1){
-                $cekperiod = (int)$isidb['periode'];
 
-                $esql3 = "SELECT periode,growday,date_record FROM `data_record` WHERE keterangan = 'ok' AND periode != '".$cekperiod."' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY `data_record`.`periode` DESC,`data_record`.`growday` DESC LIMIT 1";
-                $cekdb3 = $this->db->query($esql3);
+            $hasilgrow = (int)$isidb['growday'];
+            $hasilperiode = (int)$isidb['data_egg_weight'];
+            $cq = 1;
 
-                if($cekdb3->num_rows() > 0){
-                    $isidb3 = $cekdb3->row_array();
-                    $hasilgrow = (int)$isidb3['growday'] + (int)$diff->format("%R%a");
-                    $hasilperiode = (int)$isidb3['periode'];
-                    if($hasilgrow < 1){
-                        $cq = 0;
-                    }else{
-                        $cq = 1;
-                    }
-                }else{
-                    $cq = 0;
-                }
-            }else{
-                $hasilgrow = $difgrow;
-                $hasilperiode = (int)$isidb['periode'];
-                $cq = 1;
-            }
         }else{
-            $cq = 0;
+            $tglset = '';
+            $house = $this->db->query("SELECT * FROM data_kandang WHERE id = '".$kode_kandang."' AND kode_perusahaan = '".$id_farm."'")->row_array();
+
+            if($house['star_growday'] != ''){
+                $date_in = date_format(date_create($house['date_in']),"Y-m-d")." ".date_format(date_create($house['reset_time']),"H:i:s");
+                $date_now =$tanggal." ".date_format(date_create($house['reset_time']),"H:i:s");
+                $difftgl1 = date_diff(date_create($date_in),date_create($date_now));
+                $data['reset_time'] = $house['reset_time'];
+        
+                $hasilgrow = (int)$house['star_growday'] + (int)$difftgl1->format("%R%a");
+                $hasilperiode = '';    
+                $cq = 1;
+            }else{
+                $cq = 0;
+            }
         }
 
         if($cq == 1){

@@ -26,7 +26,7 @@ function isiselect_kandang(inidata){
     allowClear : true,
     data : inidata,
   }).on("change", function () {
-    getgrow();
+    getflock();
   });
 }
 
@@ -44,7 +44,7 @@ function save(){
                 get_sess(data.sess);
                 if( data.status == true){
                     swal.fire({
-                      title: "Berhasil!",
+                      title: "Success!",
                       html : data.message,
                       type: "success",
                     });
@@ -70,6 +70,23 @@ function validasi(){
     return cek;
 }
 
+function getflock(){
+  if($('[name="kandang"]').val() == ''){return;}
+  $('[name="periode"]').val('');
+
+  $.ajax({
+    url : '<?php echo base_url('egg_weight/getflock'); ?>',
+    type: "POST",
+    data: {'kandang' : $('#optionselect_kandang').val()},
+    dataType: "JSON",
+    success: function(data)
+    {
+      get_sess(data.sess);
+      $('[name="periode"]').val(data.periode);
+    }
+  });
+}
+
 function getgrow(){
     if($('[name="kandang"]').val() == '' || $('[name="tanggal"]').val() == ''){return;}
     $.ajax({
@@ -77,16 +94,15 @@ function getgrow(){
       type: "POST",
       data: {
         'kandang' : $('#optionselect_kandang').val(),
+        'periode' : $('[name="periode"]').val(),
         'tanggal' : $('[name="tanggal"]').val(),
       },
       dataType: "JSON",
       success: function(data)
       {
         get_sess(data.sess);
-        $('[name="periode"]').val(data.periode);
         $('[name="growday"]').val(data.growday);
-        $('[name="periode"]').removeAttr('disabled');
-        $('[name="growday"]').removeAttr('disabled');
+        $('[name="input1"]').val(data.periode);
       }
     });
 }

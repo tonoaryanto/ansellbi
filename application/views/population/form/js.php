@@ -58,7 +58,6 @@ function getflock(){
       get_sess(data.sess);
       $('[name="periode"]').removeAttr('disabled');
       $('[name="periode"]').val(data.periode);
-      getgrow(data.periode);
     }
   });
 }
@@ -77,7 +76,7 @@ function save(){
                 get_sess(data.sess);
                 if( data.status == true){
                     swal.fire({
-                      title: "Berhasil!",
+                      title: "Success!",
                       html : data.message,
                       type: "success",
                     });

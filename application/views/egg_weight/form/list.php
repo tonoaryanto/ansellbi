@@ -12,17 +12,6 @@
                 <div class="col-lg-12">
                     <div class="col-lg-6">
                             <div class="form-group">
-                                <div class="col-md-12">
-                                    <label>Date</label>
-                                    <div class="input-group date col-lg-3">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-calendar"></i>
-                                        </div>
-                                        <input name="tanggal" type="date" style="line-height: normal;" class="form-control pull-right" id="datepicker" onchange="getgrow()">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
                                 <label class="col-lg-12">Data House</label>
                                 <div class="col-lg-5">
                                     <select name="kandang" class="form-control" id="optionselect_kandang" style="width: 100%">
@@ -34,7 +23,18 @@
                                 <div class="col-sm-12">
                                     <label>Flock</label>
                                     <div class="input-group col-lg-3">
-                                        <input type="text" class="form-control pull-right" name="periode" disabled>
+                                        <input type="text" class="form-control pull-right" name="periode" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <label>Date</label>
+                                    <div class="input-group date col-lg-3">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-calendar"></i>
+                                        </div>
+                                        <input name="tanggal" type="date" style="line-height: normal;" class="form-control pull-right" id="datepicker" onchange="getgrow()">
                                     </div>
                                 </div>
                             </div>
@@ -42,7 +42,7 @@
                                 <div class="col-sm-12">
                                     <label>Growday</label>
                                     <div class="input-group col-lg-3">
-                                        <input type="text" class="form-control pull-right" name="growday" disabled>
+                                        <input type="text" class="form-control pull-right" name="growday" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -50,7 +50,7 @@
                                 <div class="col-sm-12">
                                     <label>Data Egg Weight</label>
                                     <div class="input-group col-lg-5">
-                                        <input type="text" class="form-control pull-right" name="input1">
+                                        <input type="number" min="0" class="form-control pull-right" name="input1">
                                         <div class="input-group-addon">Kg</div>
                                     </div>
                                 </div>
