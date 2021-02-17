@@ -269,9 +269,6 @@ function grafik(){
           });
 
           swal.close();
-          document.getElementById("periode").value = isi.periode;
-          document.getElementById("tanggal_1").value = isi.hourdari;
-          document.getElementById("tanggal_2").value = isi.hoursampai;
           $('#titlegrafik'+id).html(isi.glabel);
           loadtabel();
         }else{

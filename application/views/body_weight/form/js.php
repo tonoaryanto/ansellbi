@@ -26,7 +26,7 @@ function isiselect_kandang(inidata){
     allowClear : true,
     data : inidata,
   }).on("change", function () {
-    getgrow();
+    getflock();
   });
 }
 
@@ -70,23 +70,39 @@ function validasi(){
     return cek;
 }
 
+function getflock(){
+  if($('[name="kandang"]').val() == ''){return;}
+  $('[name="periode"]').val('');
+
+  $.ajax({
+    url : '<?php echo base_url('body_weight/getflock'); ?>',
+    type: "POST",
+    data: {'kandang' : $('#optionselect_kandang').val()},
+    dataType: "JSON",
+    success: function(data)
+    {
+      get_sess(data.sess);
+      $('[name="periode"]').val(data.periode);
+    }
+  });
+}
+
 function getgrow(){
-    if($('[name="kandang"]').val() == '' || $('[name="tanggal"]').val() == ''){return;}
-    $.ajax({
-      url : '<?php echo base_url('body_weight/getgrow'); ?>',
-      type: "POST",
-      data: {
-        'kandang' : $('#optionselect_kandang').val(),
-        'tanggal' : $('[name="tanggal"]').val(),
-      },
-      dataType: "JSON",
-      success: function(data)
-      {
-        get_sess(data.sess);
-        $('[name="periode"]').val(data.periode);
-        $('[name="growday"]').val(data.growday);
-        $('[name="periode"]').removeAttr('disabled');
-        $('[name="growday"]').removeAttr('disabled');
-      }
-    });
+  if($('[name="kandang"]').val() == '' || $('[name="tanggal"]').val() == ''){return;}
+  $.ajax({
+    url : '<?php echo base_url('body_weight/getgrow'); ?>',
+    type: "POST",
+    data: {
+      'kandang' : $('#optionselect_kandang').val(),
+      'periode' : $('[name="periode"]').val(),
+      'tanggal' : $('[name="tanggal"]').val(),
+    },
+    dataType: "JSON",
+    success: function(data)
+    {
+      get_sess(data.sess);
+      $('[name="growday"]').val(data.growday);
+      $('[name="input1"]').val(data.periode);
+    }
+  });
 }

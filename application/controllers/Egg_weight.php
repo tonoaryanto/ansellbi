@@ -197,20 +197,6 @@ class Egg_weight extends CI_Controller {
         $growval = $this->input->post('growval');
         $growval2 = $this->input->post('growval2');
 
-
-        $cekdb = $this->db->query("SELECT * FROM eggweight WHERE id_farm = '".$id_user."' AND kode_kandang = '".$id_farm."' ORDER BY periode DESC, growday DESC LIMIT 1")->row_array();
-
-        if($growval == '' and isset($cekdb['growday'])){
-            $growval = (int)$cekdb['growday'] - 30;
-        }
-        if($growval2 == '' and isset($cekdb['growday'])){
-            $growval2 = (int)$cekdb['growday'] + 1;
-        }
-
-        if($periode == '' and isset($cekdb['periode'])){
-            $periode = (int)$cekdb['periode'];
-        }
-
         $esqlperiode = "AND periode = '".$periode."' ";
 
         if($growval == $growval2){
@@ -367,7 +353,11 @@ class Egg_weight extends CI_Controller {
         if($growval == ''){
             $difgrow = 1;
         }else{
-            $difgrow = $growval2 - $growval;
+            if(count($isidatagrafik[0]) > 30 ){
+                $difgrow = 2;
+            }else{
+                $difgrow = 1;
+            }
         }
 
         echo json_encode(['status'=>true,'periode'=>$periode,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari'=>$growval,'hoursampai'=>$growval2,'linelabel'=>$linelabel,'difgrow'=>$difgrow,'sizeyaxis1' => $sizeyaxis1]);

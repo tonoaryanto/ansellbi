@@ -39,6 +39,111 @@ class Body_weight extends CI_Controller {
         $this->load->view('template/wrapper',$data);
     }
 
+    public function getflock(){
+        $id_farm = $this->session->userdata('id_user');
+        $kode_kandang = $this->input->post('kandang');
+        $esql2 = "SELECT flock FROM data_kandang WHERE id = '".$kode_kandang."'";
+        $cekdb2 = $this->db->query($esql2);
+        $isidb21 = $cekdb2->row_array();
+
+        if($cekdb2->num_rows() > 0){
+            echo json_encode(['status'=>true,'periode'=>$isidb21['flock']]);
+        }else{
+            echo json_encode(['status'=>false]);
+        }
+    }
+
+    public function dtdate(){
+        //Cek Seesion
+        $cek_sess = $this->konfigurasi->cek_js();
+        if ($cek_sess == 0) {echo json_encode(['sess' => $cek_sess]);return;}
+        //END Cek Session
+        $id_farm = $this->session->userdata('id_user');
+        $kode_kandang = $this->input->post('kandang');
+
+        $where = "id_farm = '".$id_farm."' AND kode_kandang = '".$kode_kandang."'";
+        $rhouse = $this->db->query("SELECT periode,growday,tanggal FROM bodyweight WHERE ".$where." ORDER BY tanggal DESC LIMIT 30");
+        $house = $rhouse->result();
+        $valcur = current($house);
+        $valend = end($house);
+
+        if($rhouse->num_rows() > 0){
+            $setperiode = $valcur->{'periode'};
+            $setgrow1 = $valend->{'growday'};
+            $setgrow2 = $valcur->{'growday'};
+            $settgl1 = date_format(date_create($valend->{'tanggal'}),"Y-m-d");
+            $settgl2 = date_format(date_create($valcur->{'tanggal'}),"Y-m-d");
+        }else{
+            $setperiode = '1';
+            $setgrow1 = '1';
+            $setgrow2 = '1';
+            $settgl1 = '';
+            $settgl2 = '';
+        }
+
+        $dtset['periode'] = $setperiode;
+        $dtset['tanggal_dari'] = $setgrow1;
+        $dtset['tanggal_sampai'] = $setgrow2;
+        $dtset['tgl1'] = $settgl1;
+        $dtset['tgl2'] = $settgl2;
+
+        if($rhouse->num_rows() > 0){
+            echo json_encode(['status' => true, 'dataset' => $dtset]);
+        }else{
+            echo json_encode(['status' => false]);
+        }
+    }
+
+    public function changetgl(){
+        $cek_sess = $this->konfigurasi->cek_js();
+        if ($cek_sess == 0) {echo json_encode(['sess' => $cek_sess]);return;}
+
+        $id_farm = $this->session->userdata('id_user');
+        $kode_kandang = $this->input->post('kandang');
+        $periode = $this->input->post('periode');
+        $startgl = $this->input->post('tgl');
+
+        $diff2 = date_format(date_create($startgl),"Y-m-d");
+        $where = "tanggal <= '".$diff2."' AND periode = '".$periode."' AND id_farm = '".$id_farm."' AND kode_kandang = '".$kode_kandang."'";
+        $house = $this->db->query("SELECT growday,tanggal FROM bodyweight WHERE ".$where." ORDER BY tanggal DESC LIMIT 1")->row_array();
+
+        $date_in = date_format(date_create($house['tanggal']),"Y-m-d");
+        $difftgl1 = date_diff(date_create($date_in),date_create($diff2));
+
+        if($house['growday'] != ''){
+            $growset = (int)$house['growday'] + (int)$difftgl1->format("%R%a");
+        }else{
+            $growset = '';
+        }
+
+        echo json_encode(['status' => true, 'dataset' => $growset]);
+    }
+
+    public function changegrow(){
+        $cek_sess = $this->konfigurasi->cek_js();
+        if ($cek_sess == 0) {echo json_encode(['sess' => $cek_sess]);return;}
+
+        $id_farm = $this->session->userdata('id_user');
+        $kode_kandang = $this->input->post('kandang');
+        $periode = $this->input->post('periode');
+        $stargrow = $this->input->post('grow');
+
+        $where = "growday <= '".$stargrow."' AND periode = '".$periode."' AND id_farm = '".$id_farm."' AND kode_kandang = '".$kode_kandang."'";
+        $house = $this->db->query("SELECT periode,growday,tanggal FROM bodyweight WHERE ".$where." ORDER BY tanggal DESC LIMIT 1")->row_array();
+
+        $diffgrow = (int)$stargrow - (int)$house['growday'];
+
+        $date=date_create($house['tanggal']);
+        date_modify($date,$diffgrow." days");
+        $growset = date_format($date,"Y-m-d");
+
+        if($house['growday'] != ''){
+            echo json_encode(['status' => true, 'dataset' => $growset]);
+        }else{
+            echo json_encode(['status' => false]);
+        }
+    }
+
     public function save_data(){
         $cek_sess = $this->konfigurasi->cek_js();
         if ($cek_sess == 0) {
@@ -77,41 +182,35 @@ class Body_weight extends CI_Controller {
     public function getgrow(){
         $id_farm = $this->session->userdata('id_user');
         $kode_kandang = $this->input->post('kandang');
+        $periode = $this->input->post('periode');
         $tanggal = date_format(date_create($this->input->post('tanggal')),"Y-m-d");
 
-        $esql = "SELECT periode,growday,date_record FROM `data_record` WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY `data_record`.`periode` DESC,`data_record`.`growday` DESC LIMIT 1";
+        $esql = "SELECT growday,data_body_weight FROM bodyweight WHERE tanggal = '".$tanggal."' AND periode = '".$periode."' AND id_farm = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY tanggal DESC LIMIT 1";
         $cekdb = $this->db->query($esql);
 
         if($cekdb->num_rows() > 0){
             $isidb = $cekdb->row_array();
-            $diff=date_diff(date_create(date_format(date_create($isidb['date_record']),"Y-m-d")),date_create($tanggal));
-            $difgrow = (int)$isidb['growday'] + (int)$diff->format("%R%a");
-            
-            if($difgrow < 1){
-                $cekperiod = (int)$isidb['periode'];
 
-                $esql3 = "SELECT periode,growday,date_record FROM `data_record` WHERE keterangan = 'ok' AND periode != '".$cekperiod."' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' ORDER BY `data_record`.`periode` DESC,`data_record`.`growday` DESC LIMIT 1";
-                $cekdb3 = $this->db->query($esql3);
+            $hasilgrow = (int)$isidb['growday'];
+            $hasilperiode = (int)$isidb['data_body_weight'];
+            $cq = 1;
 
-                if($cekdb3->num_rows() > 0){
-                    $isidb3 = $cekdb3->row_array();
-                    $hasilgrow = (int)$isidb3['growday'] + (int)$diff->format("%R%a");
-                    $hasilperiode = (int)$isidb3['periode'];
-                    if($hasilgrow < 1){
-                        $cq = 0;
-                    }else{
-                        $cq = 1;
-                    }
-                }else{
-                    $cq = 0;
-                }
-            }else{
-                $hasilgrow = $difgrow;
-                $hasilperiode = (int)$isidb['periode'];
-                $cq = 1;
-            }
         }else{
-            $cq = 0;
+            $tglset = '';
+            $house = $this->db->query("SELECT * FROM data_kandang WHERE id = '".$kode_kandang."' AND kode_perusahaan = '".$id_farm."'")->row_array();
+
+            if($house['star_growday'] != ''){
+                $date_in = date_format(date_create($house['date_in']),"Y-m-d")." ".date_format(date_create($house['reset_time']),"H:i:s");
+                $date_now =$tanggal." ".date_format(date_create($house['reset_time']),"H:i:s");
+                $difftgl1 = date_diff(date_create($date_in),date_create($date_now));
+                $data['reset_time'] = $house['reset_time'];
+        
+                $hasilgrow = (int)$house['star_growday'] + (int)$difftgl1->format("%R%a");
+                $hasilperiode = '';    
+                $cq = 1;
+            }else{
+                $cq = 0;
+            }
         }
 
         if($cq == 1){
@@ -132,22 +231,10 @@ class Body_weight extends CI_Controller {
         $inidata = 'data_body_weight';
 
         $periode = $this->input->post('periode');
+        $tgl1 = $this->input->post('tgl1');
+        $tgl2 = $this->input->post('tgl2');
         $growval = $this->input->post('growval');
         $growval2 = $this->input->post('growval2');
-
-
-        $cekdb = $this->db->query("SELECT * FROM bodyweight WHERE id_farm = '".$id_user."' AND kode_kandang = '".$id_farm."' ORDER BY periode DESC, growday DESC LIMIT 1")->row_array();
-
-        if($growval == '' and isset($cekdb['growday'])){
-            $growval = (int)$cekdb['growday'] - 30;
-        }
-        if($growval2 == '' and isset($cekdb['growday'])){
-            $growval2 = (int)$cekdb['growday'] + 1;
-        }
-
-        if($periode == '' and isset($cekdb['periode'])){
-            $periode = (int)$cekdb['periode'];
-        }
 
         $esqlperiode = "AND periode = '".$periode."' ";
 
@@ -174,10 +261,13 @@ class Body_weight extends CI_Controller {
 
         if($growval == $growval2){
             $addlabel = ' : Growday '.$growval.' ';
+            $addtgl = " | Date ".date_format(date_create($tgl1),"d F Y");
         }else{
             $addlabel = ' : Growday '.$growval.' - '.$growval2;
+            $addtgl = " | Date ".date_format(date_create($tgl1),"d F Y").' - '.date_format(date_create($tgl2),"d F Y");
         }
-        $glabel = $label[$inidata].$addlabel;
+
+        $glabel = $label[$inidata].$addlabel.$addtgl;
         $linelabel[0] = $label[$inidata];
         if(isset($stdlabel[$inidata][1])){
             $linelabel[1] = 'Min Standard Value';
@@ -223,7 +313,8 @@ class Body_weight extends CI_Controller {
         }
 
         foreach ($dataprimary1 as $value) {
-            $adata[] = ''.$value->growday.' - '.$value->periode;
+            $stttgl = date_format(date_create($value->tanggal),"d").date_format(date_create($value->tanggal),"m").date_format(date_create($value->tanggal),"y");
+            $adata[] = $stttgl.' - ('.$value->growday.')';
 
             $noarray = (int)$value->growday - 1;
             if($noarray <= count($minex)){
@@ -300,7 +391,11 @@ class Body_weight extends CI_Controller {
         if($growval == ''){
             $difgrow = 1;
         }else{
-            $difgrow = $growval2 - $growval;
+            if(count($isidatagrafik[0]) > 30 ){
+                $difgrow = 2;
+            }else{
+                $difgrow = 1;
+            }
         }
 
         echo json_encode(['status'=>true,'periode'=>$periode,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari'=>$growval,'hoursampai'=>$growval2,'linelabel'=>$linelabel,'difgrow'=>$difgrow,'sizeyaxis1' => $sizeyaxis1]);
