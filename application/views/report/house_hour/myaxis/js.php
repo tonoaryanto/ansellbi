@@ -10,6 +10,7 @@ var kategrafik = 'HOUR_1';
 var listdata = <?php  echo json_encode($listdata);?>;
 
 $(document).ready(function(){
+  $('.select2').select2();
   selectdata(1);
   selectdata(2);
   loadtabel();
@@ -30,8 +31,8 @@ $(document).ready(function(){
       'data2periode' : $('[name="val_periode1"]').val(),
       'data2data'    : $('[name="val_data2"]').val(),
       'data2posisi'  : $('[name="posisiy2"]').val(),
-      'value61'      : $('[name="hourdari1"]').val(),
-      'value62'      : $('[name="hourdari2"]').val(),
+      'value61'      : $('[name="tanggal_1"]').val(),
+      'value62'      : $('[name="tanggal_2"]').val(),
       'namagrafik'   : $('[name="namagrafik"]').val()
     };
 
@@ -89,16 +90,88 @@ $(document).ready(function(){
   });
 });
 
-function loopprint(dataini,awal,loop,dataurl) {
-  if(awal <= loop){
+function getflock(){
+  if($('[name="kandang"]').val() == ''){return;}
+  $('[name="periode"]').val('');
 
-  }else{
-    seturl = '' ;
-    for (var i = 0; i < (awal - 1); i++) {
-      seturl += '<br><div><a style="font-size: 14px" href="' + dataurl[i] + '">' + dataurl[i].split("/").pop() + '</a></div>';
+  $.ajax({
+    url : '<?php echo base_url('report/getflock'); ?>',
+    type: "POST",
+    data: {
+      'kandang' : $('[name="val_kandang1"]').val()
+      },
+    dataType: "JSON",
+    success: function(data)
+    {
+      get_sess(data.sess);
+      $('[name="val_periode1"]').val(data.periode);
+      $('[name="tanggal_1"]').val('');
+      $('[name="tanggal_2"]').val('');
+      $('[name="tgl1"]').val('');
+      $('[name="tgl2"]').val('');
+      $('[name="time1"]').val('00:00');
+      $('[name="time2"]').val('00:00');
+      $('[id^=select2-time1]')
+      .attr('title','00:00')
+      .text('00:00');
+      $('[id^=select2-time2]')
+      .attr('title','00:00')
+      .text('00:00');
     }
+  });
+}
 
-  }
+function changetgl(dt){
+  data_json = {
+    'dt' : dt,
+    'tgl' : $('[name="tgl'+dt+'"]').val(),
+    'time' : $('[name="time'+dt+'"]').val(),
+    'kandang' : $('[name="val_kandang1"]').val(),
+    'periode' : $('[name="val_periode1"]').val()
+  };
+
+  $.ajax({
+      type: "POST",
+      url : "<?php echo base_url('report/changetgl'); ?>",
+      data : data_json,
+      dataType : "JSON",
+      success : function(isi){
+        get_sess(isi.sess);
+        if(isi.status == true){
+          $('[name="time'+dt+'"]').val(isi.timeset);
+          $('[id^=select2-time'+dt+']')
+          .attr('title',isi.timeset)
+          .text(isi.timeset);
+          $('[name="tanggal_'+dt+'"]').val(isi.dataset);
+        }
+      }
+  });
+}
+
+function changegrow(dt){
+  data_json = {
+    'dt' : dt,
+    'grow' : $('[name="tanggal_'+dt+'"]').val(),
+    'kandang' : $('[name="val_kandang1"]').val(),
+    'periode' : $('[name="val_periode1"]').val()
+  };
+
+  $.ajax({
+      type: "POST",
+      url : "<?php echo base_url('report/changegrow'); ?>",
+      data : data_json,
+      dataType : "JSON",
+      success : function(isi){
+        get_sess(isi.sess);
+        if(isi.status == true){
+          $('[name="tgl'+dt+'"]').val(isi.dataset);
+          $('[name="time'+dt+'"]').val(isi.timeset);
+          $('[id^=select2-time'+dt+']')
+          .attr('title',isi.timeset)
+          .text(isi.timeset);
+        }
+      }
+  });
 }
 
 function loadtabel() {
@@ -121,8 +194,12 @@ function loadtabel() {
         'data2kandang' : function () {return $('[name="val_kandang1"]').val();},
         'data2periode' : function () {return $('[name="val_periode1"]').val();},
         'data2data'    : function () {return $('[name="val_data2"]').val();},
-        'value61'      : function () {return $('[name="hourdari1"]').val();},
-        'value62'      : function () {return $('[name="hourdari2"]').val();},
+        'tgl1'     : function () {return $('[name="tgl1"]').val();},
+        'tgl2'     : function () {return $('[name="tgl2"]').val();},
+        'time1'    : function () {return $('[name="time1"]').val();},
+        'time2'    : function () {return $('[name="time2"]').val();},
+        'value61'      : function () {return $('[name="tanggal_1"]').val();},
+        'value62'      : function () {return $('[name="tanggal_2"]').val();},
       },
       dataType : "JSON",
       success : function(data){
@@ -209,8 +286,6 @@ function selectdata_kandang(){
     success: function(data){
       get_sess(data.sess);
       isiselect_kandang(data);
-
-      dtkandang = data;
     }
   });
 }
@@ -223,6 +298,8 @@ function isiselect_kandang(inidata){
     placeholder : '-Select Data House-',
     allowClear : true,
     data : inidata,
+  }).on("change", function () {
+    getflock();
   });
 }
 
@@ -246,7 +323,7 @@ function cekgrafik() {
   if (data1data == '' || data1data == null || data1data == 'null' || data1data == undefined) {title = 'Data 1 input data parameter is empty!';cek = 1;}
   if (data1periode == '' || data1periode < 1) {title = 'Flock is empty!';cek = 1;}
   if (data1kandang == '' || data1kandang == null || data1kandang == undefined) {title = 'Data 1 input house is empty!';cek = 1;}
-  if (parseInt($('[name="hourdari1"]').val()) > parseInt($('[name="hourdari2"]').val())) {title = 'Data Grow Day is worng!';cek = 1;}
+  if (parseInt($('[name="tanggal_1"]').val()) > parseInt($('[name="tanggal_2"]').val())) {title = 'Data Grow Day is worng!';cek = 1;}
   if (title == '') {title = 'Chart name is empty!';cek = 1;}
 
   if(cek == 1){
@@ -284,8 +361,12 @@ function grafik(){
     'data2periode' : $('[name="val_periode1"]').val(),
     'data2data'    : $('[name="val_data2"]').val(),
     'data2posisi'  : $('[name="posisiy2"]').val(),
-    'value61'      : $('[name="hourdari1"]').val(),
-    'value62'      : $('[name="hourdari2"]').val(),
+    'tgl1'         : $('[name="tgl1"]').val(),
+    'tgl2'         : $('[name="tgl2"]').val(),
+    'time1'        : $('[name="time1"]').val(),
+    'time2'        : $('[name="time2"]').val(),
+    'value61'      : $('[name="tanggal_1"]').val(),
+    'value62'      : $('[name="tanggal_2"]').val(),
     'namagrafik'   : $('[name="namagrafik"]').val()
   };
 
@@ -298,11 +379,11 @@ function grafik(){
         get_sess(isi.sess);
         if(isi.status == true){
 
-          var rangegd =  parseInt($('[name="hourdari2"]').val()) - parseInt($('[name="hourdari1"]').val());
+          var rangegd =  parseInt($('[name="tanggal_2"]').val()) - parseInt($('[name="tanggal_1"]').val());
           var tinggigk = 500;
           var lebargk = 800;
           var tottinggi = (tinggigk + rangegd);
-          if (parseInt($('[name="hourdari1"]').val()) == parseInt($('[name="hourdari2"]').val())) {
+          if (parseInt($('[name="tanggal_1"]').val()) == parseInt($('[name="tanggal_2"]').val())) {
           var totlebar = (lebargk + rangegd);
           }else{
             var totlebar = (lebargk + rangegd);
@@ -433,8 +514,6 @@ function grafik(){
           });
 
           $('#titlegrafik').html(isi.glabel);
-          $('[name="hourdari1"]').val(isi.hourdari1);
-          $('[name="hourdari2"]').val(isi.hourdari2);
           $('#boxtabel').removeAttr('style');
           titleprint = $('[name="namagrafik"]').val();
           kolomkiri = listdata[$('[name="val_data1"]').val()];

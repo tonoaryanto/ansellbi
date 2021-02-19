@@ -18,6 +18,79 @@ class Report extends CI_Controller {
         redirect('report/history_house_hour');
     }
 
+    public function getflock(){
+        $id_farm = $this->session->userdata('id_user');
+        $kode_kandang = $this->input->post('kandang');
+        $esql2 = "SELECT flock FROM data_kandang WHERE id = '".$kode_kandang."'";
+        $cekdb2 = $this->db->query($esql2);
+        $isidb21 = $cekdb2->row_array();
+
+        if($cekdb2->num_rows() > 0){
+            echo json_encode(['status'=>true,'periode'=>$isidb21['flock']]);
+        }else{
+            echo json_encode(['status'=>false]);
+        }
+    }
+
+    public function changetgl(){
+        $cek_sess = $this->konfigurasi->cek_js();
+        if ($cek_sess == 0) {echo json_encode(['sess' => $cek_sess]);return;}
+
+        $id_farm = $this->session->userdata('id_user');
+        $kode_kandang = $this->input->post('kandang');
+        $periode = $this->input->post('periode');
+        $startgl = $this->input->post('tgl');
+        $startime = $this->input->post('time').":00";
+        $urut = $this->input->post('dt');
+
+        $diff2 = date_format(date_create($startgl." ".$startime),"Y-m-d H:i:s");
+        $where = "periode = '".$periode."' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' AND keterangan = 'ok'";
+        if($urut == 1){
+            $house = $this->db->query("SELECT growday,date_record,reset_time FROM data_record WHERE date_record >= '".$diff2."' AND ".$where." ORDER BY date_record ASC LIMIT 1")->row_array();
+        }else if($urut == 2){
+            $house = $this->db->query("SELECT growday,date_record,reset_time FROM data_record WHERE date_record <= '".$diff2."' AND ".$where."  ORDER BY date_record DESC LIMIT 1")->row_array();
+        }
+        $date_in = date_create(date_format(date_create($house['date_record']),"Y-m-d")." ".date_format(date_create($house['reset_time']),"H:i:s"));
+
+        $difftgl1 = date_diff($date_in,date_create($diff2));
+        $growset = (int)$house['growday'] + (int)$difftgl1->format("%R%a");
+        $timeset = date_format(date_create($house['date_record']),"H:i");
+
+        if($house['growday'] != ''){
+            echo json_encode(['status' => true, 'dataset' => $growset,'timeset' => $timeset]);
+        }else{
+            echo json_encode(['status' => false]);
+        }
+    }
+
+    public function changegrow(){
+        $cek_sess = $this->konfigurasi->cek_js();
+        if ($cek_sess == 0) {echo json_encode(['sess' => $cek_sess]);return;}
+
+        $id_farm = $this->session->userdata('id_user');
+        $kode_kandang = $this->input->post('kandang');
+        $periode = $this->input->post('periode');
+        $grow1 = $this->input->post('grow');
+        $urut = $this->input->post('dt');
+
+        $where = "periode = '".$periode."' AND growday = '".$grow1."' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' AND keterangan = 'ok'";
+        if($urut == 1){
+            $house = $this->db->query("SELECT date_record FROM data_record WHERE ".$where." ORDER BY date_record ASC LIMIT 1")->row_array();
+        }else if($urut == 2){
+            $house = $this->db->query("SELECT date_record FROM data_record WHERE ".$where."  ORDER BY date_record DESC LIMIT 1")->row_array();
+        }
+
+        $tglset = date_format(date_create($house['date_record']),"Y-m-d");
+        $timeset = date_format(date_create($house['date_record']),"H:i");
+
+        if($house['date_record'] != ''){
+            echo json_encode(['status' => true, 'dataset' => $tglset,'timeset'=>$timeset]);
+        }else{
+            echo json_encode(['status' => false]);
+        }
+    }
+
+
     public function history_house_hour($site=null)
     {
         $id_user   = $this->session->userdata('id_user');
@@ -208,6 +281,10 @@ class Report extends CI_Controller {
         $data1periode = $this->input->post('data1periode');
         $data1data    = $this->input->post('data1data');
         $data2data    = $this->input->post('data2data');
+        $tgl1     = $this->input->post('tgl1');
+        $tgl2     = $this->input->post('tgl2');
+        $time1     = $this->input->post('time1');
+        $time2     = $this->input->post('time2');
         $filhour1     = $this->input->post('value61');
         $filhour2     = $this->input->post('value62');
         $id_user      = $this->session->userdata('id_user');

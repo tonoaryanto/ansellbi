@@ -34,12 +34,16 @@
 					<div class="box" style="border-style: none;">
 						<div class="box-body">
 							<div class="row">
-								<div class="col-sm-12" style="padding: 0px 30px 0px;">
-									<div class="form-group">
+								<div class="col-sm-12" style="padding: 0px 15px 0px;">
+									<div class="form-group col-md-6">
 										<label>Data House</label>
 										<select name="val_kandang1" class="form-control optionselect_kandang" id="optionselect_kandang1" style="width: 100%">
 										<option disabled selected>-Select Data House-</option>
 										</select>
+									</div>
+									<div class="form-group col-md-6">
+										<label>Flock</label>
+										<input name="val_periode1" class="form-control" id="inputperiode1" style="width: 100%;border-radius: 3px;" type="number" min="1" placeholder="-Input Flock-">
 									</div>
 								</div>
 								<div class="col-sm-12" style="padding: 0px 30px 0px;">
@@ -97,29 +101,91 @@
 								<label>Chart name</label>
 								<input style="border-radius: 5px" type="text" class="form-control" name="namagrafik" placeholder="Nama Grafik">
 							</div>
-							<div class="form-group col-sm-3">
-								<label>Star Grow Day</label>
+							<div class="form-group col-sm-4">
+								<label>Star Growday :</label>
 								<div class="form-group">
-									<input class="form-control" type="number" min="-1" name="hourdari1" value="-1" style="border-radius:3px;">
-								</div>
-							</div>
-							<div class="form-group col-sm-3">
-								<label>End Grow Day</label>
-								<div class="form-group">
-									<input class="form-control" type="number" min="-1" name="hourdari2" value="-1" style="border-radius:3px;">
-								</div>
-							</div>
-							<div class="form-group col-sm-3">
-										<label>Flock</label>
-										<input name="val_periode1" class="form-control" id="inputperiode1" style="width: 100%;border-radius: 3px;" type="number" min="1" placeholder="-Input Flock-">
+									<div class="input-group">
+									<input name="tgl1" onchange="changetgl(1);" class="form-control" value="" type="date" style="border-top-left-radius:4px;border-bottom-left-radius:4px;line-height:unset;">
+									<span class="input-group-addon" style="padding:0px;">
+										<select onchange="changetgl(1);" name="time1" class="form-control select2" style="min-width: 90px;height:34px;border-radius:5px;">
+										<option value="00:00">00:00</option>
+										<option value="01:00">01:00</option>
+										<option value="02:00">02:00</option>
+										<option value="03:00">03:00</option>
+										<option value="04:00">04:00</option>
+										<option value="05:00">05:00</option>
+										<option value="06:00">06:00</option>
+										<option value="07:00">07:00</option>
+										<option value="08:00">08:00</option>
+										<option value="09:00">09:00</option>
+										<option value="10:00">10:00</option>
+										<option value="11:00">11:00</option>
+										<option value="12:00">12:00</option>
+										<option value="13:00">13:00</option>
+										<option value="14:00">14:00</option>
+										<option value="15:00">15:00</option>
+										<option value="16:00">16:00</option>
+										<option value="17:00">17:00</option>
+										<option value="18:00">18:00</option>
+										<option value="19:00">19:00</option>
+										<option value="20:00">20:00</option>
+										<option value="21:00">21:00</option>
+										<option value="22:00">22:00</option>
+										<option value="23:00">23:00</option>
+										</select>
+									</span>
+									<span class="input-group-addon" style="border-top-right-radius:4px;border-bottom-right-radius:4px;padding:0px;">
+										<input onchange="changegrow(1);" min="1" type="number" style="line-height: normal;border-top-right-radius:4px;border-bottom-right-radius:4px;min-width: 80px;border: none;height: 32px;" class="form-control pull-right" name="tanggal_1" id="tanggal_1">
+									</span>
 									</div>
-							<div class="form-group col-sm-3">
-								<label>Actions</label>
+								</div>
+							</div>
+							<div class="form-group col-sm-4">
+							<label>End Growday :</label>
+								<div class="form-group">
+									<div class="input-group">
+									<input name="tgl2" onchange="changetgl(2);" class="form-control" value="" type="date" style="border-top-left-radius:4px;border-bottom-left-radius:4px;line-height:unset;">
+									<span class="input-group-addon" style="padding:0px;">
+										<select onchange="changetgl(2);" name="time2" class="form-control select2" style="min-width: 90px;height:34px;border-radius:5px;">
+										<option value="00:00">00:00</option>
+										<option value="01:00">01:00</option>
+										<option value="02:00">02:00</option>
+										<option value="03:00">03:00</option>
+										<option value="04:00">04:00</option>
+										<option value="05:00">05:00</option>
+										<option value="06:00">06:00</option>
+										<option value="07:00">07:00</option>
+										<option value="08:00">08:00</option>
+										<option value="09:00">09:00</option>
+										<option value="10:00">10:00</option>
+										<option value="11:00">11:00</option>
+										<option value="12:00">12:00</option>
+										<option value="13:00">13:00</option>
+										<option value="14:00">14:00</option>
+										<option value="15:00">15:00</option>
+										<option value="16:00">16:00</option>
+										<option value="17:00">17:00</option>
+										<option value="18:00">18:00</option>
+										<option value="19:00">19:00</option>
+										<option value="20:00">20:00</option>
+										<option value="21:00">21:00</option>
+										<option value="22:00">22:00</option>
+										<option value="23:00">23:00</option>
+										</select>
+									</span>
+									<span class="input-group-addon" style="border-top-right-radius:4px;border-bottom-right-radius:4px;padding:0px;">
+										<input onchange="changegrow(2);" min="1" type="number" style="line-height: normal;border-top-right-radius:4px;border-bottom-right-radius:4px;min-width: 80px;border: none;height: 32px;" class="form-control pull-right" name="tanggal_2" id="tanggal_2">
+									</span>
+									</div>
+								</div>
+							</div>
+							<div class="form-group col-sm-4">
+							<label>Actions</label>
 								<div>
 									<button class="btn btn-default" onclick="grafik();">Apply</button>
 									<button style="display: none;" id="btnprintpdf" class="btn btn-danger" onclick="allprint()">Print PDF</button>
 								</div>
-							</div>		
+							</div>
 						</div>
 					</div>
 				</div>
