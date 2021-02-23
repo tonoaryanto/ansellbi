@@ -332,19 +332,37 @@ class Egg_weight extends CI_Controller {
         $realmax = max($datamax1);
         $realmin = min($datamin1);
 
-        if($realmax < 99){$realmax = $realmax + 2;}
-        if($realmin > 1){$realmin = $realmin - 1;}
-
         $countrange = 8;
         $dif1 = $realmax - $realmin;
         $dif1range = $dif1 / $countrange;
         if($dif1range < 1){$dif1range = 1;}
         if(isset(explode(".",$dif1range)[1])){
-            if(explode(".",$dif1range)[1] >= 1){$dif1range = explode(".",$dif1range)[0] + 1;}
-        };
+            if(explode(".",$dif1range)[1] >= 1){
+                $dif1range = explode(".",$dif1range)[0] + 1;
+            }else{
+                $dif1range = explode(".",$dif1range)[0];
+            }
+        }
+
+        if(isset(explode(".",$realmin)[1])){
+            if(explode(".",$realmin)[0] >= 1){
+                $realmin = explode(".",$realmin)[0] - 1;
+            }else{
+                $realmin = explode(".",$realmin)[0];
+            }
+        }
+
+        if(isset(explode(".",$realmax)[1])){
+            if(explode(".",$realmax)[0] >= 1){
+                $realmax = explode(".",$realmax)[0] + 1;
+            }else{
+                $realmax = explode(".",$realmax)[0];
+            }
+        }
+        
         $sizeyaxis1[0] = floatval(number_format($realmin,2));
-        if($realmax <= 5){$dif1range = $dif1range / 2;}
-        if($realmax <= 2){$dif1range = $dif1range / 2;}
+        if(($realmax - $realmin) <= 5){$dif1range = $dif1range / 2;}
+        if(($realmax - $realmin) <= 2){$dif1range = ($dif1range * 2) / 5;}
         if($sizeyaxis1[0] == false){$sizeyaxis1[0] = 0;}
         for ($i=0; $i < $countrange; $i++) { 
             $realmin = $realmin + $dif1range;
@@ -353,7 +371,11 @@ class Egg_weight extends CI_Controller {
             }else{
                 $sizeyaxis1[$i+1] = (int)number_format($realmin,0,",","");
             }
-            if($sizeyaxis1[$i+1] >= $realmax){break;}
+            if($sizeyaxis1[$i+1] >= $realmax){break;}else{
+                if(($i + 1) == $countrange){
+                    $countrange = $countrange + 1;
+                }                
+            }
         }
 
         if($growval == ''){

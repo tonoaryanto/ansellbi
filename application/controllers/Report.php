@@ -396,33 +396,73 @@ class Report extends CI_Controller {
 
             $datarange = $this->db->query($esqlmin1)->row_array();
 
-            if((int)$datarange['maxdata1'] == 100){$datamax1 = (int)$datarange['maxdata1'];}else{$datamax1 = (int)$datarange['maxdata1'] + 1;}
-            if((int)$datarange['maxdata2'] == 100){$datamax2 = (int)$datarange['maxdata2'];}else{$datamax2 = (int)$datarange['maxdata2'] + 1;}
-            if((int)$datarange['mindata1'] == 0){$datamin1 = (int)$datarange['mindata1'];}else{$datamin1 = (int)$datarange['mindata1'] - 1;}
-            if((int)$datarange['mindata2'] == 0){$datamin2 = (int)$datarange['mindata2'];}else{$datamin2 = (int)$datarange['mindata2'] - 1;}
-
+            $datamax1 = $datarange['maxdata1'];
+            $datamax2 = $datarange['maxdata2'];
+            $datamin1 = $datarange['mindata1'];
+            $datamin2 = $datarange['mindata2'];
+        
             $countrange = 8;
             $dif1 = $datamax1 - $datamin1;
             $dif1range = $dif1 / $countrange;
             if($dif1range < 1){$dif1range = 1;}
             if(isset(explode(".",$dif1range)[1])){
-                if(explode(".",$dif1range)[1] >= 1){$dif1range = explode(".",$dif1range)[0] + 1;}
-            };
+                if(explode(".",$dif1range)[1] >= 1){
+                    $dif1range = explode(".",$dif1range)[0] + 1;
+                }else{
+                    $dif1range = explode(".",$dif1range)[0];
+                }
+            }
+
+            if(isset(explode(".",$datamin1)[1])){
+                if(explode(".",$datamin1)[0] >= 1){
+                    $datamin1 = explode(".",$datamin1)[0] - 1;
+                }else{
+                    $datamin1 = explode(".",$datamin1)[0];
+                }
+            }
+    
+            if(isset(explode(".",$datamax1)[1])){
+                if(explode(".",$datamax1)[1] >= 1){
+                    $datamax1 = explode(".",$datamax1)[0] + 1;
+                }else{
+                    $datamax1 = explode(".",$datamax1)[0];
+                }
+            }
 
             $dif2 = $datamax2 - $datamin2;
             $dif2range = $dif2 / $countrange;
             if($dif2range < 1){$dif2range = 1;}
             if(isset(explode(".",$dif2range)[1])){
-                if(explode(".",$dif2range)[1] >= 1){$dif2range = explode(".",$dif2range)[0] + 1;}
-            };
-
+                if(explode(".",$dif2range)[1] >= 1){
+                    $dif2range = explode(".",$dif2range)[0] + 1;
+                }else{
+                    $dif2range = explode(".",$dif2range)[0];
+                }
+            }
+    
+            if(isset(explode(".",$datamin2)[1])){
+                if(explode(".",$datamin2)[0] >= 1){
+                    $datamin2 = explode(".",$datamin2)[0] - 1;
+                }else{
+                    $datamin2 = explode(".",$datamin2)[0];
+                }
+            }
+    
+            if(isset(explode(".",$datamax2)[1])){
+                if(explode(".",$datamax2)[1] >= 1){
+                    $datamax2 = explode(".",$datamax2)[0] + 1;
+                }else{
+                    $datamax2 = explode(".",$datamax2)[0];
+                }
+            }
+            
             $sizeyaxis1[0] = floatval(number_format($datamin1,2));
-            if($datamax1 <= 5){$dif1range = $dif1range / 2;}
-            if($datamax1 <= 2){$dif1range = $dif1range / 2;}
+            if(($datamax1 - $datamin1) <= 5){$dif1range = $dif1range / 2;}
+            if(($datamax1 - $datamin1) <= 2){$dif1range = ($dif1range * 2) / 5;}
 
             $sizeyaxis2[0] = floatval(number_format($datamin2,2));
-            if($datamax2 <= 5){$dif2range = $dif2range / 2;}
-            if($datamax2 <= 2){$dif2range = $dif2range / 2;}
+            if(($datamax2 - $datamin2) <= 5){$dif2range = $dif2range / 2;}
+            if(($datamax2 - $datamin2) <= 2){$dif2range = ($dif2range * 2) / 5;}
 
             for ($i=0; $i < $countrange; $i++) { 
                 $datamin1 = $datamin1 + $dif1range;
@@ -432,13 +472,17 @@ class Report extends CI_Controller {
                 }else{
                     $sizeyaxis1[$i+1] = (int)number_format($datamin1,0,",","");
                 }
-    
+
                 if($datamax2 <= 200){
                     $sizeyaxis2[$i+1] = floatval(number_format($datamin2,2));
                 }else{
                     $sizeyaxis2[$i+1] = (int)number_format($datamin2,0,",","");
                 }
-                if($sizeyaxis1[$i+1] >= $datamax1 AND $sizeyaxis2[$i+1] >= $datamax2){break;}
+                if($sizeyaxis1[$i+1] >= $datamax1 AND $sizeyaxis2[$i+1] >= $datamax2){break;}else{
+                    if(($i + 1) == $countrange){
+                        $countrange = $countrange + 1;
+                    }
+                }
             }
 
             echo json_encode(['status'=>true,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari1'=>$filhour1,'hourdari2'=>$filhour2,'linelabel'=>$linelabel,'difgrow'=>$difgrow,'sizeyaxis1'=>$sizeyaxis1,'sizeyaxis2'=>$sizeyaxis2]);
