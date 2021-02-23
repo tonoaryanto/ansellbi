@@ -371,21 +371,25 @@ class Body_weight extends CI_Controller {
         $realmax = max($datamax1);
         $realmin = min($datamin1);
 
-        if($realmax < 99){$realmax = $realmax + 2;}
-        if($realmin > 1){$realmin = $realmin - 1;}
-
-        $countrange = 10;
+        $countrange = 8;
         $dif1 = $realmax - $realmin;
-        if($dif1 == $realmax){$dif1range = $dif1 / 10;}
-        else{$dif1range = $dif1 / $countrange;}
+        // if($dif1 == $realmax){$dif1range = $dif1 / 10;}else{$dif1range = $dif1 / $countrange;}
+        $dif1range = $dif1 / $countrange;
         if($dif1range < 1){$dif1range = 1;}
         if(isset(explode(".",$dif1range)[1])){
             if(explode(".",$dif1range)[1] >= 1){$dif1range = explode(".",$dif1range)[0] + 1;}
         };
-        $sizeyaxis1[0] = $realmin;
+        $sizeyaxis1[0] = floatval(number_format($realmin,2));
+        if($realmax <= 5){$dif1range = $dif1range / 2;}
+        if($realmax <= 2){$dif1range = $dif1range / 2;}
         for ($i=0; $i < $countrange; $i++) { 
             $realmin = $realmin + $dif1range;
-            $sizeyaxis1[$i+1] = $realmin;
+            if($realmax <= 200){
+                $sizeyaxis1[$i+1] = floatval(number_format($realmin,2));
+            }else{
+                $sizeyaxis1[$i+1] = (int)number_format($realmin,0,",","");
+            }
+            if($sizeyaxis1[$i+1] >= $realmax){break;}
         }
 
         if($growval == ''){

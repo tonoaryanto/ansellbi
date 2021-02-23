@@ -21,12 +21,49 @@ class Report extends CI_Controller {
     public function getflock(){
         $id_farm = $this->session->userdata('id_user');
         $kode_kandang = $this->input->post('kandang');
-        $esql2 = "SELECT flock FROM data_kandang WHERE id = '".$kode_kandang."'";
+        $esql2 = "SELECT id,flock FROM data_kandang WHERE id = '".$kode_kandang."'";
         $cekdb2 = $this->db->query($esql2);
         $isidb21 = $cekdb2->row_array();
 
         if($cekdb2->num_rows() > 0){
-            echo json_encode(['status'=>true,'periode'=>$isidb21['flock']]);
+            $rcekdb3 = $this->db->query("SELECT growday FROM data_record WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$isidb21['id']."' ORDER BY date_record DESC lIMIT 1");
+            $cekdb3 = $rcekdb3->row_array();
+
+            if($rcekdb3->num_rows() > 0){
+                $cekdb3min = $this->db->query("SELECT date_record FROM data_record WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$isidb21['id']."' AND growday = '".$cekdb3['growday']."' ORDER BY date_record ASC lIMIT 1")->row_array();
+                $cekdb3max = $this->db->query("SELECT date_record FROM data_record WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$isidb21['id']."' AND growday = '".$cekdb3['growday']."' ORDER BY date_record DESC lIMIT 1")->row_array();
+    
+                $tanggalawal = date_format(date_create($cekdb3min['date_record']),"Y-m-d");
+                $tanggalakhir = date_format(date_create($cekdb3max['date_record']),"Y-m-d");
+                $jam1 = date_format(date_create($cekdb3min['date_record']),"H:i");
+                $jam2 = date_format(date_create($cekdb3max['date_record']),"H:i");
+                $growday = $cekdb3['growday'];    
+            }else{
+                $tanggalawal = '';
+                $tanggalakhir = '';
+                $jam1 = '';
+                $jam2 = '';
+                $growday = '';
+            }
+        }else{
+            $tanggalawal = '';
+            $tanggalakhir = '';
+            $jam1 = '';
+            $jam2 = '';
+            $growday = '';
+        }
+
+        if($cekdb2->num_rows() > 0){
+            echo json_encode([
+                'status'        => true,
+                'periode'       => $isidb21['flock'],
+                'tanggalawal'   => $tanggalawal,
+                'tanggalakhir'  => $tanggalakhir,
+                'jam1'          => $jam1,
+                'jam2'          => $jam2,
+                'growawal'      => $growday,
+                'growakhir'     => $growday
+                ]);
         }else{
             echo json_encode(['status'=>false]);
         }
@@ -73,14 +110,20 @@ class Report extends CI_Controller {
         $grow1 = $this->input->post('grow');
         $urut = $this->input->post('dt');
 
-        $where = "periode = '".$periode."' AND growday = '".$grow1."' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' AND keterangan = 'ok'";
+        $house2 = $this->db->query("SELECT growday FROM data_record WHERE periode = '".$periode."' AND growday <= '".$grow1."' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' AND keterangan = 'ok' ORDER BY date_record DESC LIMIT 1")->row_array();
+
+        $where = "periode = '".$periode."' AND growday = '".$house2['growday']."' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' AND keterangan = 'ok'";
         if($urut == 1){
-            $house = $this->db->query("SELECT date_record FROM data_record WHERE ".$where." ORDER BY date_record ASC LIMIT 1")->row_array();
+            $house = $this->db->query("SELECT growday,date_record FROM data_record WHERE ".$where." ORDER BY date_record ASC LIMIT 1")->row_array();
         }else if($urut == 2){
-            $house = $this->db->query("SELECT date_record FROM data_record WHERE ".$where."  ORDER BY date_record DESC LIMIT 1")->row_array();
+            $house = $this->db->query("SELECT growday,date_record FROM data_record WHERE ".$where."  ORDER BY date_record DESC LIMIT 1")->row_array();
         }
 
-        $tglset = date_format(date_create($house['date_record']),"Y-m-d");
+        $diffgrow = (int)$grow1 - (int)$house['growday'];
+
+        $date=date_create($house['date_record']);
+        date_modify($date,$diffgrow." days");
+        $tglset = date_format($date,"Y-m-d");
         $timeset = date_format(date_create($house['date_record']),"H:i");
 
         if($house['date_record'] != ''){
@@ -289,6 +332,13 @@ class Report extends CI_Controller {
         $filhour2     = $this->input->post('value62');
         $id_user      = $this->session->userdata('id_user');
 
+        $vtgl1 = date_format(date_create($tgl1),"Y-m-d");
+        $vtgl2 = date_format(date_create($tgl2),"Y-m-d");
+        $vtime1 = date_format(date_create($time1.":00"),"H:i:s");
+        $vtime2 = date_format(date_create($time2.":00"),"H:i:s");
+        $tglaw = date_format(date_create($vtgl1." ".$vtime1),"Y-m-d H:i:s");
+        $tglen = date_format(date_create($vtgl2." ".$vtime2),"Y-m-d H:i:s");
+
         $namakd = $this->umum_model->get('data_kandang',['kode_perusahaan'=>$id_user])->result();
         $stringkd = [];
         foreach ($namakd as $key) {
@@ -296,10 +346,6 @@ class Report extends CI_Controller {
         }
 
         if($filhour1 == $filhour2){
-            if($filhour1 == '-1'){
-                $filhour1 = $this->db->query("SELECT growday FROM data_record WHERE keterangan = 'ok' AND periode = '".$data1periode."' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$data1kandang."' ORDER BY growday DESC LIMIT 1")->row_array()['growday'];
-                $filhour2 = $filhour1;
-            }
             $esqlgrow = "AND growday = '".$filhour1."'";
         }else{
             $esqlgrow = "AND growday BETWEEN '".$filhour1."' AND '".$filhour2."'";
@@ -318,6 +364,7 @@ class Report extends CI_Controller {
             $esql1  = $esqlgen;
             $esql1 .= "AND periode = '".$data1periode."' ";
             $esql1 .= $esqlgrow;
+            $esql1 .= "AND date_record >= '".$tglaw."' AND date_record <= '".$tglen."'";
             $esql1 .= $esqlorder;
 
             $dataprimary1 = $this->db->query($esql1)->result();
@@ -344,6 +391,7 @@ class Report extends CI_Controller {
             $esqlmin1  = "SELECT MAX($data1data) as maxdata1,MAX($data2data) as maxdata2, MIN($data1data) as mindata1,MIN($data2data) as mindata2 FROM `data_record` WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$data1kandang."' ";
             $esqlmin1 .= "AND periode = '".$data1periode."' ";
             $esqlmin1 .= $esqlgrow;
+            $esqlmin1 .= "AND date_record >= '".$tglaw."' AND date_record <= '".$tglen."'";
             $esqlmin1 .= $esqlorder;
 
             $datarange = $this->db->query($esqlmin1)->row_array();
@@ -353,25 +401,44 @@ class Report extends CI_Controller {
             if((int)$datarange['mindata1'] == 0){$datamin1 = (int)$datarange['mindata1'];}else{$datamin1 = (int)$datarange['mindata1'] - 1;}
             if((int)$datarange['mindata2'] == 0){$datamin2 = (int)$datarange['mindata2'];}else{$datamin2 = (int)$datarange['mindata2'] - 1;}
 
-            $countrange = 10;
+            $countrange = 8;
             $dif1 = $datamax1 - $datamin1;
             $dif1range = $dif1 / $countrange;
-            if($dif1 == $datamax1){$dif1range = $dif1 / 10;}
-            else{$dif1range = $dif1 / $countrange;}
+            if($dif1range < 1){$dif1range = 1;}
+            if(isset(explode(".",$dif1range)[1])){
+                if(explode(".",$dif1range)[1] >= 1){$dif1range = explode(".",$dif1range)[0] + 1;}
+            };
 
             $dif2 = $datamax2 - $datamin2;
             $dif2range = $dif2 / $countrange;
-            if($dif2 == $datamax2){$dif2range = $dif2 / 10;}
-            else{$dif2range = $dif2 / $countrange;}
+            if($dif2range < 1){$dif2range = 1;}
+            if(isset(explode(".",$dif2range)[1])){
+                if(explode(".",$dif2range)[1] >= 1){$dif2range = explode(".",$dif2range)[0] + 1;}
+            };
 
-            $sizeyaxis1[0] = $datamin1;
-            $sizeyaxis2[0] = $datamin2;
+            $sizeyaxis1[0] = floatval(number_format($datamin1,2));
+            if($datamax1 <= 5){$dif1range = $dif1range / 2;}
+            if($datamax1 <= 2){$dif1range = $dif1range / 2;}
+
+            $sizeyaxis2[0] = floatval(number_format($datamin2,2));
+            if($datamax2 <= 5){$dif2range = $dif2range / 2;}
+            if($datamax2 <= 2){$dif2range = $dif2range / 2;}
 
             for ($i=0; $i < $countrange; $i++) { 
                 $datamin1 = $datamin1 + $dif1range;
                 $datamin2 = $datamin2 + $dif2range;
-                $sizeyaxis1[$i+1] = $datamin1;
-                $sizeyaxis2[$i+1] = $datamin2;
+                if($datamin1 <= 200){
+                    $sizeyaxis1[$i+1] = floatval(number_format($datamin1,2));
+                }else{
+                    $sizeyaxis1[$i+1] = (int)number_format($datamin1,0,",","");
+                }
+    
+                if($datamax2 <= 200){
+                    $sizeyaxis2[$i+1] = floatval(number_format($datamin2,2));
+                }else{
+                    $sizeyaxis2[$i+1] = (int)number_format($datamin2,0,",","");
+                }
+                if($sizeyaxis1[$i+1] >= $datamax1 AND $sizeyaxis2[$i+1] >= $datamax2){break;}
             }
 
             echo json_encode(['status'=>true,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari1'=>$filhour1,'hourdari2'=>$filhour2,'linelabel'=>$linelabel,'difgrow'=>$difgrow,'sizeyaxis1'=>$sizeyaxis1,'sizeyaxis2'=>$sizeyaxis2]);
@@ -386,6 +453,17 @@ class Report extends CI_Controller {
         $growval2      = $this->input->post('value62');
         $filperiode = $this->input->post('data1periode');
         $data2data    = $this->input->post('data2data');
+        $tgl1     = $this->input->post('tgl1');
+        $tgl2     = $this->input->post('tgl2');
+        $time1     = $this->input->post('time1');
+        $time2     = $this->input->post('time2');
+
+        $vtgl1 = date_format(date_create($tgl1),"Y-m-d");
+        $vtgl2 = date_format(date_create($tgl2),"Y-m-d");
+        $vtime1 = date_format(date_create($time1.":00"),"H:i:s");
+        $vtime2 = date_format(date_create($time2.":00"),"H:i:s");
+        $tglaw = date_format(date_create($vtgl1." ".$vtime1),"Y-m-d H:i:s");
+        $tglen = date_format(date_create($vtgl2." ".$vtime2),"Y-m-d H:i:s");
 
         if($fil2 == ''){$fil2 = "id";}
         if($data2data == ''){$data2data = "id";}
@@ -401,6 +479,7 @@ class Report extends CI_Controller {
         $datsql1 .= " FROM data_record WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$fil3."' ";
         $datsql1 .= "AND periode = '".$filperiode."' ";
         $datsql1 .= $esqlgrow;
+        $datsql1 .= "AND date_record >= '".$tglaw."' AND date_record <= '".$tglen."'";
         $datsql1 .= "ORDER BY date_record ASC";
 
         //Data Utama

@@ -289,14 +289,20 @@ class History_house extends CI_Controller {
         $grow1 = $this->input->post('grow');
         $urut = $this->input->post('dt');
 
-        $where = "periode = '".$periode."' AND growday = '".$grow1."' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' AND keterangan = 'ok'";
+        $house2 = $this->db->query("SELECT growday FROM data_record WHERE periode = '".$periode."' AND growday <= '".$grow1."' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' AND keterangan = 'ok' ORDER BY date_record DESC LIMIT 1")->row_array();
+
+        $where = "periode = '".$periode."' AND growday = '".$house2['growday']."' AND kode_perusahaan = '".$id_farm."' AND kode_kandang = '".$kode_kandang."' AND keterangan = 'ok'";
         if($urut == 1){
-            $house = $this->db->query("SELECT date_record FROM data_record WHERE ".$where." ORDER BY date_record ASC LIMIT 1")->row_array();
+            $house = $this->db->query("SELECT growday,date_record FROM data_record WHERE ".$where." ORDER BY date_record ASC LIMIT 1")->row_array();
         }else if($urut == 2){
-            $house = $this->db->query("SELECT date_record FROM data_record WHERE ".$where."  ORDER BY date_record DESC LIMIT 1")->row_array();
+            $house = $this->db->query("SELECT growday,date_record FROM data_record WHERE ".$where."  ORDER BY date_record DESC LIMIT 1")->row_array();
         }
 
-        $tglset = date_format(date_create($house['date_record']),"Y-m-d");
+        $diffgrow = (int)$grow1 - (int)$house['growday'];
+
+        $date=date_create($house['date_record']);
+        date_modify($date,$diffgrow." days");
+        $tglset = date_format($date,"Y-m-d");
         $timeset = date_format(date_create($house['date_record']),"H:i");
 
         if($house['date_record'] != ''){

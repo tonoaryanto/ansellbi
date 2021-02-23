@@ -189,8 +189,8 @@ class Grafik_model extends CI_Model {
         $esqlgrow = $reqdata['esqlgrow'];
         $growval = $reqdata['growval'];
         $growval2 = $reqdata['growval2'];
-        $tgl = date_format(date_create($reqdata['tgl']),"d/m/Y");
-        $tgl2 = date_format(date_create($reqdata['tgl2']),"d/m/Y");
+        $tgl = date_format(date_create($reqdata['tgl']),"Y-m-d");
+        $tgl2 = date_format(date_create($reqdata['tgl2']),"Y-m-d");
         $time = date_format(date_create($reqdata['time'].":00"),"H:i:s");
         $time2 = date_format(date_create($reqdata['time2'].":00"),"H:i:s");
         $tglaw = date_format(date_create($reqdata['tgl']." ".$time),"Y-m-d H:i:s");
@@ -218,6 +218,9 @@ class Grafik_model extends CI_Model {
             'temp_4' => 'Temperature 4',
             'temp_out' => 'Out Temperature'
         ];
+
+        $tgl = date_format(date_create($reqdata['tgl']),"d/m/Y");
+        $tgl2 = date_format(date_create($reqdata['tgl2']),"d/m/Y");
 
         if($growval == $growval2){
             $addlabel = ' : Grow Day '.$growval.' ';
@@ -350,9 +353,6 @@ class Grafik_model extends CI_Model {
         $realmax = max($datamax1);
         $realmin = min($datamin1);
 
-        if($realmax < 99){$realmax = $realmax + 2;}
-        if($realmin > 1){$realmin = $realmin - 1;}
-
         $countrange = 8;
         $dif1 = $realmax - $realmin;
         //if($dif1 == $realmax){$dif1range = $dif1 / 8;}else{$dif1range = $dif1 / $countrange;}
@@ -361,10 +361,17 @@ class Grafik_model extends CI_Model {
         if(isset(explode(".",$dif1range)[1])){
             if(explode(".",$dif1range)[1] >= 1){$dif1range = explode(".",$dif1range)[0] + 1;}
         };
-        $sizeyaxis1[0] = $realmin;
+        $sizeyaxis1[0] = floatval(number_format($realmin,2));
+        if($realmax <= 5){$dif1range = $dif1range / 2;}
+        if($realmax <= 2){$dif1range = $dif1range / 2;}
         for ($i=0; $i < $countrange; $i++) { 
             $realmin = $realmin + $dif1range;
-            $sizeyaxis1[$i+1] = $realmin;
+            if($realmax <= 200){
+                $sizeyaxis1[$i+1] = floatval(number_format($realmin,2));
+            }else{
+                $sizeyaxis1[$i+1] = (int)number_format($realmin,0,",","");
+            }
+            if($sizeyaxis1[$i+1] >= $realmax){break;}
         }
 
         $hasildata['sizeyaxis'] = $sizeyaxis1;
@@ -386,8 +393,8 @@ class Grafik_model extends CI_Model {
         $esqlgrow = $reqdata['esqlgrow'];
         $growval = $reqdata['growval'];
         $growval2 = $reqdata['growval2'];
-        $tgl = date_format(date_create($reqdata['tgl']),"d/m/Y");
-        $tgl2 = date_format(date_create($reqdata['tgl2']),"d/m/Y");
+        $tgl = date_format(date_create($reqdata['tgl']),"Y-m-d");
+        $tgl2 = date_format(date_create($reqdata['tgl2']),"Y-m-d");
         $time = date_format(date_create($reqdata['time'].":00"),"H:i:s");
         $time2 = date_format(date_create($reqdata['time2'].":00"),"H:i:s");
         $tglaw = date_format(date_create($reqdata['tgl']." ".$time),"Y-m-d H:i:s");
@@ -416,6 +423,9 @@ class Grafik_model extends CI_Model {
             'static_pressure' => ['std_static_press'],
             'fan' => ['std_fanspeed']
         ];
+
+        $tgl = date_format(date_create($reqdata['tgl']),"d/m/Y");
+        $tgl2 = date_format(date_create($reqdata['tgl2']),"d/m/Y");
 
         if($growval == $growval2){
             $addlabel = ' : Grow Day '.$growval.' ';
@@ -537,10 +547,18 @@ class Grafik_model extends CI_Model {
         if(isset(explode(".",$dif1range)[1])){
             if(explode(".",$dif1range)[1] >= 1){$dif1range = explode(".",$dif1range)[0] + 1;}
         };
-        $sizeyaxis1[0] = $realmin;
+
+        $sizeyaxis1[0] = floatval(number_format($realmin,2));
+        if($realmax <= 5){$dif1range = $dif1range / 2;}
+        if($realmax <= 2){$dif1range = $dif1range / 2;}
         for ($i=0; $i < $countrange; $i++) { 
             $realmin = $realmin + $dif1range;
-            $sizeyaxis1[$i+1] = $realmin;
+            if($realmax <= 200){
+                $sizeyaxis1[$i+1] = floatval(number_format($realmin,2));
+            }else{
+                $sizeyaxis1[$i+1] = (int)number_format($realmin,0,",","");
+            }
+            if($sizeyaxis1[$i+1] >= $realmax){break;}
         }
 
         $hasildata['sizeyaxis'] = $sizeyaxis1;
@@ -562,8 +580,8 @@ class Grafik_model extends CI_Model {
         $esqlgrow = $reqdata['esqlgrow'];
         $growval = $reqdata['growval'];
         $growval2 = $reqdata['growval2'];
-        $tgl = date_format(date_create($reqdata['tgl']),"d/m/Y");
-        $tgl2 = date_format(date_create($reqdata['tgl2']),"d/m/Y");
+        $tgl = date_format(date_create($reqdata['tgl']),"Y-m-d");
+        $tgl2 = date_format(date_create($reqdata['tgl2']),"Y-m-d");
         $time = date_format(date_create($reqdata['time'].":00"),"H:i:s");
         $time2 = date_format(date_create($reqdata['time2'].":00"),"H:i:s");
         $tglaw = date_format(date_create($reqdata['tgl']." ".$time),"Y-m-d H:i:s");
@@ -583,6 +601,9 @@ class Grafik_model extends CI_Model {
             'min_windspeed' => 'Minimum Wind Speed',
             'max_windspeed' => 'Maximum Wind Speed'
         ];
+
+        $tgl = date_format(date_create($reqdata['tgl']),"d/m/Y");
+        $tgl2 = date_format(date_create($reqdata['tgl2']),"d/m/Y");
 
         if($growval == $growval2){
             $addlabel = ' : Grow Day '.$growval.' ';
@@ -668,10 +689,18 @@ class Grafik_model extends CI_Model {
         if(isset(explode(".",$dif1range)[1])){
             if(explode(".",$dif1range)[1] >= 1){$dif1range = explode(".",$dif1range)[0] + 1;}
         };
-        $sizeyaxis1[0] = $realmin;
+
+        $sizeyaxis1[0] = floatval(number_format($realmin,2));
+        if($realmax <= 5){$dif1range = $dif1range / 2;}
+        if($realmax <= 2){$dif1range = $dif1range / 2;}
         for ($i=0; $i < $countrange; $i++) { 
             $realmin = $realmin + $dif1range;
-            $sizeyaxis1[$i+1] = $realmin;
+            if($realmax <= 200){
+                $sizeyaxis1[$i+1] = floatval(number_format($realmin,2));
+            }else{
+                $sizeyaxis1[$i+1] = (int)number_format($realmin,0,",","");
+            }
+            if($sizeyaxis1[$i+1] >= $realmax){break;}
         }
 
         $hasildata['sizeyaxis'] = $sizeyaxis1;

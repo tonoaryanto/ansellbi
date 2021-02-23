@@ -105,18 +105,18 @@ function getflock(){
     {
       get_sess(data.sess);
       $('[name="val_periode1"]').val(data.periode);
-      $('[name="tanggal_1"]').val('');
-      $('[name="tanggal_2"]').val('');
-      $('[name="tgl1"]').val('');
-      $('[name="tgl2"]').val('');
-      $('[name="time1"]').val('00:00');
-      $('[name="time2"]').val('00:00');
+      $('[name="tanggal_1"]').val(data.growawal);
+      $('[name="tanggal_2"]').val(data.growakhir);
+      $('[name="tgl1"]').val(data.tanggalawal);
+      $('[name="tgl2"]').val(data.tanggalakhir);
+      $('[name="time1"]').val(data.jam1);
+      $('[name="time2"]').val(data.jam2);
       $('[id^=select2-time1]')
-      .attr('title','00:00')
-      .text('00:00');
+      .attr('title',data.jam1)
+      .text(data.jam1);
       $('[id^=select2-time2]')
-      .attr('title','00:00')
-      .text('00:00');
+      .attr('title',data.jam2)
+      .text(data.jam2);
     }
   });
 }

@@ -378,9 +378,6 @@ class Egg_counter extends CI_Controller {
         $realmax = max($datamax1);
         $realmin = min($datamin1);
 
-        if(isset(explode(".",$realmax)[1])){if(explode(".",$realmax)[1] >= 1){$realmax = explode(".",$realmax)[0] + 1;}}
-        if($realmin > 1){$realmin = $realmin - 1;}
-
         $countrange = 8;
         $dif1 = $realmax - $realmin;
         // if($dif1 == $realmax){$dif1range = $dif1 / 10;}else{$dif1range = $dif1 / $countrange;}
@@ -394,7 +391,7 @@ class Egg_counter extends CI_Controller {
         if($realmax <= 2){$dif1range = $dif1range / 2;}
         for ($i=0; $i < $countrange; $i++) { 
             $realmin = $realmin + $dif1range;
-            if($realmax <= 5){
+            if($realmax <= 200){
                 $sizeyaxis1[$i+1] = floatval(number_format($realmin,2));
             }else{
                 $sizeyaxis1[$i+1] = (int)number_format($realmin,0,",","");
