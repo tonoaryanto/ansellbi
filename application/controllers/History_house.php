@@ -60,14 +60,15 @@ class History_house extends CI_Controller {
                 if($isi['id'] != ''){
                     $tanggalsc = date_format(date_create($isi['date_create']), "d-m");
                     $tanggal = date_format(date_create($isi['date_create']), "d F Y");
-                    $xmenit = (int)str_split(date_format(date_create($isi['date_create']), "i"))[1] - 5;
-                    if($xmenit < 0){
-                      $xmenit = 0;
-                    }else if($xmenit >= 0){
-                      $xmenit = 5;
-                    }
-                    $menit = str_split(date_format(date_create($isi['date_create']), "i"))[0].$xmenit;
-                    $jam = date_format(date_create($isi['date_create']), "H").":".$menit."";
+                    // $xmenit = (int)str_split(date_format(date_create($isi['date_create']), "i"))[1] - 5;
+                    // if($xmenit < 0){
+                    //   $xmenit = 0;
+                    // }else if($xmenit >= 0){
+                    //   $xmenit = 5;
+                    // }
+                    // $menit = str_split(date_format(date_create($isi['date_create']), "i"))[0].$xmenit;
+                    // $jam = date_format(date_create($isi['date_create']), "H").":".$menit."";
+                    $jam = date_format(date_create($isi['date_create']), "H:i");
                     $data2['periode'][$nomor] = $isi['periode'];
                     $data2['growday'][$nomor] = $isi['growday'];
                     $data2['tanggal'][$nomor] = '<a href="javascript:void(0);" title="'.$tanggal.'" style="color:#333;">'.$tanggalsc.'</a>';
