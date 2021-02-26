@@ -49,51 +49,75 @@
               <?php } ?>
             </tr>
             <tr>
-            <td style="width:15%;">Required Temperature</td>
+            <td style="width:15%;">Required Temp. (°C)</td>
               <?php for ($i=0; $i < count($farm); $i++) { ?>
               <td id="dtrt4_<?php echo $i; ?>"><a href="javascript:void(0);" title="Loading. . .">...</a></td>
               <?php } ?>
             </tr>
             <tr>
-              <td>Current Temperature</td>
+              <td>Current Temp. (°C)</td>
               <?php for ($i=0; $i < count($farm); $i++) { ?>
               <td id="dtrt5_<?php echo $i; ?>"><a href="javascript:void(0);" title="Loading. . .">...</a></td>
               <?php } ?>
             </tr>
             <tr>
-              <td>Humidity</td>
+              <td>Out Temp. (°C)</td>
               <?php for ($i=0; $i < count($farm); $i++) { ?>
               <td id="dtrt6_<?php echo $i; ?>"><a href="javascript:void(0);" title="Loading. . .">...</a></td>
               <?php } ?>
             </tr>
             <tr>
-              <td>Fan Speed</td>
+              <td>Humidity (%)</td>
               <?php for ($i=0; $i < count($farm); $i++) { ?>
               <td id="dtrt7_<?php echo $i; ?>"><a href="javascript:void(0);" title="Loading. . .">...</a></td>
               <?php } ?>
             </tr>
             <tr>
-              <td>Wind Speed</td>
+              <td>Fan Speed (%)</td>
               <?php for ($i=0; $i < count($farm); $i++) { ?>
               <td id="dtrt8_<?php echo $i; ?>"><a href="javascript:void(0);" title="Loading. . .">...</a></td>
               <?php } ?>
             </tr>
             <tr>
-              <td>Feed Consumption</td>
+              <td>Required Speed (m/s)</td>
               <?php for ($i=0; $i < count($farm); $i++) { ?>
               <td id="dtrt9_<?php echo $i; ?>"><a href="javascript:void(0);" title="Loading. . .">...</a></td>
               <?php } ?>
             </tr>
             <tr>
-              <td>Water Consumption</td>
+              <td>Wind Speed (m/s)</td>
               <?php for ($i=0; $i < count($farm); $i++) { ?>
               <td id="dtrt10_<?php echo $i; ?>"><a href="javascript:void(0);" title="Loading. . .">...</a></td>
               <?php } ?>
             </tr>
             <tr>
-              <td>Static Pressure</td>
+              <td>Feed Cons. (Kg)</td>
               <?php for ($i=0; $i < count($farm); $i++) { ?>
               <td id="dtrt11_<?php echo $i; ?>"><a href="javascript:void(0);" title="Loading. . .">...</a></td>
+              <?php } ?>
+            </tr>
+            <tr>
+              <td>Water Cons. (Liter)</td>
+              <?php for ($i=0; $i < count($farm); $i++) { ?>
+              <td id="dtrt12_<?php echo $i; ?>"><a href="javascript:void(0);" title="Loading. . .">...</a></td>
+              <?php } ?>
+            </tr>
+            <tr>
+              <td>Static Pressure</td>
+              <?php for ($i=0; $i < count($farm); $i++) { ?>
+              <td id="dtrt13_<?php echo $i; ?>"><a href="javascript:void(0);" title="Loading. . .">...</a></td>
+              <?php } ?>
+            </tr>
+            <tr>
+              <td>Silo 1</td>
+              <?php for ($i=0; $i < count($farm); $i++) { ?>
+              <td id="dtrt14_<?php echo $i; ?>"><a href="javascript:void(0);" title="Loading. . .">...</a></td>
+              <?php } ?>
+            </tr>
+            <tr>
+              <td>Silo 2</td>
+              <?php for ($i=0; $i < count($farm); $i++) { ?>
+              <td id="dtrt15_<?php echo $i; ?>"><a href="javascript:void(0);" title="Loading. . .">...</a></td>
               <?php } ?>
             </tr>
             </tbody>

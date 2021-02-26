@@ -49,12 +49,16 @@ function setdt(count,i,data){
         $('#dtrt4_' + i).text(isidata.req_temp[i]);
         $('#dtrt5_' + i).attr('style','background:'+isidata.avg_bg[i]);
         $('#dtrt5_' + i).text(isidata.avg_temp[i]);
-        $('#dtrt6_' + i).text(isidata.humidity[i]);
-        $('#dtrt7_' + i).text(isidata.fan[i]);
-        $('#dtrt8_' + i).text(isidata.windspeed[i]);
-        $('#dtrt9_' + i).text(isidata.feed[i]);
-        $('#dtrt10_' + i).text(isidata.water[i]);
-        $('#dtrt11_' + i).text(isidata.static_pressure[i]);
+        $('#dtrt6_' + i).text(isidata.out_temp[i]);
+        $('#dtrt7_' + i).text(isidata.humidity[i]);
+        $('#dtrt8_' + i).text(isidata.fan[i]);
+        $('#dtrt9_' + i).text(isidata.reqspeed[i]);
+        $('#dtrt10_' + i).text(isidata.windspeed[i]);
+        $('#dtrt11_' + i).text(isidata.feed[i]);
+        $('#dtrt12_' + i).text(isidata.water[i]);
+        $('#dtrt13_' + i).text(isidata.static_pressure[i]);
+        $('#dtrt14_' + i).text(isidata.silo1[i]);
+        $('#dtrt15_' + i).text(isidata.silo2[i]);
         i = i + 1;
         setdt(count,i,data);
     }

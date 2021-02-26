@@ -85,12 +85,16 @@ class History_house extends CI_Controller {
                     }
                     $data2['avg_bg'][$nomor] = $avgtemp;
                     $data2['avg_temp'][$nomor] = $isi['avg_temp'];
+                    $data2['out_temp'][$nomor] = $isi['temp_out'];
                     $data2['humidity'][$nomor] = $isi['humidity'];
                     $data2['windspeed'][$nomor] = $isi['windspeed'];
+                    $data2['reqspeed'][$nomor] = $isi['req_windspeed'];
                     $data2['feed'][$nomor] = $isi['feed'];
                     $data2['water'][$nomor] = $isi['water'];
                     $data2['static_pressure'][$nomor] = $isi['static_pressure'];
                     $data2['fan'][$nomor] = $isi['fan'];
+                    $data2['silo1'][$nomor] = $isi['silo1'];
+                    $data2['silo2'][$nomor] = $isi['silo2'];
                 }else{
                     $tanggal = "-";
                     $jam = "-";
@@ -100,12 +104,16 @@ class History_house extends CI_Controller {
                     $data2['jam'][$nomor] = $jam;
                     $data2['req_temp'][$nomor] = "-";
                     $data2['avg_temp'][$nomor] = "-";
+                    $data2['out_temp'][$nomor] = "-";
                     $data2['humidity'][$nomor] = "-";
                     $data2['windspeed'][$nomor] = "-";
+                    $data2['reqspeed'][$nomor] = "-";
                     $data2['feed'][$nomor] = "-";
                     $data2['water'][$nomor] = "-";
                     $data2['static_pressure'][$nomor] = "-";
                     $data2['fan'][$nomor] = "-";
+                    $data2['silo1'][$nomor] = "-";
+                    $data2['silo2'][$nomor] = "-";
                 }
                 $nomor = $nomor + 1;
             }
