@@ -2,6 +2,18 @@
 $(document).ready(function(){
     reload_data();
     getdat();
+
+    $('#example1').DataTable({
+        "lengthMenu": [[-1], ["All"]],
+        "paging":   false,
+        "searching": false,
+        "ordering": false,
+        fixedColumns: {
+            leftColumns: 1
+        },
+        scrollX: true,
+        "info":     false
+    });
 });
 
 function reload_data(){

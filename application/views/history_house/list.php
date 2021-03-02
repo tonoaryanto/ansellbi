@@ -9,47 +9,46 @@
       .table-striped > tbody > tr:nth-of-type(2n+1){background:#e1eef2 !important;}
       </style>
         <div id="tglresponse" class="table-responsive">
-          <table id="example1" class="table table-bordered table-striped">
+          <table id="example1" cellspacing="0" class="display nowrap cell-border" width="100%">
             <thead>
             <tr>
               <th>Name</th>
-              <?php for ($i=0; $i < count($farm); $i++) { 
-                $rskt = explode(" ",$farm[$i]->{'nama_kandang'});
-                $skt = strtoupper(str_split($rskt[0])[0]);
-                if(isset($rskt[1])){$skt .= strtoupper(str_split($rskt[1])[0]);}
-                if(count($rskt) > 2){$skt .= strtoupper(str_split(end($rskt))[0]);}
-                ?>
-              <th><a href="<?php echo base_url('history_house/farm/').$farm[$i]->{'id'}; ?>" class="btn btn-success btn-xs" title="<?php echo $farm[$i]->{'nama_kandang'}; ?>"><span style="font-size:14px;"><?php echo $skt; ?></span><?php if(count($farm) < 11){ ?><span style="font-weight:bold;">&nbsp;<?php echo $farm[$i]->{'nama_kandang'}; ?></span> <?php } ?></a></th>
+              <?php for ($i=0; $i < count($farm); $i++) {?>
+              <th>
+              <a href="<?php echo base_url('history_house/farm/').$farm[$i]->{'id'}; ?>" class="btn btn-success btn-xs" title="<?php echo $farm[$i]->{'nama_kandang'}; ?>">
+              <span style="font-size:14px;">
+              <?php echo $farm[$i]->{'nama_kandang'}; ?></span>
+              </a></th>
               <?php } ?>
             </tr>
             </thead>
             <tbody>
             <tr>
-            <td style="width:15%;">Flock</td>
+              <td>Flock</td>
               <?php for ($i=0; $i < count($farm); $i++) { ?>
               <td id="dtrt0_<?php echo $i; ?>"><a href="javascript:void(0);" title="Loading. . .">...</a></td>
               <?php } ?>
             </tr>
             <tr>
-            <td style="width:15%;">Growday</td>
+              <td>Growday</td>
               <?php for ($i=0; $i < count($farm); $i++) { ?>
               <td id="dtrt1_<?php echo $i; ?>"><a href="javascript:void(0);" title="Loading. . .">...</a></td>
               <?php } ?>
             </tr>
             <tr>
-            <td style="width:15%;">Date</td>
+              <td>Date</td>
               <?php for ($i=0; $i < count($farm); $i++) { ?>
               <td id="dtrt2_<?php echo $i; ?>"><a href="javascript:void(0);" title="Loading. . .">...</a></td>
               <?php } ?>
             </tr>
             <tr>
-            <td style="width:15%;">Time</td>
+              <td>Time</td>
               <?php for ($i=0; $i < count($farm); $i++) { ?>
               <td id="dtrt3_<?php echo $i; ?>"><a href="javascript:void(0);" title="Loading. . .">...</a></td>
               <?php } ?>
             </tr>
             <tr>
-            <td style="width:15%;">Required Temp. (°C)</td>
+              <td>Required Temp. (°C)</td>
               <?php for ($i=0; $i < count($farm); $i++) { ?>
               <td id="dtrt4_<?php echo $i; ?>"><a href="javascript:void(0);" title="Loading. . .">...</a></td>
               <?php } ?>
@@ -121,6 +120,18 @@
               <?php } ?>
             </tr>
             </tbody>
+            <tfoot>
+            <tr>
+              <th>&nbsp;</th>
+              <?php for ($i=0; $i < count($farm); $i++) {?>
+              <th>
+              <a href="<?php echo base_url('history_house/farm/').$farm[$i]->{'id'}; ?>" class="btn btn-success btn-xs" title="<?php echo $farm[$i]->{'nama_kandang'}; ?>">
+              <span style="font-size:14px;">
+              <?php echo $farm[$i]->{'nama_kandang'}; ?></span>
+              </a></th>
+              <?php } ?>
+            </tr>
+            </tfoot>
           </table>
         </div>
       </div>
