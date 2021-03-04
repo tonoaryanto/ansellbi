@@ -86,7 +86,8 @@
 						<div class="box-footer">
 							<div class="form-group">
 							<button class="btn btn-default" onclick="grafik();">Apply</button>
-							<button class="btn btn-success" id="btnprint">Print</button>
+							<!--button class="btn btn-success" id="btnprint">Print</button-->
+							<button style="display: none;" id="btnprintpdf" class="btn btn-danger" onclick="allprint()">Print PDF</button>
 							</div>		
 						</div>
 					</div>
@@ -94,7 +95,5 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-sm-12">
-		<div id="inihtml"></div>
-	</div>
+	<div id="inihtml"></div>
 </div>

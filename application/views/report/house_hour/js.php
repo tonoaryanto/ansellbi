@@ -1,3 +1,7 @@
+<?php defined('BASEPATH') OR exit('No direct script access allowed'); ?>
+
+var urlimage1 = {};
+
 $(document).ready(function(){
   $('#btnprint').on('click',(function(e){
 
@@ -181,6 +185,7 @@ function grafik(){
   var datgraf = $('#optionselect').val();
 
   $('#inihtml').empty();
+  $('#btnprintpdf').hide();
 
   if (datkandang == '' || datkandang == null || datkandang == undefined) {
     swal.fire({
@@ -305,12 +310,37 @@ function loopgrafik(dataini,awal,loop) {
       if (parseInt($('[name="hourdari1"]').val()) == parseInt($('[name="hourdari2"]').val())) {
       var totlebar = (lebargk + rangegd);
       }else{
-        var totlebar = (lebargk + rangegd)*2;
+        var totlebar = (lebargk + rangegd);
       }
+
+      var htm1 = "";
+
+      htm1 += '<div class="nav-tabs-custom">';
+      htm1 +=   '<ul class="nav nav-tabs pull-right">';
+      htm1 +=     '<li id="tabtable'+awal+'" class=""><a href="#data-table'+awal+'" data-toggle="tab">Table</a></li>';
+      htm1 +=     '<li id="tabchart'+awal+'" class="active"><a href="#data-chart'+awal+'" data-toggle="tab">Chart</a></li>';
+      htm1 +=     '<li class="pull-left header"><i class="fa fa-inbox"></i> <span id="titlegrafik'+awal+'"></span></li>';            
+      htm1 +=   '</ul>';
+      htm1 +=   '<div class="tab-content no-padding">';
+			htm1 +=     '<div class="tab-pane active" id="data-chart'+awal+'">';
+      htm1 +=       '<div class="box-body" style="overflow-x: auto;">';
+      htm1 +=         '<div id="inicanvas'+awal+'" style="min-height: '+tottinggi+'px;min-width: '+totlebar+'px;">';
+      htm1 +=         '</div>';
+      htm1 +=       '</div>';
+      htm1 +=     '</div>';
+      htm1 +=     '<div class="tab-pane" id="data-table'+awal+'">';
+      htm1 +=       '<div class="row" style="padding: 15px;">';
+      htm1 +=         '<div class="col-sm-12">';
+      htm1 +=           '<div id="tglresponse'+awal+'" class="table-responsive"></div>';
+      htm1 +=         '</div>';
+      htm1 +=       '</div>';
+      htm1 +=     '</div>';
+      htm1 +=   '</div>';
+      htm1 += '</div>';
 
           $('<div>')
           .attr('class','col-sm-12')
-          .html('<div class="box box-success" style="padding: 10px;"><div class="box-header with-border"><h3 class="box-title" id="titlegrafik'+awal+'"><span style="color: #aaa;">-Set Options Terlebih Dahulu-</span></h3><div class="box-tools pull-right"><button type="button" class="btn btn-box-tool" isi-widget="collapse"><i class="fa fa-minus"></i></button></div></div><div class="box-body" style="overflow-x: auto;"><div id="inicanvas'+awal+'" style="min-height: '+tottinggi+'px;min-width: '+totlebar+'px;"></div></div></div>')
+          .html(htm1)
           .appendTo('#inihtml');
 
           $('#inicanvas'+awal).empty();
@@ -447,6 +477,8 @@ function loopgrafik(dataini,awal,loop) {
           $('[name="hourdari1"]').val(isi.hourdari1);
           $('[name="hourdari2"]').val(isi.hourdari2);
           $('#tglresponse').removeAttr('style');
+          $('#btnprintpdf').show();
+          tabel(awal,isi.linelabel,isi.tdtbl,isi.glabel);
           awal = awal + 1;
           loopgrafik(dataini,awal,loop);
         }else{
@@ -467,6 +499,116 @@ function loopgrafik(dataini,awal,loop) {
       type : "success",
     });
   }
+}
+
+function tabel(awal,nama,data,title){
+  var titleprint = title;
+  var thm = '';
+
+  thm +=  '<thead>';
+  thm +=  '<tr>';
+  thm +=    '<th>';
+  thm += 'No';
+  thm += '</th><th>';
+  thm += 'Grow day';
+  thm += '</th><th>';
+  thm += 'Time';
+
+  for (var i = 0; i < nama.length; i++) {
+  thm += '</th><th>';
+  thm += nama[i];
+  }
+
+  thm += '</th>';
+  thm += '</tr>';
+  thm += '</thead>';
+  thm += '<tbody>';
+
+  for (var i = 0; i < data.length; i++) {
+  thm += '<tr>';
+  thm += '<td>';
+  thm += (i+1);
+  thm += '</td><td>';
+  thm += data[i].growday;
+  thm += '</td><td>';
+  thm += data[i].time;
+
+  for (var k = 0; k < nama.length; k++) {
+  thm += '</td><td>';
+  thm += data[i].data[k];
+  }
+
+  thm += '</td>';
+  thm += '</tr>';
+  }
+
+  thm += '</tbody>';
+
+  $("<table>")
+    .attr({
+      'class' : 'table table-striped- table-bordered table-hover table-checkable',
+      'id' : 'mytable'+awal,
+    })
+    .html(thm)
+    .appendTo('#tglresponse'+awal);
+
+  $("#mytable"+awal).DataTable({
+    dom: 'Bfrtip',
+    buttons : [
+      {
+            title : 'Multiple Data ' + titleprint,
+            extend: 'pdfHtml5',
+            orientation: 'landscape',
+            pageSize: 'A4',
+            filename: 'Multiple Data ' + titleprint,
+            attr:  {
+              id: 'btnpdf'+awal
+            },
+            customize: function(doc) {
+                  var dataimage = [];
+                  dataimage[0] = {image: urlimage1[(awal - 1)],margin: [ 0, 20, 0, 0 ],alignment: 'center',width:780,height:385};
+
+                  doc.styles.tableBodyEven.alignment = 'center';
+                  doc.styles.tableBodyOdd.alignment = 'center';
+                  doc.styles.tableHeader.alignment = 'center';
+                  doc.styles.tableHeader.fillColor = '#fff';
+                  doc.styles.tableHeader.color = '#000';
+                  doc.styles.tableHeader.width = 200;
+                  doc.styles.tableBodyEven.fillColor = '#fff';
+                  doc.styles.tableBodyOdd.fillColor = '#ddeeff';
+                  doc.content.push(dataimage);
+                  var objLayout = {};
+                  objLayout['hLineWidth'] = function(i) { return 1; };
+                  objLayout['vLineWidth'] = function(i) { return 1; };
+                  objLayout['hLineColor'] = function(i) { return '#555'; };
+                  objLayout['vLineColor'] = function(i) { return '#555'; };
+                  objLayout['paddingLeft'] = function(i) { return 4; };
+                  objLayout['paddingRight'] = function(i) { return 4; };
+                  doc.content[1].layout = objLayout;
+                  var widthtb = [];
+
+                  if(nama.length <= 2){
+                  widthtb[0] = '5%';
+                  widthtb[1] = '15%';
+                  widthtb[2] = '20%';
+                  var wdl = 60;
+                  }else{
+                  widthtb[0] = '5%';
+                  widthtb[1] = '7%';
+                  widthtb[2] = '8%';
+                  var wdl = 80;
+                  }
+
+                  var wd = wdl / nama.length;
+                  for (var i = 0; i < nama.length; i++) {
+                  widthtb[(3+i)] = wd+'%';
+                  }
+
+                  doc.content[1].table.widths = widthtb;
+            }
+      }
+    ]
+  });
 }
 
 function hapuspembanding() {
@@ -553,5 +695,17 @@ function btn_data() {
   }else{
   $('#thisbtndata').attr('data-toggle','0');
   $('#btndatapop').attr({'class' : 'input-group-btn', 'aria-expanded' : 'false'});
+  }
+}
+
+function allprint(){
+  var datgraf = $('#optionselect').val();
+
+  for (var i = 0; i < datgraf.length; i++) {
+    urlimage1[i] = document.getElementById("chartcanvas"+(i+1)).toDataURL("image/png");
+  }
+
+  for (var i = 0; i < datgraf.length; i++) {
+  document.getElementById("btnpdf"+(i+1)).click();
   }
 }

@@ -201,7 +201,7 @@ class Report extends CI_Controller {
                 }
                 $esqlgrow = "AND growday = '".$filhour1."'";
             }else{
-                $esqlgrow = "AND growday BETWEEN '".$filhour1."' AND '".$filhour2."'";
+                $esqlgrow = "AND growday >= '".$filhour1."' AND growday <= '".$filhour2."'";
             }
 
             $esqlgen  = "SELECT growday, date_record,".$fil2." AS isidata FROM `data_record` ";
@@ -231,9 +231,15 @@ class Report extends CI_Controller {
             $dataprimary = $this->db->query($esqlprimary)->result();
 
             $adata = [];
+            $datatabel = [];
+            $kl = 0;
             foreach ($dataprimary as $value) {
                 $jam = date_format(date_create($value->date_record),"H");
                 $adata[] = ''.$value->growday.' - '.$jam;
+                $datatabel[$kl]['growday'] = $value->growday;
+                $datatabel[$kl]['time'] = $jam.":00:00";
+                $datatabel[$kl]['data'][0] = $value->isidata;
+                $kl++;
             }
             $isigrowday = $adata;
 
@@ -252,35 +258,39 @@ class Report extends CI_Controller {
 
             if((int)$datarange['maxdata1'] == 100){$datamax1[0] = (int)$datarange['maxdata1'];}else{$datamax1[0] = (int)$datarange['maxdata1'] + 1;}
             if((int)$datarange['mindata1'] == 0){$datamin1[0] = (int)$datarange['mindata1'];}else{$datamin1[0] = (int)$datarange['mindata1'] - 1;}
-
+            
             //Data Pembanding
             $urutan = 7;
             $countsecond = 0;
             $isisecondary = [];
             for ($i=0; $i < $nomor; $i++) { 
+                $hj = $i + 1;
                 $urutan = $urutan + 1;
                 $esqlsecondary  = $esqlgen;
                 $esqlsecondary .= "AND kode_kandang = '".$valpem['valkandang'.$urutan]."' ";
                 $esqlsecondary .= "AND periode = '".$valpem['valperiode'.$urutan]."' ";
                 $esqlsecondary .= $esqlgrow;
                 $esqlsecondary .= $esqlorder;
-                $datasecondary = $this->db->query($esqlsecondary)->result();
+                $datasecondary = $this->db->query($esqlsecondary);
                 $cdata = [];
-                if ($datasecondary == null) {
+                if ($datasecondary->num_rows() == 0) {
                     for ($j=0; $j < count($isigrowday); $j++) { 
                         $cdata[$j] = 0;
+                        $datatabel[$j]['data'][$hj] = 0;
                     }
                 }else{
                     for ($k=0; $k < count($isigrowday); $k++) { 
                         $cdata[$k] = '';
-                        foreach ($datasecondary as $value3) {
-                            $jam2 = date_format(date_create($value3->date_record),"H");
-                            if($isigrowday[$k] == (''.$value->growday.' - '.$jam2)){
-                                $cdata[$k] = $value3->isidata;
-                            }
+                        $value3 = $datasecondary->row_array($k);
+                        $jam2 = date_format(date_create($value3['date_record']),"H");
+                        if($isigrowday[$k] == (''.$value3['growday'].' - '.$jam2)){
+                            $cdata[$k] = $value3['isidata'];
+                            $datatabel[$k]['data'][$hj] = $value3['isidata'];
                         }
+
                         if($cdata[$k] == '' OR $cdata[$k] == null){
                             $cdata[$k] = 0;
+                            $datatabel[$k]['data'][$hj] = 0;
                         }
                     }
                     $esqlmin1c  = "SELECT MAX($fil2) as maxdata1,MIN($fil2) as mindata1 FROM `data_record` WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$valpem['valkandang'.$urutan]."' ";
@@ -302,21 +312,76 @@ class Report extends CI_Controller {
             $realmax = max($datamax1);
             $realmin = min($datamin1);
 
-            $countrange = 10;
+            $countrange = 8;
             $dif1 = $realmax - $realmin;
-            if($dif1 == $realmax){$dif1range = $dif1 / 10;}
-            else{$dif1range = $dif1 / $countrange;}
-            $sizeyaxis1[0] = $realmin;
+            $dif1range = $dif1 / $countrange;
             if($dif1range < 1){$dif1range = 1;}
             if(isset(explode(".",$dif1range)[1])){
-                if(explode(".",$dif1range)[1] >= 1){$dif1range = explode(".",$dif1range)[0] + 1;}
-            };
-            for ($i=0; $i < $countrange; $i++) { 
-                $realmin = $realmin + $dif1range;
-                $sizeyaxis1[$i+1] = $realmin;
+                if(explode(".",$dif1range)[1] >= 1){
+                    $dif1range = explode(".",$dif1range)[0] + 1;
+                }else{
+                    $dif1range = explode(".",$dif1range)[0];
+                }
+            }
+    
+            if(isset(explode(".",$realmin)[1])){
+                if(explode(".",$realmin)[0] >= 1){
+                    $realmin = explode(".",$realmin)[0] - 1;
+                }else{
+                    $realmin = explode(".",$realmin)[0];
+                }
+            }
+    
+            if(isset(explode(".",$realmax)[1])){
+                if(explode(".",$realmax)[0] >= 1){
+                    $realmax = explode(".",$realmax)[0] + 1;
+                }else{
+                    $realmax = explode(".",$realmax)[0];
+                }
             }
 
-            echo json_encode(['status'=>true,'labelgf'=>$isigrowday,'data'=>$isiprimary,'label'=>$xlabel[$fil2],'glabel'=>$glabel,'hourdari1'=>$filhour1,'hourdari2'=>$filhour2,'datasecond'=>$isisecondary,'countsecond'=>$countsecond,'linelabel'=>$linelabel,'difgrow'=>$difgrow,'sizeyaxis1'=>$sizeyaxis1]);
+            $sizeyaxis1[0] = floatval(number_format($realmin,2));
+            if(($realmax - $realmin) <= 5){$dif1range = $dif1range / 2;}
+            if(($realmax - $realmin) <= 2){$dif1range = ($dif1range * 2) / 5;}            
+            for ($i=0; $i < $countrange; $i++) { 
+                $realmin = $realmin + $dif1range;
+                if($realmax <= 200){
+                    $sizeyaxis1[$i+1] = floatval(number_format($realmin,2));
+                }else{
+                    $sizeyaxis1[$i+1] = (int)number_format($realmin,0,",","");
+                }
+                if($sizeyaxis1[$i+1] >= $realmax){break;}else{
+                    if(($i + 1) == $countrange){
+                        $countrange = $countrange + 1;
+                    }                
+                }
+            }
+
+            if($filhour1 == ''){
+                $difgrow = 1;
+            }else{
+                if(count($isiprimary) > 30 ){
+                    $difgrow = 2;
+                }else{
+                    $difgrow = 1;
+                }
+            }
+
+            echo json_encode([
+                'status'        => true,
+                'labelgf'       => $isigrowday,
+                'data'          => $isiprimary,
+                'label'         => $xlabel[$fil2],
+                'glabel'        => $glabel,
+                'hourdari1'     => $filhour1,
+                'hourdari2'     => $filhour2,
+                'datasecond'    => $isisecondary,
+                'countsecond'   => $countsecond,
+                'linelabel'     => $linelabel,
+                'difgrow'       => $difgrow,
+                'sizeyaxis1'    => $sizeyaxis1,
+                'tdtbl'         => $datatabel
+                ]);
     }
 
     public function dataaxish(){
@@ -348,7 +413,7 @@ class Report extends CI_Controller {
         if($filhour1 == $filhour2){
             $esqlgrow = "AND growday = '".$filhour1."'";
         }else{
-            $esqlgrow = "AND growday BETWEEN '".$filhour1."' AND '".$filhour2."'";
+            $esqlgrow = "AND growday >= '".$filhour1."' AND growday <= '".$filhour2."'";
         }
 
         $esqlgen  = "SELECT growday, date_record,".$data1data." AS isidata,".$data2data." AS isidata2 FROM `data_record` ";
