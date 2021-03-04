@@ -64,7 +64,7 @@
 		<span class="icon-bar"></span>
 		</a>
 
-		<span class="hidden-xs logo" style="min-width: 200px;text-align:left;background: none;">
+		<span class="hidden-xs logo" style="min-width: 250px;text-align:left;background: none;">
 		<a href="#" style="color: #fff;font-size: 16px;"><b><?php echo $this->konfigurasi->set('nama_web');?></b></a>    		
 		</span>
 
