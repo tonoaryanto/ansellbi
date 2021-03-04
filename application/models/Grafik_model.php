@@ -309,7 +309,7 @@ class Grafik_model extends CI_Model {
         }
 
         foreach ($dataprimary1 as $value2) {
-            $bdata[] = floatval($value2->isidata);
+            $bdata[]  = floatval($value2->isidata);
             $cdata2[] = floatval($value2->isidata2);
             if($inidata == 'alltemp'){
             $cdata3[] = floatval($value2->isidata3);

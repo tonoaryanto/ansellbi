@@ -30,7 +30,7 @@
                             <div class="form-group">
                                 <div class="col-md-12">
                                     <label>Date</label>
-                                    <div class="input-group date col-lg-3">
+                                    <div class="input-group date col-lg-4">
                                         <div class="input-group-addon">
                                             <i class="fa fa-calendar"></i>
                                         </div>

@@ -249,16 +249,9 @@ class Report extends CI_Controller {
             }
             $isiprimary = $bdata;
 
-            $esqlmin1  = "SELECT MAX($fil2) as maxdata1,MIN($fil2) as mindata1 FROM `data_record` WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$fil3."' ";
-            $esqlmin1 .= "AND periode = '".$filperiode."' ";
-            $esqlmin1 .= $esqlgrow;
-            $esqlmin1 .= $esqlorder;
+            $datamin1[0] = min($bdata);
+            $datamax1[0] = max($bdata);
 
-            $datarange = $this->db->query($esqlmin1)->row_array();
-
-            if((int)$datarange['maxdata1'] == 100){$datamax1[0] = (int)$datarange['maxdata1'];}else{$datamax1[0] = (int)$datarange['maxdata1'] + 1;}
-            if((int)$datarange['mindata1'] == 0){$datamin1[0] = (int)$datarange['mindata1'];}else{$datamin1[0] = (int)$datarange['mindata1'] - 1;}
-            
             //Data Pembanding
             $urutan = 7;
             $countsecond = 0;
@@ -281,11 +274,15 @@ class Report extends CI_Controller {
                 }else{
                     for ($k=0; $k < count($isigrowday); $k++) { 
                         $cdata[$k] = '';
-                        $value3 = $datasecondary->row_array($k);
-                        $jam2 = date_format(date_create($value3['date_record']),"H");
-                        if($isigrowday[$k] == (''.$value3['growday'].' - '.$jam2)){
-                            $cdata[$k] = $value3['isidata'];
-                            $datatabel[$k]['data'][$hj] = $value3['isidata'];
+                        $values = $datasecondary->result();
+
+                        foreach ($values as $value3) {
+                            $jam2 = date_format(date_create($value3->date_record),"H");
+                            if($isigrowday[$k] == (''.$value3->growday.' - '.$jam2)){
+                                $cdata[$k] = $value3->isidata;
+                                $datatabel[$k]['data'][$hj] = $value3->isidata;
+                                break;
+                            }    
                         }
 
                         if($cdata[$k] == '' OR $cdata[$k] == null){
@@ -293,15 +290,10 @@ class Report extends CI_Controller {
                             $datatabel[$k]['data'][$hj] = 0;
                         }
                     }
-                    $esqlmin1c  = "SELECT MAX($fil2) as maxdata1,MIN($fil2) as mindata1 FROM `data_record` WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$valpem['valkandang'.$urutan]."' ";
-                    $esqlmin1c .= "AND periode = '".$valpem['valperiode'.$urutan]."' ";
-                    $esqlmin1c .= $esqlgrow;
-                    $esqlmin1c .= $esqlorder;
-        
-                    $datarangec = $this->db->query($esqlmin1)->row_array();
 
-                    if((int)$datarangec['maxdata1'] == 100){$datamax1[$i + 1] = (int)$datarange['maxdata1'];}else{$datamax1[$i + 1] = (int)$datarange['maxdata1'] + 1;}
-                    if((int)$datarangec['mindata1'] == 0){$datamin1[$i + 1] = (int)$datarange['mindata1'];}else{$datamin1[$i + 1] = (int)$datarange['mindata1'] - 1;}
+                    $datamax1[$i + 1] = max($cdata);
+                    $datamin1[$i + 1] = min($cdata);
+
                 }
                 $isisecondary[] = $cdata;
                 $countsecond = $countsecond + 1;
@@ -453,18 +445,10 @@ class Report extends CI_Controller {
             //END Data 2
             $difgrow = $filhour1 - $filhour2;
 
-            $esqlmin1  = "SELECT MAX($data1data) as maxdata1,MAX($data2data) as maxdata2, MIN($data1data) as mindata1,MIN($data2data) as mindata2 FROM `data_record` WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$data1kandang."' ";
-            $esqlmin1 .= "AND periode = '".$data1periode."' ";
-            $esqlmin1 .= $esqlgrow;
-            $esqlmin1 .= "AND date_record >= '".$tglaw."' AND date_record <= '".$tglen."'";
-            $esqlmin1 .= $esqlorder;
-
-            $datarange = $this->db->query($esqlmin1)->row_array();
-
-            $datamax1 = $datarange['maxdata1'];
-            $datamax2 = $datarange['maxdata2'];
-            $datamin1 = $datarange['mindata1'];
-            $datamin2 = $datarange['mindata2'];
+            $datamax1 = max($bdata);
+            $datamax2 = max($cdata2);
+            $datamin1 = min($bdata);
+            $datamin2 = min($cdata2);
         
             $countrange = 8;
             $dif1 = $datamax1 - $datamin1;

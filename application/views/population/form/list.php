@@ -27,7 +27,7 @@
                         </div>
                         <div class="form-group col-md-12">
                             <label>Date</label>
-                            <div class="input-group date col-lg-5">
+                            <div class="input-group date col-lg-6">
                                 <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                 </div>

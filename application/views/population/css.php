@@ -7,4 +7,4 @@ span .select2-container .select2-selection--single{
     height: 32px !important;
     border-style: none !important;
 }
-.dt-buttons{display:none}
+.dt-buttons{visibility: hidden;}
