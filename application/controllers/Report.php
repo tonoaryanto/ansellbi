@@ -142,10 +142,10 @@ class Report extends CI_Controller {
         if($site == null){
         $this->konfigurasi->cek_url();
         $data = [
-            'txthead1'     => 'Report Histori House',
+            'txthead1'     => 'Report History House',
             'head1'     => 'Report',
             'link1'     => '#',
-            'head2'     => 'Histori House',
+            'head2'     => 'History House',
             'link2'     => 'report/history_house_hour',
             'head3'     => '<b>Multi Data</b>',
             'link3'     => '#',
@@ -159,10 +159,10 @@ class Report extends CI_Controller {
         if($site == 'myaxis'){
             $this->konfigurasi->cek_url();
             $data = [
-                'txthead1'     => 'Report Histori House - Double Yaxis',
+                'txthead1'     => 'Report History House - Double Yaxis',
                 'head1'     => 'Report',
                 'link1'     => '#',
-                'head2'     => '<b>Histori House</b>',
+                'head2'     => '<b>History House</b>',
                 'link2'     => 'report/history_house_hour',
                 'head3'     => '<b>Yaxis Ganda</b>',
                 'link3'     => '#',

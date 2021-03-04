@@ -40,7 +40,7 @@ class Login extends CI_Controller {
 			$this->session->set_userdata($dat_sess);
 			echo json_encode(['status'=>true,'nama_user'=>$data_pegawai['nama_user'],'url'=>$url]);
 		}else{
-			echo json_encode(['status'=>false,'message'=>'<b>Username</b> or <b>Password</b> you entered is incorrect! please check again.']);
+			echo json_encode(['status'=>false,'message'=>'Logon Failure, Unknown <b>username</b> or bad <b>password</b>. Please check again!']);
 		}
 	}
 

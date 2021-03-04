@@ -71,7 +71,7 @@ $(document).ready(function(){
       if ($('[name="val_pemperiode'+i+'"]').val() == '' || $('[name="val_pemperiode'+i+'"]').val() == null || $('[name="val_pemperiode'+i+'"]').val() == undefined) {
         swal.fire({
           title: "Warning!",
-          html : '<p style="font-size: 14px">Data FLock '+i+' is empty!</p>',
+          html : '<p style="font-size: 14px">Data Flock '+i+' is empty!</p>',
           type : "warning",
         });
         return;

@@ -64,7 +64,7 @@
 										<div class="checkbox">
 						                    <label>
 						                      <input type="checkbox">
-						                      Tidak digunakan
+						                      Not Used
 						                    </label>
 						                </div>
 									</div>
@@ -86,7 +86,7 @@
 										<div class="checkbox">
 						                    <label>
 						                      <input type="checkbox">
-						                      Tidak digunakan
+						                      Not Used
 						                    </label>
 						                </div>
 									</div>
@@ -99,7 +99,7 @@
 						<div class="box-footer">
 							<div class="form-group col-sm-12">
 								<label>Chart name</label>
-								<input style="border-radius: 5px" type="text" class="form-control" name="namagrafik" placeholder="Nama Grafik">
+								<input style="border-radius: 5px" type="text" class="form-control" name="namagrafik" placeholder="Input chart name">
 							</div>
 							<div class="form-group col-sm-4">
 								<label>Star Growday :</label>

@@ -39,7 +39,7 @@
   <!-- /.login-logo -->
   <div id="cnotif"></div>
   <div class="login-box-body">
-    <p class="login-box-msg" style="color:#505050;">Please fill in the username and password to enter the system.</p>
+    <p class="login-box-msg" style="color:#505050;">Please enter your username and password to log in .</p>
 
     <form id="form-login">
       <div class="form-group has-feedback">

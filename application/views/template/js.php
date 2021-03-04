@@ -78,13 +78,13 @@
 	$('#logout').on('click',function(){
 	    Swal.fire({
 	      title: 'Warning!',
-	      html : '<p style="font-size: 14px">Are you sure you want to <b>quit</b>?</p>',
+	      html : '<p style="font-size: 14px">Do you want to  <b>Log out</b> ?</p>',
 	      type: 'warning',
 	      showCancelButton: true,
 	      confirmButtonColor: '#3085d6',
 	      cancelButtonColor: '#d33',
-	      confirmButtonText: 'Ya',
-	      cancelButtonText: 'Batal'
+	      confirmButtonText: 'Log out',
+	      cancelButtonText: 'Cancel'
 	    }).then(function(result){
 	    	if(result.value == true){
 		    	location.replace("<?php echo base_url('login/keluar');?>");

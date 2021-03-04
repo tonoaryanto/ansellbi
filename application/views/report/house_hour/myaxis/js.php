@@ -75,7 +75,7 @@ $(document).ready(function(){
           $('#btnprint').removeAttr('disabled');
           swal.fire({
             title: "Error!",
-            html : '<p style="font-size: 14px">Terjadi Kesalahan!</p>',
+            html : '<p style="font-size: 14px">There is an error!</p>',
             type: "error",
           });
         }

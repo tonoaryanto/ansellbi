@@ -44,7 +44,7 @@ function save(){
                 get_sess(data.sess);
                 if( data.status == true){
                     swal.fire({
-                      title: "Berhasil!",
+                      title: "Success!",
                       html : data.message,
                       type: "success",
                     });

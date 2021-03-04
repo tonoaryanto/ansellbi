@@ -58,21 +58,21 @@
 					                </div>
 								</div>
 								<div class="form-group col-sm-2">
-									<label> Star Grow Day</label>
+									<label> Star Growday</label>
 
 						            <div class="form-group">
 						                <input class="form-control" type="number" min="-1" name="hourdari1" value="-1" style="border-radius:3px;">
 						            </div>
 								</div>
 								<div class="form-group col-sm-2">
-									<label>End Grow Day</label>
+									<label>End Growday</label>
 
 						            <div class="form-group">
 						                <input class="form-control" type="number" min="-1" name="hourdari2" value="-1" style="border-radius:3px;">
 						            </div>
 								</div>
 								<div class="form-group col-sm-2">
-									<label>Action</label>
+									<label>Actions</label>
 									<div class="row">
 										<div class="col-sm-12" id="actionpem">
 											<button class="btn btn-success" onclick="addpembanding();" title="Added the comparator"><i class="fa fa-plus"></i></button>
