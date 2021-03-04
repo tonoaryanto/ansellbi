@@ -5,3 +5,6 @@ table.dataTable{
     margin-top:0px !important;
     margin-bottom:0px !important;
 }
+table.dataTable tbody td{
+    padding: 3px 10px !important;
+}
