@@ -8,3 +8,5 @@ table.dataTable{
 table.dataTable tbody td{
     padding: 3px 10px !important;
 }
+.DTFC_LeftBodyLiner{overflow-y:hidden !important;}
+.DTFC_LeftBodyWrapper{border-right: thin solid #ddd;}
