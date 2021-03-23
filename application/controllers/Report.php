@@ -615,7 +615,7 @@ class Report extends CI_Controller {
 
             echo json_encode($dataini1);
         }
-    }    
+    }
 
     public function data_selectdy(){
         $cek_sess = $this->konfigurasi->cek_js();

@@ -45,6 +45,8 @@ class Grafik_model extends CI_Model {
             '9' => 'static_pressure',
             '10' => 'fan',
             '11' => 'windspeed',
+            '12' => 'silo1',
+            '13' => 'silo2'
         ];
         
         $textxlabel = [
@@ -60,6 +62,8 @@ class Grafik_model extends CI_Model {
             '9' => 'Static Pressure',
             '10' => 'Fan Speed',
             '11' => 'Wind Speed',
+            '12' => 'Silo 1',
+            '13' => 'Silo 2'
         ];
 
         switch ($cek) {
@@ -76,8 +80,10 @@ class Grafik_model extends CI_Model {
                     $idxlabel[8],
                     $idxlabel[9],
                     $idxlabel[10],
-                    $idxlabel[11]
-                ];      
+                    $idxlabel[11],
+                    $idxlabel[12],
+                    $idxlabel[13]
+                ];
                 break;
             case "textselect":
                 $xlabel = [
@@ -92,7 +98,9 @@ class Grafik_model extends CI_Model {
                     $textxlabel[8],
                     $textxlabel[9],
                     $textxlabel[10],
-                    $textxlabel[11]    
+                    $textxlabel[11],
+                    $textxlabel[12],
+                    $textxlabel[13]
                 ];
                 break;
                 case "idselectdy":
@@ -104,7 +112,9 @@ class Grafik_model extends CI_Model {
                         $idxlabel[8],
                         $idxlabel[9],
                         $idxlabel[10],
-                        $idxlabel[11]
+                        $idxlabel[11],
+                        $idxlabel[12],
+                        $idxlabel[13]
                     ];
                     break;
                 case "textselectdy":
@@ -116,7 +126,9 @@ class Grafik_model extends CI_Model {
                         $textxlabel[8],
                         $textxlabel[9],
                         $textxlabel[10],
-                        $textxlabel[11]
+                        $textxlabel[11],
+                        $textxlabel[12],
+                        $textxlabel[13]
                     ];      
                     break;
                 case "all":
@@ -132,6 +144,8 @@ class Grafik_model extends CI_Model {
                     $xlabel[$idxlabel[9]]  = $textxlabel[9];
                     $xlabel[$idxlabel[10]] = $textxlabel[10];
                     $xlabel[$idxlabel[11]] = $textxlabel[11];
+                    $xlabel[$idxlabel[12]] = $textxlabel[12];
+                    $xlabel[$idxlabel[13]] = $textxlabel[13];
                     break;
                 case "allCAPITAL":
                     $xlabel[$idxlabel[0]]  = strtoupper($textxlabel[0]);
@@ -146,6 +160,8 @@ class Grafik_model extends CI_Model {
                     $xlabel[$idxlabel[9]]  = strtoupper($textxlabel[9]);
                     $xlabel[$idxlabel[10]] = strtoupper($textxlabel[10]);
                     $xlabel[$idxlabel[11]] = strtoupper($textxlabel[11]);
+                    $xlabel[$idxlabel[12]] = strtoupper($textxlabel[12]);
+                    $xlabel[$idxlabel[13]] = strtoupper($textxlabel[13]);
                     break;
         
             }
