@@ -33,6 +33,7 @@
       <li class="<?php if($this->uri->segment(4) == 'water'){ echo 'active';} ?>"><a href="<?php echo base_url('history_house/farm/').$idfarm.'/water' ?>">Water</a></li>
       <li class="<?php if($this->uri->segment(4) == 'pressure'){ echo 'active';} ?>"><a href="<?php echo base_url('history_house/farm/').$idfarm.'/pressure' ?>">Static Pressure</a></li>
       <li class="<?php if($this->uri->segment(4) == 'fan'){ echo 'active';} ?>"><a href="<?php echo base_url('history_house/farm/').$idfarm.'/fan' ?>">Fan Speed</a></li>
+      <li class="<?php if($this->uri->segment(4) == 'silo'){ echo 'active';} ?>"><a href="<?php echo base_url('history_house/farm/').$idfarm.'/silo' ?>">Silo</a></li>
       </ul>
       <div class="tab-content">
         <div class="tab-pane active">

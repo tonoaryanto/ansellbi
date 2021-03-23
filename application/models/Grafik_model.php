@@ -782,4 +782,168 @@ class Grafik_model extends CI_Model {
 
         return $hasildata;
     }
+
+    function grafik_silo($reqdata)
+    {
+        $id_user = $reqdata['id_user'];
+        $inidata = $reqdata['inidata'];
+        $id_farm = $reqdata['id_farm'];
+        $esqlperiode = $reqdata['esqlperiode'];
+        $esqlgrow = $reqdata['esqlgrow'];
+        $growval = $reqdata['growval'];
+        $growval2 = $reqdata['growval2'];
+        $tgl = date_format(date_create($reqdata['tgl']),"Y-m-d");
+        $tgl2 = date_format(date_create($reqdata['tgl2']),"Y-m-d");
+        $time = date_format(date_create($reqdata['time'].":00"),"H:i:s");
+        $time2 = date_format(date_create($reqdata['time2'].":00"),"H:i:s");
+        $tglaw = date_format(date_create($reqdata['tgl']." ".$time),"Y-m-d H:i:s");
+        $tglen = date_format(date_create($reqdata['tgl2']." ".$time2),"Y-m-d H:i:s");
+
+        $esql  = "SELECT id,growday, date_record,";
+        $esql .= $inidata[0][0]." AS isidata, ".$inidata[0][1]." AS isidata2";
+        $esql .= " FROM data_record WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
+        $esql .= $esqlperiode;
+        $esql .= $esqlgrow;
+        $esql .= "AND date_record >= '".$tglaw."' AND date_record <= '".$tglen."'";
+        $esql .= "ORDER BY date_record ASC";
+
+        $label = [
+            'silo1' => 'Silo 1',
+            'silo2' => 'Silo 2'
+        ];
+
+        $tgl = date_format(date_create($reqdata['tgl']),"d/m/Y");
+        $tgl2 = date_format(date_create($reqdata['tgl2']),"d/m/Y");
+
+        if($growval == $growval2){
+            $addlabel = ' : Grow Day '.$growval.' ';
+            $addtgl = " | Date ".$tgl;
+        }else{
+            $addlabel = ' : Grow Day '.$growval.' - '.$growval2;
+            $addtgl = " | Date ".$tgl.' - '.$tgl2;
+        }
+
+        $glabel = 'Silo'.$addlabel.$addtgl;
+
+        $linelabel[0] = $label[$inidata[0][0]];
+        
+        //Data Utama
+        $dataprimary1 = $this->db->query($esql)->result();
+
+        // $sqlstd = "SELECT std_wind_speed FROM standar_value WHERE kode_farm = '".$id_user."' AND kode_kandang = '".$id_farm."'";
+
+        // $dbstd = $this->db->query($sqlstd);
+
+        // if($dbstd->num_rows() > 0  and $dbstd->row_array()['std_wind_speed'] != ''){
+            // $dtmin = $dbstd->row_array()['std_wind_speed'];
+            // $minex = explode(',',$dtmin);
+        // }else{
+            // $minex = [];
+        // }
+
+        $adata = [];
+        foreach ($dataprimary1 as $value) {
+            $jam = date_format(date_create($value->date_record),"H");
+            $d = date_format(date_create($value->date_record),"d");
+            $m = date_format(date_create($value->date_record),"m");
+            $y = date_format(date_create($value->date_record),"y");
+            $adata[] = ''.$d.$m.$y.' - '.$jam;
+            $noarray = (int)$value->growday - 1;
+            // if($noarray <= count($minex)){
+                // $vstdmin = $minex[((int)$value->growday - 1)];
+            // }else{
+                // $vstdmin = 0;
+                // $vstdmin = end($minex);
+            // }
+            // if(isset($vstdmin)){$fvstdmin = $vstdmin;}else{$fvstdmin = 0;}
+            // $stdmin[] = (int)$fvstdmin;
+        }
+        $isigrowday1 = $adata;
+
+        $bdata = [];
+        $cdata2 = [];
+        foreach ($dataprimary1 as $value2) {
+            $bdata[] = floatval($value2->isidata);
+            $cdata2[] = floatval($value2->isidata2);
+        }
+
+        if(empty($bdata[0])){$bdata[0] = 0;}
+        if(empty($cdata2[0])){$cdata2[0] = 0;}
+        // if(empty($stdmin[0])){$stdmin[0] = 0;}
+
+        $isidatagrafik[0] = $bdata;
+        $isidatagrafik[1] = $cdata2;
+        // $isidatagrafik[2] = $stdmin;
+        $linelabel[1] = $label[$inidata[0][1]];
+        // $linelabel[2] = 'Standard Value';
+
+        $datamax1[0] = max($bdata);
+        $datamax1[1] = max($cdata2);
+        $datamin1[0] = min($bdata);
+        $datamin1[1] = min($cdata2);
+
+        // $datamin1[2] = min($stdmin);
+        // $datamax1[2] = max($stdmin);
+
+        $realmax = max($datamax1);
+        $realmin = min($datamin1);
+
+        if($realmax < 99){$realmax = $realmax + 2;}
+        if($realmin > 1){$realmin = $realmin - 1;}
+
+        $countrange = 8;
+        $dif1 = $realmax - $realmin;
+        //if($dif1 == $realmax){$dif1range = $dif1 / 8;}else{$dif1range = $dif1 / $countrange;}
+        $dif1range = $dif1 / $countrange;
+        if($dif1range < 1){$dif1range = 1;}
+        if(isset(explode(".",$dif1range)[1])){
+            if(explode(".",$dif1range)[1] >= 1){
+                $dif1range = explode(".",$dif1range)[0] + 1;
+            }else{
+                $dif1range = explode(".",$dif1range)[0];
+            }
+        }
+
+        if(isset(explode(".",$realmin)[1])){
+            if(explode(".",$realmin)[0] >= 1){
+                $realmin = explode(".",$realmin)[0] - 1;
+            }else{
+                $realmin = explode(".",$realmin)[0];
+            }
+        }
+
+        if(isset(explode(".",$realmax)[1])){
+            if(explode(".",$realmax)[0] >= 1){
+                $realmax = explode(".",$realmax)[0] + 1;
+            }else{
+                $realmax = explode(".",$realmax)[0];
+            }
+        }
+        
+        $sizeyaxis1[0] = floatval(number_format($realmin,2));
+        if(($realmax - $realmin) <= 5){$dif1range = $dif1range / 2;}
+        if(($realmax - $realmin) <= 2){$dif1range = ($dif1range * 2) / 5;}
+        for ($i=0; $i < $countrange; $i++) { 
+            $realmin = $realmin + $dif1range;
+            if($realmax <= 200){
+                $sizeyaxis1[$i+1] = floatval(number_format($realmin,2));
+            }else{
+                $sizeyaxis1[$i+1] = (int)number_format($realmin,0,",","");
+            }
+            if($sizeyaxis1[$i+1] >= $realmax){break;}else{
+                if(($i + 1) == $countrange){
+                    $countrange = $countrange + 1;
+                }                
+            }
+        }
+
+        $hasildata['sizeyaxis'] = $sizeyaxis1;
+        $hasildata['isigrowday1'] = $isigrowday1;
+        $hasildata['isidatagrafik'] = $isidatagrafik;
+        $hasildata['glabel'] = $glabel;
+        $hasildata['growval'] = $growval;
+        $hasildata['linelabel'] = $linelabel;
+
+        return $hasildata;
+    }
 }

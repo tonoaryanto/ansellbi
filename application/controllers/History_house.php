@@ -202,7 +202,7 @@ class History_house extends CI_Controller {
 
     public function farm($idfarm,$sensor=null){
         if ($sensor == null) {redirect('history_house/farm/'.$idfarm.'/temperature');}
-        if ($sensor != 'temperature' AND $sensor != 'humidity' AND $sensor != 'wind' AND $sensor != 'feed' AND $sensor != 'water' AND $sensor != 'pressure' AND $sensor != 'fan') {redirect('history_house/farm/'.$idfarm.'/temperature');}
+        if ($sensor != 'temperature' AND $sensor != 'humidity' AND $sensor != 'wind' AND $sensor != 'feed' AND $sensor != 'water' AND $sensor != 'pressure' AND $sensor != 'fan' AND $sensor != 'silo') {redirect('history_house/farm/'.$idfarm.'/temperature');}
         $this->konfigurasi->cek_url();
         $this->session->set_userdata(['idfarm'=>$idfarm]);
         $id_user   = $this->session->userdata('id_user');
@@ -214,6 +214,7 @@ class History_house extends CI_Controller {
         if($sensor == 'water'){$urljs = 'history_house-farm-waterjs.js';}
         if($sensor == 'pressure'){$urljs = 'history_house-farm-pressurejs.js';}
         if($sensor == 'fan'){$urljs = 'history_house-farm-fanjs.js';}
+        if($sensor == 'silo'){$urljs = 'history_house-farm-silojs.js';}
 
         $inidatafarm = $this->umum_model->get('data_kandang',"id = '".$idfarm."' AND kode_perusahaan = '".$id_user."'")->row_array();
         $iniperiode = $this->umum_model->get("(SELECT periode,growday,date_record,reset_time FROM data_record WHERE keterangan = 'ok' AND kode_kandang = '".$idfarm."' AND kode_perusahaan = '".$id_user."' ORDER BY date_record DESC LIMIT 1) as data")->row_array();
@@ -342,9 +343,9 @@ class History_house extends CI_Controller {
 
         if ($radio == 'grow') {
             if($growval == $growval2){
-                $esqlgrow = "AND growday= '".$growval."' ";
+                $esqlgrow = "AND growday = '".$growval."' ";
             }else{
-                $esqlgrow = "AND growday BETWEEN '".$growval."' AND '".$growval2."' ";
+                $esqlgrow = "AND growday >= '".$growval."' AND growday <= '".$growval2."' ";
             }
         }
 
@@ -406,9 +407,9 @@ class History_house extends CI_Controller {
 
         if ($radio = 'grow') {
             if($growval == $growval2){
-                $esqlgrow = "AND growday= '".$growval."' ";
+                $esqlgrow = "AND growday = '".$growval."' ";
             }else{
-                $esqlgrow = "AND growday BETWEEN '".$growval."' AND '".$growval2."' ";
+                $esqlgrow = "AND growday >= '".$growval."' AND growday <= '".$growval2."' ";
             }
 
         }
@@ -461,9 +462,9 @@ class History_house extends CI_Controller {
 
         if ($radio = 'grow') {
             if($growval == $growval2){
-                $esqlgrow = "AND growday= '".$growval."' ";
+                $esqlgrow = "AND growday = '".$growval."' ";
             }else{
-                $esqlgrow = "AND growday BETWEEN '".$growval."' AND '".$growval2."' ";
+                $esqlgrow = "AND growday >= '".$growval."' AND growday <= '".$growval2."' ";
             }
 
         }
@@ -483,6 +484,58 @@ class History_house extends CI_Controller {
         $reqdata['growval2'] = $growval2;
         
         $hasildata = $this->grafik_model->grafik_windspeed($reqdata);
+
+        $isigrowday1 = $hasildata['isigrowday1'];
+        $isidatagrafik = $hasildata['isidatagrafik'];
+        $glabel = $hasildata['glabel'];
+        $growval = $hasildata['growval'];
+        $linelabel = $hasildata['linelabel'];
+        $difgrow = $growval2 - $growval;
+        $sizeyaxis1 = $hasildata['sizeyaxis'];
+
+        echo json_encode(['status'=>true,'labelgf'=>$isigrowday1,'data'=>$isidatagrafik,'glabel'=>$glabel,'hourdari'=>$growval,'linelabel'=>$linelabel,'difgrow'=>$difgrow,'sizeyaxis1' => $sizeyaxis1]);
+    }
+
+    public function grafiksl(){
+        //Cek Seesion
+        $cek_sess = $this->konfigurasi->cek_js();
+        if ($cek_sess == 0) {echo json_encode(['sess' => $cek_sess]);return;}
+        //END Cek Session
+
+        $radio = $this->input->post('radio');
+        $id_user   = $this->session->userdata('id_user');
+        $id_farm   = $this->session->userdata('idfarm');
+        $inidata = $this->input->post('inidata');
+        $tgl = $this->input->post('tgl');
+        $tgl2 = $this->input->post('tgl2');
+        $time = $this->input->post('time');
+        $time2 = $this->input->post('time2');
+        $periode = $this->input->post('periode');
+        $growval = $this->input->post('growval');
+        $growval2 = $this->input->post('growval2');
+        $periode = $this->input->post('periode');
+
+        if($growval == $growval2){
+            $esqlgrow = "AND growday = '".$growval."' ";
+        }else{
+            $esqlgrow = "AND growday >= '".$growval."' AND growday <= '".$growval2."' ";
+        }
+
+        $esqlperiode = "AND periode = '".$periode."' ";
+
+        $reqdata['id_user'] = $id_user;
+        $reqdata['inidata'] = $inidata;
+        $reqdata['id_farm'] = $id_farm;
+        $reqdata['esqlperiode'] = $esqlperiode;
+        $reqdata['esqlgrow'] = $esqlgrow;
+        $reqdata['tgl'] = $tgl;
+        $reqdata['tgl2'] = $tgl2;
+        $reqdata['time'] = $time;
+        $reqdata['time2'] = $time2;
+        $reqdata['growval'] = $growval;
+        $reqdata['growval2'] = $growval2;
+        
+        $hasildata = $this->grafik_model->grafik_silo($reqdata);
 
         $isigrowday1 = $hasildata['isigrowday1'];
         $isidatagrafik = $hasildata['isidatagrafik'];
@@ -612,6 +665,7 @@ class History_house extends CI_Controller {
         if($this->input->post('kateg') == 'water'){$adata = $this->tabelsatukolom($dates,$id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
         if($this->input->post('kateg') == 'press'){$adata = $this->tabelsatukolom($dates,$id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
         if($this->input->post('kateg') == 'fan'){$adata = $this->tabelsatukolom($dates,$id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata);}
+        if($this->input->post('kateg') == 'silo'){$adata = $this->tabelsilo($dates,$id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata[0][0],$inidata[0][1]);}
 
         echo json_encode(['status' => true, 'dataSet' => $adata]);
     }
@@ -809,6 +863,58 @@ class History_house extends CI_Controller {
             $kolomdata[4]  = $isidata[$inidata1];
             $kolomdata[5]  = $isidata[$inidata2];
             $kolomdata[6]  = (int)$fvstdmin;
+            $adata[$iz] = $kolomdata;
+        }
+        //END Data Utama
+
+        return $adata;
+    }
+
+    private function tabelsilo($dates,$id_user,$id_farm,$esqlperiode,$esqlgrow,$inidata1,$inidata2)
+    {
+
+        $datsql1  = "SELECT id,growday, date_record,";
+        $datsql1 .= $inidata1.",".$inidata2;
+        $datsql1 .= " FROM data_record WHERE keterangan = 'ok' AND kode_perusahaan = '".$id_user."' AND kode_kandang = '".$id_farm."' ";
+        $datsql1 .= $esqlperiode;
+        $datsql1 .= $esqlgrow;
+        $datsql1 .= "AND date_record >= '".$dates['dates1']."' AND date_record <= '".$dates['dates2']."'";
+        $datsql1 .= "ORDER BY date_record ASC";
+
+        //Data Utama
+        $dataprimary1 = $this->db->query($datsql1);
+
+        // $sqlstd = "SELECT std_wind_speed FROM standar_value WHERE kode_farm = '".$id_user."' AND kode_kandang = '".$id_farm."'";
+
+        // $dbstd = $this->db->query($sqlstd);
+
+        // if($dbstd->num_rows() > 0  and $dbstd->row_array()['std_wind_speed'] != ''){
+        //     $dtmin = $dbstd->row_array()['std_wind_speed'];
+        //     $minex = explode(',',$dtmin);
+        // }else{
+        //     $minex = [];
+        // }
+
+        $adata = [];
+        for ($iz=0; $iz < $dataprimary1->num_rows(); $iz++) {
+            $isidata = $dataprimary1->row_array($iz);
+
+            $noarray = (int)$isidata['growday'] - 1;
+            // if($noarray <= count($minex)){
+            //     $vstdmin = $minex[((int)$isidata['growday'] - 1)];
+            // }else{
+            //     $vstdmin = end($minex);
+            // }
+            // if(isset($vstdmin)){$fvstdmin = $vstdmin;}else{$fvstdmin = 0;}
+
+            $kolomdata = [];
+            $kolomdata[0]  = $iz + 1;
+            $kolomdata[1]  = $isidata['growday'];
+            $kolomdata[2]  = date_format(date_create($isidata['date_record']),"d-m-Y");
+            $kolomdata[3]  = date_format(date_create($isidata['date_record']),"H:i:s");
+            $kolomdata[4]  = $isidata[$inidata1];
+            $kolomdata[5]  = $isidata[$inidata2];
+            // $kolomdata[6]  = (int)$fvstdmin;
             $adata[$iz] = $kolomdata;
         }
         //END Data Utama

@@ -1,3 +1,4 @@
+download/
 application/config/database.php
 *.xlsx
 *.csv
