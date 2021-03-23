@@ -1,5 +1,6 @@
 download/
 application/config/database.php
+application/config/config.php
 *.xlsx
 *.csv
 *.xls
