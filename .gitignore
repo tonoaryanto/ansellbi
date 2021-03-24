@@ -1,4 +1,5 @@
 download/
+application/hooks/ssl.php
 application/config/database.php
 application/config/config.php
 *.xlsx
