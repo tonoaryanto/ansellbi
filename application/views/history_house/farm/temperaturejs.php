@@ -343,7 +343,7 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
       }
     });
   }else{
-    loadtabel();  
+    loadtabel();
     swal.close();
   }
 }
