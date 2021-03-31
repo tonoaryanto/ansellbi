@@ -468,7 +468,7 @@ class Setting extends CI_Controller {
         $settglawal = date_format(date_create($startgl." ".$startime),"Y-m-d H:i:s");
         $settglakhir = date_format(date_create($endtgl." ".$endtime),"Y-m-d H:i:s");
 
-        $esqlloop = "SELECT periode,growday,date_record,reset_time FROM data_record WHERE ".$addwhere." AND date_record >= '".$settglawal."' AND date_record <= '".$settglakhir."' ORDER BY date_record ASC";
+        $esqlloop = "SELECT id,periode,growday,date_record,reset_time FROM data_record WHERE ".$addwhere." AND date_record >= '".$settglawal."' AND date_record <= '".$settglakhir."' ORDER BY date_record ASC";
         $inidb2 = $this->db->query($esqlloop)->result();
 
         $house = $this->db->query("SELECT * FROM data_kandang WHERE kode_perusahaan = '".$id_farm."' AND id = '".$kode_kandang."'")->row_array();
@@ -488,7 +488,7 @@ class Setting extends CI_Controller {
             $data['growday'] = $growset;
             $data['periode'] = $flock;
             $data['keterangan'] = 'ok';
-            $where = ['date_record' => $value->date_record];
+            $where = ['id' => $value->id];
 
             $this->db->update('data_record',$data,$where);
 
@@ -505,7 +505,7 @@ class Setting extends CI_Controller {
                 }
             }
 
-            $data['date_record'] = $where['date_record'];
+            $data['date_record'] = $value->date_record;
             $data2 = $data;
             $data2['reset'] = $jamreset;
 
