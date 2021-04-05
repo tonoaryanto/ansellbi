@@ -198,8 +198,8 @@ function grafik(){
 
           var adddt2 = {
             label: isi.linelabel[2],
-            borderColor: window.chartColors.red,
-            backgroundColor: window.chartColors.red,
+            borderColor: '#ff0000',
+            backgroundColor: '#ff0000',
             fill: false,
             data: isi.data[2],
             spanGaps: false,
