@@ -179,8 +179,8 @@ function grafik(){
           lineChartData['labels'] = isi.labelgf;
           lineChartData['datasets'] = [{
                   label: isi.linelabel[0],
-                  borderColor: window.chartColors.blue,
-                  backgroundColor: window.chartColors.blue,
+                  borderColor: '#5B7BB4',
+                  backgroundColor: '#5B7BB4',
                   fill: false,
                   data: isi.data[0],
                   spanGaps: true,
@@ -188,8 +188,8 @@ function grafik(){
 
           var adddt1 = {
             label: isi.linelabel[1],
-            borderColor: window.chartColors.orange,
-            backgroundColor: window.chartColors.orange,
+            borderColor: '#40b000',
+            backgroundColor: '#40b000',
             fill: false,
             data: isi.data[1],
             spanGaps: false,
