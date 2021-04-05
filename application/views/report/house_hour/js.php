@@ -352,17 +352,17 @@ function loopgrafik(dataini,awal,loop) {
           lineChartData['labels'] = isi.labelgf;
           lineChartData['datasets'] = [{
                   label: isi.linelabel[0],
-                  borderColor: window.chartColors.blue,
-                  backgroundColor: window.chartColors.blue,
+                  borderColor: '#2185a9',
+                  backgroundColor: '#2185a9',
                   fill: false,
                   data: isi.data,
                   spanGaps: true,
                   }];
 
           var data_color = [
-            window.chartColors.orange,
-            window.chartColors.green,
-            window.chartColors.red,
+            '#40b000',
+            '#ffbf00',
+            '#f969f3',
             '#603ec7',
             '#32a852',
             '#6e1800',

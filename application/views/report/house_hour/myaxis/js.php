@@ -398,15 +398,15 @@ function grafik(){
           .attr({'id' : 'chartcanvas'})
           .appendTo('#inicanvas');
 
-          var data_color = [window.chartColors.orange, window.chartColors.green, window.chartColors.red, window.chartColors.purple];
+          var data_color = ['#40b000', '#ffbf00','#f969f3','#fa6607'];
 
           var lineChartData = {};
           lineChartData['labels'] = isi.labelgf;
           lineChartData['datasets'] = [
                   {
                     label: isi.linelabel[0],
-                    borderColor: window.chartColors.blue,
-                    backgroundColor: window.chartColors.blue,
+                    borderColor: '#2185a9',
+                    backgroundColor: '#2185a9',
                     fill: false,
                     data: isi.data[0],
                     spanGaps: true,
