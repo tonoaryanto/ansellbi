@@ -158,8 +158,8 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
           lineChartData['labels'] = isi.labelgf;
           lineChartData['datasets'] = [{
                   label: isi.linelabel[0],
-                  borderColor: window.chartColors.blue,
-                  backgroundColor: window.chartColors.blue,
+                  borderColor: '#2185a9',
+                  backgroundColor: '#2185a9',
                   fill: false,
                   data: isi.data[0],
                   spanGaps: true,
@@ -167,8 +167,8 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
 
           var adddt1 = {
             label: isi.linelabel[1],
-            borderColor: window.chartColors.red,
-            backgroundColor: window.chartColors.red,
+            borderColor: '#f60000',
+            backgroundColor: '#f60000',
             fill: false,
             data: isi.data[1],
             spanGaps: false,
@@ -177,8 +177,8 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
                   
           var adddt2 = {
             label: isi.linelabel[2],
-            borderColor: window.chartColors.orange,
-            backgroundColor: window.chartColors.orange,
+            borderColor: '#fa6607',
+            backgroundColor: '#fa6607',
             fill: false,
             data: isi.data[2],
             spanGaps: false,

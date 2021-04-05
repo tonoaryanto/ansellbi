@@ -192,7 +192,7 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
                   spanGaps: true,
                   }];
 
-          var data_color = [window.chartColors.blue, window.chartColors.green, window.chartColors.purple,'#32a852',window.chartColors.orange];
+          var data_color = ['#2185a9', '#40b000', '#696aaa','#32a852','#fa6607'];
 
           var minadddt = {
             label: isi.linelabel[1],
@@ -343,7 +343,7 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
       }
     });
   }else{
-    loadtabel();
+    loadtabel();  
     swal.close();
   }
 }

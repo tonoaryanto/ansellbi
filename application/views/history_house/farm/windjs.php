@@ -157,7 +157,7 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
             .attr({'id' : 'chartcanvas'+id})
             .appendTo('#inicanvas'+id);
 
-          var data_color = [window.chartColors.orange, window.chartColors.green, window.chartColors.red, window.chartColors.purple];
+          var data_color = ['#fa6607', '#40b000', '#f60000', '#696aaa'];
 
           var lineChartData = {};
           lineChartData['labels'] = isi.labelgf;
