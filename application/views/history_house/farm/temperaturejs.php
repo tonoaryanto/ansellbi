@@ -192,7 +192,7 @@ function grafik(inidata,id,lebar,dtrow,count,ul){
                   spanGaps: true,
                   }];
 
-          var data_color = ['#2185a9', '#40b000', '#696aaa','#32a852','#fa6607'];
+          var data_color = ['#2185a9', '#40b000', '#ffbf00','#f969f3','#fa6607'];
 
           var minadddt = {
             label: isi.linelabel[1],
