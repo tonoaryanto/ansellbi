@@ -7,7 +7,7 @@ $(document).ready(function(){
 function selectdata_kandang(){
   var inidata = $.ajax({
     type: "GET",
-    url : "<?php echo base_url('setting/data_change_kandang'); ?>",
+    url : "<?php echo base_url('setting/growchange/data_change_kandang'); ?>",
     dataType: "JSON",
     success: function(data){
       get_sess(data.sess);
@@ -32,7 +32,7 @@ function isiselect_kandang(inidata){
 }
 
 function loaddata(){
-    var ling = '<?php echo base_url('setting/load_growchange'); ?>';
+    var ling = '<?php echo base_url('setting/growchange/load_growchange'); ?>';
     var isidata = {
         'nama_kandang' : $('[name="kandang"]').val()
     };
@@ -102,7 +102,7 @@ function changedate(){
     var endtgl = $('[name="endtgl"]').val();
     var endtime = $('[name="endtime"]').val();
 
-    var ling = '<?php echo base_url('setting/load_inputchange'); ?>';
+    var ling = '<?php echo base_url('setting/growchange/load_inputchange'); ?>';
     var isidata = {
         'nama_kandang' : $('[name="kandang"]').val(),
         'startgl' : startgl,
@@ -141,7 +141,7 @@ function changedate(){
 }
 
 function save(){
-var ling = '<?php echo base_url('setting/save_growchange'); ?>';
+var ling = '<?php echo base_url('setting/growchange/save_growchange'); ?>';
 var isidata = {
     'nama_kandang' : $('[name="kandang"]').val(),
     'startgl' : $('[name="startgl"]').val(),

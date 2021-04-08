@@ -5,14 +5,37 @@ $(document).ready(function(){
 });
 
 function addweek(){
+    if($('[name="kandang"]').val() == ''){return;}
     var count_week = parseInt($('#inputweek').attr('data-week'));
     var newweek = count_week + 1;
     var vweek = 7 * newweek;
+    if(newweek > 1){$('#rmweek').show();}
+    if(newweek != 0){$('#shweek').text(newweek);}
 
     var htm = '';
     htm += '<label>Week '+newweek+'</label>';
     htm += '<div class="col-lg-12" style="margin-bottom:15px;border-style:solid;padding:10px;border-width: thin;border-radius: 5px;border-color: #ccc;">';
-    htm += '<div class="form-group">';
+    htm += '<div class="form-group col-lg-12">';
+    htm += '<div class="col-lg-3" style="line-height: 34px;">';
+    htm += '<label>Input per week</label>';
+    htm += '</div>';
+    htm += '<div class="col-lg-3">';
+    htm += '<div class="input-group">';
+    htm += '<span class="input-group-addon">Min</span>';
+    htm += '<input name="weeka" onkeyup="weekinput(1,'+newweek+');" placeholder="--Optional--" type="text" class="form-control" value="">';
+    htm += '</div>';
+    htm += '</div>';
+    htm += '<div class="col-lg-3">';
+    htm += '<div class="input-group">';
+    htm += '<span class="input-group-addon">Max</span>';
+    htm += '<input name="mxweeka" onkeyup="weekinput(2,'+newweek+');" placeholder="--Optional--" type="text" class="form-control" value="">';
+    htm += '</div>';
+    htm += '</div>';
+    htm += '</div>';
+    htm += '<div class="col-lg-12">';
+    htm += '<hr style="margin-top:0px;">';
+    htm += '</div>';
+    htm += '<div class="form-group col-lg-7">';
     htm += '<label class="col-lg-12">Growday '+(vweek - 6)+' </label>';
     htm += '<div class="input-group col-lg-12" style="margin-bottom:10px;">';
     htm += '<span class="input-group-addon">Min</span>';
@@ -23,7 +46,7 @@ function addweek(){
     htm += '<input name="mxweek'+(vweek - 6)+'" type="text" class="form-control" value="">';
     htm += '</div>';
     htm += '</div>';
-    htm += '<div class="form-group">';
+    htm += '<div class="form-group col-lg-7">';
     htm += '<label class="col-lg-12">Growday '+(vweek - 5)+' </label>';
     htm += '<div class="input-group col-lg-12" style="margin-bottom:10px;">';
     htm += '<span class="input-group-addon">Min</span>';
@@ -34,7 +57,7 @@ function addweek(){
     htm += '<input name="mxweek'+(vweek - 5)+'" type="text" class="form-control" value="">';
     htm += '</div>';
     htm += '</div>';
-    htm += '<div class="form-group">';
+    htm += '<div class="form-group col-lg-7">';
     htm += '<label class="col-lg-12">Growday '+(vweek - 4)+' </label>';
     htm += '<div class="input-group col-lg-12" style="margin-bottom:10px;">';
     htm += '<span class="input-group-addon">Min</span>';
@@ -45,7 +68,7 @@ function addweek(){
     htm += '<input name="mxweek'+(vweek - 4)+'" type="text" class="form-control" value="">';
     htm += '</div>';
     htm += '</div>';
-    htm += '<div class="form-group">';
+    htm += '<div class="form-group col-lg-7">';
     htm += '<label class="col-lg-12">Growday '+(vweek - 3)+' </label>';
     htm += '<div class="input-group col-lg-12" style="margin-bottom:10px;">';
     htm += '<span class="input-group-addon">Min</span>';
@@ -56,7 +79,7 @@ function addweek(){
     htm += '<input name="mxweek'+(vweek - 3)+'" type="text" class="form-control" value="">';
     htm += '</div>';
     htm += '</div>';
-    htm += '<div class="form-group">';
+    htm += '<div class="form-group col-lg-7">';
     htm += '<label class="col-lg-12">Growday '+(vweek - 2)+' </label>';
     htm += '<div class="input-group col-lg-12" style="margin-bottom:10px;">';
     htm += '<span class="input-group-addon">Min</span>';
@@ -67,7 +90,7 @@ function addweek(){
     htm += '<input name="mxweek'+(vweek - 2)+'" type="text" class="form-control" value="">';
     htm += '</div>';
     htm += '</div>';
-    htm += '<div class="form-group">';
+    htm += '<div class="form-group col-lg-7">';
     htm += '<label class="col-lg-12">Growday '+(vweek - 1)+' </label>';
     htm += '<div class="input-group col-lg-12" style="margin-bottom:10px;">';
     htm += '<span class="input-group-addon">Min</span>';
@@ -78,7 +101,7 @@ function addweek(){
     htm += '<input name="mxweek'+(vweek - 1)+'" type="text" class="form-control" value="">';
     htm += '</div>';
     htm += '</div>';
-    htm += '<div class="form-group">';
+    htm += '<div class="form-group col-lg-7">';
     htm += '<label class="col-lg-12">Growday '+vweek+' </label>';
     htm += '<div class="input-group col-lg-12" style="margin-bottom:10px;">';
     htm += '<span class="input-group-addon">Min</span>';
@@ -92,7 +115,7 @@ function addweek(){
     htm += '</div>';
 
     $('<div>')
-    .attr({'class' : 'form-group col-md-2', 'id' : 'week'+newweek})
+    .attr({'class' : 'form-group col-md-12', 'id' : 'week'+newweek})
     .html(htm)
     .appendTo('#inputweek');
     $('#inputweek').attr('data-week',newweek);
@@ -104,6 +127,8 @@ function removeweek(){
     if(count_week == 1){return;}
     $('#week'+count_week).remove();
     $('#inputweek').attr('data-week',newweek)
+    if(newweek <= 1){$('#rmweek').hide();}
+    if(newweek != 0){$('#shweek').text(newweek);}
 }
 
 function selectdata_kandang(){
@@ -136,7 +161,7 @@ function isiselect_kandang(inidata){
 function loaddata(){
     $('#inputweek').html('');
     $('#inputweek').attr('data-week','0');
-    var ling = '<?php echo base_url('setting/load_standard_val'); ?>';
+    var ling = '<?php echo base_url('setting/standard_value/load_val'); ?>';
     var isidata = {
         'nama_kandang' : $('[name="kandang"]').val(),
         'tpval' : $('[name="tpval"]').val()
@@ -155,6 +180,11 @@ function loaddata(){
                 var vnomordata = parseInt(data.dataSet['countweek']);
                     nomordata = vnomordata;
                     var dweek = 7;
+
+                    if(nomordata > 1){$('#rmweek').show();}
+                    if(nomordata <= 1){$('#rmweek').hide();}
+                    if(nomordata != 0){$('#brshweek').show();$('#shweek').text(nomordata);}
+
                 for (i = 0; i < nomordata; i++) {
                     var a = i + 1;
                     vweek = dweek * a;
@@ -298,8 +328,14 @@ function loaddata(){
                     $('#inputweek').attr('data-week',a);
                 }
             }else{
+                var nomordata = 24;
+
+                if(nomordata > 1){$('#rmweek').show();}
+                if(nomordata <= 1){$('#rmweek').hide();}
+                if(nomordata != 0){$('#brshweek').show();$('#shweek').text(nomordata);}
+
                 var dweek = 7;
-                for (i = 0; i < 24; i++) {
+                for (i = 0; i < nomordata; i++) {
                     var a = i + 1;
                     vweek = dweek * a;
 
@@ -441,7 +477,7 @@ function weekinput(set,dt){
 }
 
 function save(){
-    var ling = '<?php echo base_url('setting/save_standard_val'); ?>';
+    var ling = '<?php echo base_url('setting/standard_value/save_val'); ?>';
     var cek = validasi();
 
     var isidata = {
